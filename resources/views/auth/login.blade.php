@@ -6,12 +6,17 @@
 
         <title>Laravel</title>
 
+         <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/all.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body class="fondo">
         <main class="container">
             
 <div class="row justify-content-center mt-3">
@@ -19,11 +24,15 @@
     <div class="col-lg-4">
     
         {{-- Card Login --}}
-        <div class="card mb-4">
+        <div class="card mb-2">
             <div class="card-body">
     
-                <h1 class="text-center mt-3 mb-4" style="letter-spacing: 1px; font-family: 'Cookie', cursive; font-size: 60px">Messenger</h1>
+                <div class="text-center mb-3">
+                    <img style="width: 50%" src="{{ asset('images/chat.png') }}" alt="">
+                </div>
+                
     
+                <p class="text-center" style=" font-size:18px; color: #777">Inicia sesión para chatear con tus amigos.</p>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
     
@@ -57,7 +66,7 @@
                             <div class="form-check">
                                 <input class="form-check-input position-static" name ="remember" type="checkbox" id="blankCheckbox" value="option1" {{ old('remember') ? 'checked' : '' }}>                      
                                
-                                <label class="form-check-label" for="remember">
+                                <label class="form-check-label" for="remember" style=" color: #777">
                                     {{ __('Recuerdame') }}
                                 </label>
                             </div>
@@ -98,7 +107,7 @@
                 <div class="form-group row ">
                     <div class="col-md-12 text-center ">
                         @if (Route::has('register'))
-                           <p class="mt-4">¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>      
+                           <p class="mt-4 mr-2" style=" color: #777">¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>      
                         @endif
                     </div>
                 </div>

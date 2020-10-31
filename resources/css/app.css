@@ -1,0 +1,19 @@
+:root{
+    --primario: #31AF91;
+}
+
+body{ 
+    background-color: var(--primario);
+
+}
+
+/* login */
+
+.card{
+    border-radius: 50px !important;
+}
+
+hr{
+    
+    border-color: var(--primario);
+}
