@@ -4,8 +4,8 @@
 
 body{ 
     background-color: var(--primario);
-
 }
+
 
 /* login */
 
@@ -17,3 +17,46 @@ hr{
     
     border-color: var(--primario);
 }
+
+/* content principal */
+
+.contacs{
+    border-radius: 10px 0 0 10px !important;
+}
+
+.list{
+    width: 100% !important;
+}
+
+/* conversation */
+.messages{
+    
+    background-image: url('https://img3.todoiphone.net/wp-content/uploads/2014/03/WhatsApp-Wallpaper-39.jpg'); 
+ }
+
+ .conversation{
+    border-radius: 0 10px 10px 0 !important; 
+ }
+
+ /* images */
+.rounded{
+    border-radius: 50px !important;
+}
+
+/* Messages */
+
+.messageReceived{
+    background-color: #fafbfd;
+    border-radius: 15px 15px 15px 0px !important;
+    width: 50%;
+}
+
+.messageSent{
+    background-color: #DCF8C7;
+    border-radius: 15px 15px 0px 15px !important;
+    width: 50%;
+}
+
+
+
+ 
