@@ -9,7 +9,7 @@
           class="rounded"
           style="width: 30px"
         />
-        <span>Juan Perez</span>
+        <span>{{ contactName }}</span>
       </div>
 
       <!--Message -->
@@ -17,7 +17,7 @@
         <message-conversation-component
           v-for="message in messages"
           :key="message.id"
-          :writtenByMe = message.writtenByMe
+          :writtenByMe="message.writtenByMe"
         >
           {{ message.content }}
         </message-conversation-component>
@@ -25,20 +25,22 @@
 
       <div class="card-footer text-muted pt-2 pb-2">
         <form @submit.prevent="postMessage" autocomplete="off">
-           <div class="input-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Escribe tu mensaje..."
-            aria-describedby="basic-addon2"
-            v-model="messageSent"
-          />
-          <div class="input-group-append">
-            <span class="input-group-text pb-0" id="basic-addon2">
-              <button class="btn btn-sm btn-ligth" type="submit">Enviar</button>
-            </span>
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Escribe tu mensaje..."
+              aria-describedby="basic-addon2"
+              v-model="messageSent"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text pb-0" id="basic-addon2">
+                <button class="btn btn-sm btn-ligth" type="submit">
+                  Enviar
+                </button>
+              </span>
+            </div>
           </div>
-        </div>
         </form>
       </div>
     </div>
@@ -47,31 +49,42 @@
 
 <script>
 export default {
+  props: {
+    contactId: Number,
+    contactName: String,
+  },
   data() {
     return {
       messages: [],
-      messageSent:'',
-      contact_id:2
+      messageSent: "",
     };
   },
   mounted() {
     this.getMessages();
   },
   methods: {
-    getMessages(){
-      axios.get(`/api/messages?contact_id=${this.contact_id}`).then((response) => {
-        this.messages = response.data;
-      });
+    getMessages() {
+      axios
+        .get(`/api/messages?contact_id=${this.contactId}`)
+        .then((response) => {
+          this.messages = response.data;
+        });
     },
-    postMessage(){
-      axios.post("/api/messages",{
-        to_id:2,
-        content: this.messageSent
-      }).then((response)=>{
-         this.messageSent = '',
-         this.getMessages();
-      });
-    }
+    postMessage() {
+      axios
+        .post("/api/messages", {
+          to_id: this.contactId,
+          content: this.messageSent,
+        })
+        .then((response) => {
+          (this.messageSent = ""), this.getMessages();
+        });
+    },
+  },
+  watch: {
+    contactId(value) {
+      this.getMessages();
+    },
   },
 };
 </script>

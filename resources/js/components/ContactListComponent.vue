@@ -66,7 +66,7 @@ export default {
       });
     },
     selectConversation(conversation){
-        console.log("event click");
+      this.$emit('conversationSelected',conversation);
     }
   },
 };
