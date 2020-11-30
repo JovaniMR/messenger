@@ -9,9 +9,13 @@
       messageReceived: !writtenByMe,
     }"
   >
-    <div class="card-body">
-      <p class="card-text">
-        <slot></slot>
+    <div class="card-body pl-2 pt-1 pb-0 pr-0">
+      <p class="card-text mb-0">
+        {{ message.content }}
+      </p>
+      <p class="mb-0 " style="font-size: .7em; color: #777; margin-left:88%">
+        15:45
+        <!-- {{ message.created_at }} -->
       </p>
     </div>
   </div>
@@ -21,6 +25,7 @@
 export default {
   props: {
     writtenByMe: Boolean,
+    message: Array
   },
   data() {
     return {};

@@ -1,62 +1,138 @@
-:root{
+:root {
     --primario: #31AF91;
 }
 
-body{ 
+body {
     background-color: var(--primario);
+    font-size: 16px;
 }
-
 
 /* login */
 
-.card{
+.card {
     border-radius: 50px !important;
 }
 
-hr{
-    
+hr {
+
     border-color: var(--primario);
 }
 
-/* content principal */
+/* ContactListComponent.vue */
 
-.contacs{
+.contacs {
     border-radius: 10px 0 0 10px !important;
 }
 
-.list{
+.list {
     width: 100% !important;
+    overflow: auto;
 }
 
-/* conversation */
-.messages{
-    
-    background-image: url('https://img3.todoiphone.net/wp-content/uploads/2014/03/WhatsApp-Wallpaper-39.jpg'); 
- }
-
- .conversation{
-    border-radius: 0 10px 10px 0 !important; 
- }
-
- /* images */
-.rounded{
-    border-radius: 50px !important;
+.allContacts{
+    overflow: auto;
+}
+/* ConversationComponent.vue */
+.messages {
+    background-image: url('https://img3.todoiphone.net/wp-content/uploads/2014/03/WhatsApp-Wallpaper-39.jpg');
+    min-height: 65vh;
+    max-height: 66vh;
 }
 
-/* Messages */
+.conversation {
+    border-radius: 0 10px 10px 0 !important;
+}
 
-.messageReceived{
+
+/* MessageConversationComponent.vue */
+
+.messageReceived {
     background-color: #fafbfd;
-    border-radius: 15px 15px 15px 0px !important;
+    border-radius: 8px 8px 8px 0px !important;
     width: 50%;
 }
 
-.messageSent{
+.messageSent {
     background-color: #DCF8C7;
-    border-radius: 15px 15px 0px 15px !important;
+    border-radius: 8px 8px 0px 8px !important;
     width: 50%;
 }
 
 
 
- 
+/*--------------- Reponsive Design ---------------- */
+
+/* Movile devices */
+@media (max-width: 576px) {
+    body {
+        font-size: 7px;
+    }
+
+    /* Login */
+    .login{
+        width: 80%;
+        /* margin-right: auto; */
+    }
+
+    .register{
+        width: 80%;
+        /* margin-right: auto; */
+    }
+
+    /*EmptyConversationComponent.vue */
+    .empty {
+        display: none;
+    }
+
+    /* MessageConversationComponent.vue */
+    .messageReceived, .messageSent {
+        width: 90%;
+        ;
+    }
+
+    /* ContactListComponent.vue */
+    .contacs {
+        border-radius: 5px !important;
+        max-height: 65vh;
+    }
+
+    /* ConversationComponent.vue */
+    .conversation {
+        border-radius: 5px !important;
+        /* display: none; */
+    }
+
+    .return{
+        /* display: block !important; */
+        display: inline !important;
+    }
+
+    .emojis{
+        display: none;
+    }
+
+    .card-footer{
+        padding-left: 18px !important;
+    }
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (max-width: 768px) {
+    body {
+        font-size: 12px;
+    }
+
+    /* MessageConversationComponent.vue */
+    .messageReceived, .messageSent {
+        width: 80%;
+    }
+
+    h5{
+        font-size: 1em;
+    }
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (max-width: 1200px) {}

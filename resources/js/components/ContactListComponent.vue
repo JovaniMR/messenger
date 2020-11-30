@@ -1,6 +1,6 @@
 <template>
   <!-- {{-- Contacs general--}} -->
-  <div class="col-md-5 col-lg-4 bg-light contacs p-0">
+  <div id="allContacts" class="col-10 col-md-4 col-lg-4 bg-light contacs p-0">
     <!-- {{--Search  --}} -->
     <div class="row pr-3 pl-3">
       <div class="input-group mt-3 mr-3 ml-3 mb-0">
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -58,6 +59,8 @@ export default {
   },
   mounted() {
     this.getConversations();
+    document.getElementById('allConversation').style.display = 'none';
+
   },
   methods: {
     getConversations() {
@@ -67,7 +70,21 @@ export default {
     },
     selectConversation(conversation){
       this.$emit('conversationSelected',conversation);
+      // if(screen.width < 576){
+      //   this.hide();
+      // }
+      if(window.innerWidth < 576){
+         this.hide();
+      }
+
+    },
+    hide(){
+      document.getElementById('allContacts').style.display = 'none';
+      document.getElementById('allConversation').style.display = 'block';
     }
+
+    
+
   },
 };
 </script>

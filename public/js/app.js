@@ -1925,6 +1925,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     active: Boolean,
@@ -2008,6 +2009,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getConversations();
+    document.getElementById('allConversation').style.display = 'none';
   },
   methods: {
     getConversations: function getConversations() {
@@ -2018,7 +2020,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     selectConversation: function selectConversation(conversation) {
-      this.$emit('conversationSelected', conversation);
+      this.$emit('conversationSelected', conversation); // if(screen.width < 576){
+      //   this.hide();
+      // }
+
+      if (window.innerWidth < 576) {
+        this.hide();
+      }
+    },
+    hide: function hide() {
+      document.getElementById('allContacts').style.display = 'none';
+      document.getElementById('allConversation').style.display = 'block';
     }
   }
 });
@@ -2029,6 +2041,144 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ConversationComponent.vue?vue&type=script&lang=js& ***!
   \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var v_emoji_picker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! v-emoji-picker */ "./node_modules/v-emoji-picker/lib/v-emoji-picker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VEmojiPicker: v_emoji_picker__WEBPACK_IMPORTED_MODULE_0__["VEmojiPicker"]
+  },
+  props: {
+    contactId: Number,
+    contactName: String,
+    messages: Array
+  },
+  data: function data() {
+    return {
+      messageSent: "",
+      showDialog: false,
+      // screen: screen.width
+      screen: window.innerWidth
+    };
+  },
+  updated: function updated() {
+    this.scrollToEnd();
+  },
+  methods: {
+    postMessage: function postMessage() {
+      var _this = this;
+
+      axios.post("/api/messages", {
+        to_id: this.contactId,
+        content: this.messageSent
+      }).then(function (response) {
+        _this.messageSent = "";
+      });
+    },
+    scrollToEnd: function scrollToEnd() {
+      var el = document.querySelector(".messages");
+      el.scrollTop = el.scrollHeight;
+    },
+    showContacts: function showContacts() {
+      document.getElementById('allContacts').style.display = 'block ';
+      document.getElementById('allConversation').style.display = 'none ';
+    },
+    toogleDialogEmoji: function toogleDialogEmoji() {
+      this.showDialog = !this.showDialog;
+    },
+    onSelectEmoji: function onSelectEmoji(emoji) {
+      this.messageSent += emoji.data;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2046,82 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    contactId: Number,
-    contactName: String
-  },
-  data: function data() {
-    return {
-      messages: [],
-      messageSent: ""
-    };
-  },
-  mounted: function mounted() {
-    this.getMessages();
-  },
-  methods: {
-    getMessages: function getMessages() {
-      var _this = this;
-
-      axios.get("/api/messages?contact_id=".concat(this.contactId)).then(function (response) {
-        _this.messages = response.data;
-      });
-    },
-    postMessage: function postMessage() {
-      var _this2 = this;
-
-      axios.post("/api/messages", {
-        to_id: this.contactId,
-        content: this.messageSent
-      }).then(function (response) {
-        _this2.messageSent = "", _this2.getMessages();
-      });
-    }
-  },
-  watch: {
-    contactId: function contactId(value) {
-      this.getMessages();
-    }
-  }
-});
+/* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
 
@@ -2153,9 +2228,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    writtenByMe: Boolean
+    writtenByMe: Boolean,
+    message: Array
   },
   data: function data() {
     return {};
@@ -2186,15 +2266,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    userId: Number
+  },
   data: function data() {
     return {
-      selectedConversation: ""
+      selectedConversation: "",
+      messages: []
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    Echo.channel("example").listen("MessageSent", function (data) {
+      var message = data.message;
+      message.writtenByMe = _this.userId == message.from_id;
+
+      _this.messages.push(message);
+    });
   },
   methods: {
     changeActiveConversation: function changeActiveConversation(conversation) {
       this.selectedConversation = conversation;
+      this.getMessages();
+    },
+    getMessages: function getMessages() {
+      var _this2 = this;
+
+      axios.get("/api/messages?contact_id=".concat(this.selectedConversation.contact_id)).then(function (response) {
+        _this2.messages = response.data;
+      });
     }
   }
 });
@@ -6625,6 +6732,112 @@ __webpack_require__.r(__webpack_exports__);
 
 })));
 //# sourceMappingURL=bootstrap.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.messages {\noverflow-y: auto;\n}\n#EmojiPicker{\n  position: absolute;\n  margin-top: -27.8rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/lib/css-base.js":
+/*!*************************************************!*\
+  !*** ./node_modules/css-loader/lib/css-base.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
 
 
 /***/ }),
@@ -17509,6 +17722,1537 @@ if ( typeof noGlobal === "undefined" ) {
 
 return jQuery;
 } );
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-echo/dist/echo.js":
+/*!************************************************!*\
+  !*** ./node_modules/laravel-echo/dist/echo.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function () {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+var Connector = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Connector(options) {
+    _classCallCheck(this, Connector);
+
+    /**
+     * Default connector options.
+     */
+    this._defaultOptions = {
+      auth: {
+        headers: {}
+      },
+      authEndpoint: '/broadcasting/auth',
+      broadcaster: 'pusher',
+      csrfToken: null,
+      host: null,
+      key: null,
+      namespace: 'App.Events'
+    };
+    this.setOptions(options);
+    this.connect();
+  }
+  /**
+   * Merge the custom options with the defaults.
+   */
+
+
+  _createClass(Connector, [{
+    key: "setOptions",
+    value: function setOptions(options) {
+      this.options = _extends(this._defaultOptions, options);
+
+      if (this.csrfToken()) {
+        this.options.auth.headers['X-CSRF-TOKEN'] = this.csrfToken();
+      }
+
+      return options;
+    }
+    /**
+     * Extract the CSRF token from the page.
+     */
+
+  }, {
+    key: "csrfToken",
+    value: function csrfToken() {
+      var selector;
+
+      if (typeof window !== 'undefined' && window['Laravel'] && window['Laravel'].csrfToken) {
+        return window['Laravel'].csrfToken;
+      } else if (this.options.csrfToken) {
+        return this.options.csrfToken;
+      } else if (typeof document !== 'undefined' && typeof document.querySelector === 'function' && (selector = document.querySelector('meta[name="csrf-token"]'))) {
+        return selector.getAttribute('content');
+      }
+
+      return null;
+    }
+  }]);
+
+  return Connector;
+}();
+
+/**
+ * This class represents a basic channel.
+ */
+var Channel = /*#__PURE__*/function () {
+  function Channel() {
+    _classCallCheck(this, Channel);
+  }
+
+  _createClass(Channel, [{
+    key: "listenForWhisper",
+
+    /**
+     * Listen for a whisper event on the channel instance.
+     */
+    value: function listenForWhisper(event, callback) {
+      return this.listen('.client-' + event, callback);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "notification",
+    value: function notification(callback) {
+      return this.listen('.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', callback);
+    }
+    /**
+     * Stop listening for a whisper event on the channel instance.
+     */
+
+  }, {
+    key: "stopListeningForWhisper",
+    value: function stopListeningForWhisper(event) {
+      return this.stopListening('.client-' + event);
+    }
+  }]);
+
+  return Channel;
+}();
+
+/**
+ * Event name formatter
+ */
+var EventFormatter = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function EventFormatter(namespace) {
+    _classCallCheck(this, EventFormatter);
+
+    this.setNamespace(namespace);
+  }
+  /**
+   * Format the given event name.
+   */
+
+
+  _createClass(EventFormatter, [{
+    key: "format",
+    value: function format(event) {
+      if (event.charAt(0) === '.' || event.charAt(0) === '\\') {
+        return event.substr(1);
+      } else if (this.namespace) {
+        event = this.namespace + '.' + event;
+      }
+
+      return event.replace(/\./g, '\\');
+    }
+    /**
+     * Set the event namespace.
+     */
+
+  }, {
+    key: "setNamespace",
+    value: function setNamespace(value) {
+      this.namespace = value;
+    }
+  }]);
+
+  return EventFormatter;
+}();
+
+/**
+ * This class represents a Pusher channel.
+ */
+
+var PusherChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(PusherChannel, _Channel);
+
+  var _super = _createSuper(PusherChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function PusherChannel(pusher, name, options) {
+    var _this;
+
+    _classCallCheck(this, PusherChannel);
+
+    _this = _super.call(this);
+    _this.name = name;
+    _this.pusher = pusher;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Pusher channel.
+   */
+
+
+  _createClass(PusherChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.subscription = this.pusher.subscribe(this.name);
+    }
+    /**
+     * Unsubscribe from a Pusher channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.pusher.unsubscribe(this.name);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      this.subscription.unbind(this.eventFormatter.format(event));
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      this.on('pusher:subscription_succeeded', function () {
+        callback();
+      });
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      this.on('pusher:subscription_error', function (status) {
+        callback(status);
+      });
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      this.subscription.bind(event, callback);
+      return this;
+    }
+  }]);
+
+  return PusherChannel;
+}(Channel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPrivateChannel);
+
+  function PusherPrivateChannel() {
+    _classCallCheck(this, PusherPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherEncryptedPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherEncryptedPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherEncryptedPrivateChannel);
+
+  function PusherEncryptedPrivateChannel() {
+    _classCallCheck(this, PusherEncryptedPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherEncryptedPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherEncryptedPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher presence channel.
+ */
+
+var PusherPresenceChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPresenceChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPresenceChannel);
+
+  function PusherPresenceChannel() {
+    _classCallCheck(this, PusherPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      this.on('pusher:subscription_succeeded', function (data) {
+        callback(Object.keys(data.members).map(function (k) {
+          return data.members[k];
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('pusher:member_added', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('pusher:member_removed', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+    /**
+     * Trigger client event on the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherPresenceChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Socket.io channel.
+ */
+
+var SocketIoChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(SocketIoChannel, _Channel);
+
+  var _super = _createSuper(SocketIoChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function SocketIoChannel(socket, name, options) {
+    var _this;
+
+    _classCallCheck(this, SocketIoChannel);
+
+    _this = _super.call(this);
+    /**
+     * The event callbacks applied to the channel.
+     */
+
+    _this.events = {};
+    _this.name = name;
+    _this.socket = socket;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    _this.configureReconnector();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Socket.io channel.
+   */
+
+
+  _createClass(SocketIoChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.socket.emit('subscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Unsubscribe from channel and ubind event callbacks.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.unbind();
+      this.socket.emit('unsubscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      var name = this.eventFormatter.format(event);
+      this.socket.removeListener(name);
+      delete this.events[name];
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      this.on('connect', function (socket) {
+        callback(socket);
+      });
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind the channel's socket to an event and store the callback.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      var _this2 = this;
+
+      var listener = function listener(channel, data) {
+        if (_this2.name == channel) {
+          callback(data);
+        }
+      };
+
+      this.socket.on(event, listener);
+      this.bind(event, listener);
+    }
+    /**
+     * Attach a 'reconnect' listener and bind the event.
+     */
+
+  }, {
+    key: "configureReconnector",
+    value: function configureReconnector() {
+      var _this3 = this;
+
+      var listener = function listener() {
+        _this3.subscribe();
+      };
+
+      this.socket.on('reconnect', listener);
+      this.bind('reconnect', listener);
+    }
+    /**
+     * Bind the channel's socket to an event and store the callback.
+     */
+
+  }, {
+    key: "bind",
+    value: function bind(event, callback) {
+      this.events[event] = this.events[event] || [];
+      this.events[event].push(callback);
+    }
+    /**
+     * Unbind the channel's socket from all stored event callbacks.
+     */
+
+  }, {
+    key: "unbind",
+    value: function unbind() {
+      var _this4 = this;
+
+      Object.keys(this.events).forEach(function (event) {
+        _this4.events[event].forEach(function (callback) {
+          _this4.socket.removeListener(event, callback);
+        });
+
+        delete _this4.events[event];
+      });
+    }
+  }]);
+
+  return SocketIoChannel;
+}(Channel);
+
+/**
+ * This class represents a Socket.io presence channel.
+ */
+
+var SocketIoPrivateChannel = /*#__PURE__*/function (_SocketIoChannel) {
+  _inherits(SocketIoPrivateChannel, _SocketIoChannel);
+
+  var _super = _createSuper(SocketIoPrivateChannel);
+
+  function SocketIoPrivateChannel() {
+    _classCallCheck(this, SocketIoPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.socket.emit('client event', {
+        channel: this.name,
+        event: "client-".concat(eventName),
+        data: data
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPrivateChannel;
+}(SocketIoChannel);
+
+/**
+ * This class represents a Socket.io presence channel.
+ */
+
+var SocketIoPresenceChannel = /*#__PURE__*/function (_SocketIoPrivateChann) {
+  _inherits(SocketIoPresenceChannel, _SocketIoPrivateChann);
+
+  var _super = _createSuper(SocketIoPresenceChannel);
+
+  function SocketIoPresenceChannel() {
+    _classCallCheck(this, SocketIoPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      this.on('presence:subscribed', function (members) {
+        callback(members.map(function (m) {
+          return m.user_info;
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('presence:joining', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('presence:leaving', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPresenceChannel;
+}(SocketIoPrivateChannel);
+
+/**
+ * This class represents a null channel.
+ */
+
+var NullChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(NullChannel, _Channel);
+
+  var _super = _createSuper(NullChannel);
+
+  function NullChannel() {
+    _classCallCheck(this, NullChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullChannel, [{
+    key: "subscribe",
+
+    /**
+     * Subscribe to a channel.
+     */
+    value: function subscribe() {} //
+
+    /**
+     * Unsubscribe from a channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {} //
+
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      return this;
+    }
+  }]);
+
+  return NullChannel;
+}(Channel);
+
+/**
+ * This class represents a null private channel.
+ */
+
+var NullPrivateChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPrivateChannel, _NullChannel);
+
+  var _super = _createSuper(NullPrivateChannel);
+
+  function NullPrivateChannel() {
+    _classCallCheck(this, NullPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      return this;
+    }
+  }]);
+
+  return NullPrivateChannel;
+}(NullChannel);
+
+/**
+ * This class represents a null presence channel.
+ */
+
+var NullPresenceChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPresenceChannel, _NullChannel);
+
+  var _super = _createSuper(NullPresenceChannel);
+
+  function NullPresenceChannel() {
+    _classCallCheck(this, NullPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      return this;
+    }
+    /**
+     * Trigger client event on the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      return this;
+    }
+  }]);
+
+  return NullPresenceChannel;
+}(NullChannel);
+
+/**
+ * This class creates a connector to Pusher.
+ */
+
+var PusherConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(PusherConnector, _Connector);
+
+  var _super = _createSuper(PusherConnector);
+
+  function PusherConnector() {
+    var _this;
+
+    _classCallCheck(this, PusherConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Pusher connection.
+   */
+
+
+  _createClass(PusherConnector, [{
+    key: "connect",
+    value: function connect() {
+      if (typeof this.options.client !== 'undefined') {
+        this.pusher = this.options.client;
+      } else {
+        this.pusher = new Pusher(this.options.key, this.options);
+      }
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new PusherChannel(this.pusher, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new PusherPrivateChannel(this.pusher, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivateChannel",
+    value: function encryptedPrivateChannel(name) {
+      if (!this.channels['private-encrypted-' + name]) {
+        this.channels['private-encrypted-' + name] = new PusherEncryptedPrivateChannel(this.pusher, 'private-encrypted-' + name, this.options);
+      }
+
+      return this.channels['private-encrypted-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new PusherPresenceChannel(this.pusher, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this2 = this;
+
+      var channels = [name, 'private-' + name, 'presence-' + name];
+      channels.forEach(function (name, index) {
+        _this2.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.pusher.connection.socket_id;
+    }
+    /**
+     * Disconnect Pusher connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.pusher.disconnect();
+    }
+  }]);
+
+  return PusherConnector;
+}(Connector);
+
+/**
+ * This class creates a connnector to a Socket.io server.
+ */
+
+var SocketIoConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(SocketIoConnector, _Connector);
+
+  var _super = _createSuper(SocketIoConnector);
+
+  function SocketIoConnector() {
+    var _this;
+
+    _classCallCheck(this, SocketIoConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Socket.io connection.
+   */
+
+
+  _createClass(SocketIoConnector, [{
+    key: "connect",
+    value: function connect() {
+      var io = this.getSocketIO();
+      this.socket = io(this.options.host, this.options);
+      return this.socket;
+    }
+    /**
+     * Get socket.io module from global scope or options.
+     */
+
+  }, {
+    key: "getSocketIO",
+    value: function getSocketIO() {
+      if (typeof this.options.client !== 'undefined') {
+        return this.options.client;
+      }
+
+      if (typeof io !== 'undefined') {
+        return io;
+      }
+
+      throw new Error('Socket.io client not found. Should be globally available or passed via options.client');
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new SocketIoChannel(this.socket, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new SocketIoPrivateChannel(this.socket, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new SocketIoPresenceChannel(this.socket, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this2 = this;
+
+      var channels = [name, 'private-' + name, 'presence-' + name];
+      channels.forEach(function (name) {
+        _this2.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.socket.id;
+    }
+    /**
+     * Disconnect Socketio connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.socket.disconnect();
+    }
+  }]);
+
+  return SocketIoConnector;
+}(Connector);
+
+/**
+ * This class creates a null connector.
+ */
+
+var NullConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(NullConnector, _Connector);
+
+  var _super = _createSuper(NullConnector);
+
+  function NullConnector() {
+    var _this;
+
+    _classCallCheck(this, NullConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh connection.
+   */
+
+
+  _createClass(NullConnector, [{
+    key: "connect",
+    value: function connect() {} //
+
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return new NullChannel();
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      return new NullChannel();
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      return new NullPrivateChannel();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      return new NullPresenceChannel();
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {} //
+
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {} //
+
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return 'fake-socket-id';
+    }
+    /**
+     * Disconnect the connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {//
+    }
+  }]);
+
+  return NullConnector;
+}(Connector);
+
+/**
+ * This class is the primary API for interacting with broadcasting.
+ */
+
+var Echo = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Echo(options) {
+    _classCallCheck(this, Echo);
+
+    this.options = options;
+    this.connect();
+
+    if (!this.options.withoutInterceptors) {
+      this.registerInterceptors();
+    }
+  }
+  /**
+   * Get a channel instance by name.
+   */
+
+
+  _createClass(Echo, [{
+    key: "channel",
+    value: function channel(_channel) {
+      return this.connector.channel(_channel);
+    }
+    /**
+     * Create a new connection.
+     */
+
+  }, {
+    key: "connect",
+    value: function connect() {
+      if (this.options.broadcaster == 'pusher') {
+        this.connector = new PusherConnector(this.options);
+      } else if (this.options.broadcaster == 'socket.io') {
+        this.connector = new SocketIoConnector(this.options);
+      } else if (this.options.broadcaster == 'null') {
+        this.connector = new NullConnector(this.options);
+      } else if (typeof this.options.broadcaster == 'function') {
+        this.connector = new this.options.broadcaster(this.options);
+      }
+    }
+    /**
+     * Disconnect from the Echo server.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.connector.disconnect();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "join",
+    value: function join(channel) {
+      return this.connector.presenceChannel(channel);
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(channel) {
+      this.connector.leave(channel);
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(channel) {
+      this.connector.leaveChannel(channel);
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(channel, event, callback) {
+      return this.connector.listen(channel, event, callback);
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "private",
+    value: function _private(channel) {
+      return this.connector.privateChannel(channel);
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivate",
+    value: function encryptedPrivate(channel) {
+      return this.connector.encryptedPrivateChannel(channel);
+    }
+    /**
+     * Get the Socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.connector.socketId();
+    }
+    /**
+     * Register 3rd party request interceptiors. These are used to automatically
+     * send a connections socket id to a Laravel app with a X-Socket-Id header.
+     */
+
+  }, {
+    key: "registerInterceptors",
+    value: function registerInterceptors() {
+      if (typeof Vue === 'function' && Vue.http) {
+        this.registerVueRequestInterceptor();
+      }
+
+      if (typeof axios === 'function') {
+        this.registerAxiosRequestInterceptor();
+      }
+
+      if (typeof jQuery === 'function') {
+        this.registerjQueryAjaxSetup();
+      }
+    }
+    /**
+     * Register a Vue HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerVueRequestInterceptor",
+    value: function registerVueRequestInterceptor() {
+      var _this = this;
+
+      Vue.http.interceptors.push(function (request, next) {
+        if (_this.socketId()) {
+          request.headers.set('X-Socket-ID', _this.socketId());
+        }
+
+        next();
+      });
+    }
+    /**
+     * Register an Axios HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerAxiosRequestInterceptor",
+    value: function registerAxiosRequestInterceptor() {
+      var _this2 = this;
+
+      axios.interceptors.request.use(function (config) {
+        if (_this2.socketId()) {
+          config.headers['X-Socket-Id'] = _this2.socketId();
+        }
+
+        return config;
+      });
+    }
+    /**
+     * Register jQuery AjaxPrefilter to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerjQueryAjaxSetup",
+    value: function registerjQueryAjaxSetup() {
+      var _this3 = this;
+
+      if (typeof jQuery.ajax != 'undefined') {
+        jQuery.ajaxPrefilter(function (options, originalOptions, xhr) {
+          if (_this3.socketId()) {
+            xhr.setRequestHeader('X-Socket-Id', _this3.socketId());
+          }
+        });
+      }
+    }
+  }]);
+
+  return Echo;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Echo);
 
 
 /***/ }),
@@ -37503,6 +39247,4577 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/pusher-js/dist/web/pusher.js":
+/*!***************************************************!*\
+  !*** ./node_modules/pusher-js/dist/web/pusher.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * Pusher JavaScript Library v7.0.1
+ * https://pusher.com/
+ *
+ * Copyright 2020, Pusher
+ * Released under the MIT licence.
+ */
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package base64 implements Base64 encoding and decoding.
+ */
+// Invalid character used in decoding to indicate
+// that the character to decode is out of range of
+// alphabet and cannot be decoded.
+var INVALID_BYTE = 256;
+/**
+ * Implements standard Base64 encoding.
+ *
+ * Operates in constant time.
+ */
+var Coder = /** @class */ (function () {
+    // TODO(dchest): methods to encode chunk-by-chunk.
+    function Coder(_paddingCharacter) {
+        if (_paddingCharacter === void 0) { _paddingCharacter = "="; }
+        this._paddingCharacter = _paddingCharacter;
+    }
+    Coder.prototype.encodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 8 + 5) / 6 | 0;
+        }
+        return (length + 2) / 3 * 4 | 0;
+    };
+    Coder.prototype.encode = function (data) {
+        var out = "";
+        var i = 0;
+        for (; i < data.length - 2; i += 3) {
+            var c = (data[i] << 16) | (data[i + 1] << 8) | (data[i + 2]);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            out += this._encodeByte((c >>> 1 * 6) & 63);
+            out += this._encodeByte((c >>> 0 * 6) & 63);
+        }
+        var left = data.length - i;
+        if (left > 0) {
+            var c = (data[i] << 16) | (left === 2 ? data[i + 1] << 8 : 0);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            if (left === 2) {
+                out += this._encodeByte((c >>> 1 * 6) & 63);
+            }
+            else {
+                out += this._paddingCharacter || "";
+            }
+            out += this._paddingCharacter || "";
+        }
+        return out;
+    };
+    Coder.prototype.maxDecodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 6 + 7) / 8 | 0;
+        }
+        return length / 4 * 3 | 0;
+    };
+    Coder.prototype.decodedLength = function (s) {
+        return this.maxDecodedLength(s.length - this._getPaddingLength(s));
+    };
+    Coder.prototype.decode = function (s) {
+        if (s.length === 0) {
+            return new Uint8Array(0);
+        }
+        var paddingLength = this._getPaddingLength(s);
+        var length = s.length - paddingLength;
+        var out = new Uint8Array(this.maxDecodedLength(length));
+        var op = 0;
+        var i = 0;
+        var haveBad = 0;
+        var v0 = 0, v1 = 0, v2 = 0, v3 = 0;
+        for (; i < length - 4; i += 4) {
+            v0 = this._decodeChar(s.charCodeAt(i + 0));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+            haveBad |= v2 & INVALID_BYTE;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (i < length - 1) {
+            v0 = this._decodeChar(s.charCodeAt(i));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+        }
+        if (i < length - 2) {
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            haveBad |= v2 & INVALID_BYTE;
+        }
+        if (i < length - 3) {
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (haveBad !== 0) {
+            throw new Error("Base64Coder: incorrect characters for decoding");
+        }
+        return out;
+    };
+    // Standard encoding have the following encoded/decoded ranges,
+    // which we need to convert between.
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  +   /
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   43  47
+    //
+    // Encode 6 bits in b into a new character.
+    Coder.prototype._encodeByte = function (b) {
+        // Encoding uses constant time operations as follows:
+        //
+        // 1. Define comparison of A with B using (A - B) >>> 8:
+        //          if A > B, then result is positive integer
+        //          if A <= B, then result is 0
+        //
+        // 2. Define selection of C or 0 using bitwise AND: X & C:
+        //          if X == 0, then result is 0
+        //          if X != 0, then result is C
+        //
+        // 3. Start with the smallest comparison (b >= 0), which is always
+        //    true, so set the result to the starting ASCII value (65).
+        //
+        // 4. Continue comparing b to higher ASCII values, and selecting
+        //    zero if comparison isn't true, otherwise selecting a value
+        //    to add to result, which:
+        //
+        //          a) undoes the previous addition
+        //          b) provides new value to add
+        //
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 43);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 43) - 63 + 47);
+        return String.fromCharCode(result);
+    };
+    // Decode a character code into a byte.
+    // Must return 256 if character is out of alphabet range.
+    Coder.prototype._decodeChar = function (c) {
+        // Decoding works similar to encoding: using the same comparison
+        // function, but now it works on ranges: result is always incremented
+        // by value, but this value becomes zero if the range is not
+        // satisfied.
+        //
+        // Decoding starts with invalid value, 256, which is then
+        // subtracted when the range is satisfied. If none of the ranges
+        // apply, the function returns 256, which is then checked by
+        // the caller to throw error.
+        var result = INVALID_BYTE; // start with invalid character
+        // c == 43 (c > 42 and c < 44)
+        result += (((42 - c) & (c - 44)) >>> 8) & (-INVALID_BYTE + c - 43 + 62);
+        // c == 47 (c > 46 and c < 48)
+        result += (((46 - c) & (c - 48)) >>> 8) & (-INVALID_BYTE + c - 47 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    Coder.prototype._getPaddingLength = function (s) {
+        var paddingLength = 0;
+        if (this._paddingCharacter) {
+            for (var i = s.length - 1; i >= 0; i--) {
+                if (s[i] !== this._paddingCharacter) {
+                    break;
+                }
+                paddingLength++;
+            }
+            if (s.length < 4 || paddingLength > 2) {
+                throw new Error("Base64Coder: incorrect padding");
+            }
+        }
+        return paddingLength;
+    };
+    return Coder;
+}());
+exports.Coder = Coder;
+var stdCoder = new Coder();
+function encode(data) {
+    return stdCoder.encode(data);
+}
+exports.encode = encode;
+function decode(s) {
+    return stdCoder.decode(s);
+}
+exports.decode = decode;
+/**
+ * Implements URL-safe Base64 encoding.
+ * (Same as Base64, but '+' is replaced with '-', and '/' with '_').
+ *
+ * Operates in constant time.
+ */
+var URLSafeCoder = /** @class */ (function (_super) {
+    __extends(URLSafeCoder, _super);
+    function URLSafeCoder() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    // URL-safe encoding have the following encoded/decoded ranges:
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  -   _
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   45  95
+    //
+    URLSafeCoder.prototype._encodeByte = function (b) {
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 45);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 45) - 63 + 95);
+        return String.fromCharCode(result);
+    };
+    URLSafeCoder.prototype._decodeChar = function (c) {
+        var result = INVALID_BYTE;
+        // c == 45 (c > 44 and c < 46)
+        result += (((44 - c) & (c - 46)) >>> 8) & (-INVALID_BYTE + c - 45 + 62);
+        // c == 95 (c > 94 and c < 96)
+        result += (((94 - c) & (c - 96)) >>> 8) & (-INVALID_BYTE + c - 95 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    return URLSafeCoder;
+}(Coder));
+exports.URLSafeCoder = URLSafeCoder;
+var urlSafeCoder = new URLSafeCoder();
+function encodeURLSafe(data) {
+    return urlSafeCoder.encode(data);
+}
+exports.encodeURLSafe = encodeURLSafe;
+function decodeURLSafe(s) {
+    return urlSafeCoder.decode(s);
+}
+exports.decodeURLSafe = decodeURLSafe;
+exports.encodedLength = function (length) {
+    return stdCoder.encodedLength(length);
+};
+exports.maxDecodedLength = function (length) {
+    return stdCoder.maxDecodedLength(length);
+};
+exports.decodedLength = function (s) {
+    return stdCoder.decodedLength(s);
+};
+//# sourceMappingURL=base64.js.map
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package utf8 implements UTF-8 encoding and decoding.
+ */
+var INVALID_UTF16 = "utf8: invalid string";
+var INVALID_UTF8 = "utf8: invalid source encoding";
+/**
+ * Encodes the given string into UTF-8 byte array.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encode(s) {
+    // Calculate result length and allocate output array.
+    // encodedLength() also validates string and throws errors,
+    // so we don't need repeat validation here.
+    var arr = new Uint8Array(encodedLength(s));
+    var pos = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            arr[pos++] = c;
+        }
+        else if (c < 0x800) {
+            arr[pos++] = 0xc0 | c >> 6;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else if (c < 0xd800) {
+            arr[pos++] = 0xe0 | c >> 12;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else {
+            i++; // get one more character
+            c = (c & 0x3ff) << 10;
+            c |= s.charCodeAt(i) & 0x3ff;
+            c += 0x10000;
+            arr[pos++] = 0xf0 | c >> 18;
+            arr[pos++] = 0x80 | (c >> 12) & 0x3f;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+    }
+    return arr;
+}
+exports.encode = encode;
+/**
+ * Returns the number of bytes required to encode the given string into UTF-8.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encodedLength(s) {
+    var result = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            result += 1;
+        }
+        else if (c < 0x800) {
+            result += 2;
+        }
+        else if (c < 0xd800) {
+            result += 3;
+        }
+        else if (c <= 0xdfff) {
+            if (i >= s.length - 1) {
+                throw new Error(INVALID_UTF16);
+            }
+            i++; // "eat" next character
+            result += 4;
+        }
+        else {
+            throw new Error(INVALID_UTF16);
+        }
+    }
+    return result;
+}
+exports.encodedLength = encodedLength;
+/**
+ * Decodes the given byte array from UTF-8 into a string.
+ * Throws if encoding is invalid.
+ */
+function decode(arr) {
+    var chars = [];
+    for (var i = 0; i < arr.length; i++) {
+        var b = arr[i];
+        if (b & 0x80) {
+            var min = void 0;
+            if (b < 0xe0) {
+                // Need 1 more byte.
+                if (i >= arr.length) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x1f) << 6 | (n1 & 0x3f);
+                min = 0x80;
+            }
+            else if (b < 0xf0) {
+                // Need 2 more bytes.
+                if (i >= arr.length - 1) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 12 | (n1 & 0x3f) << 6 | (n2 & 0x3f);
+                min = 0x800;
+            }
+            else if (b < 0xf8) {
+                // Need 3 more bytes.
+                if (i >= arr.length - 2) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                var n3 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80 || (n3 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 18 | (n1 & 0x3f) << 12 | (n2 & 0x3f) << 6 | (n3 & 0x3f);
+                min = 0x10000;
+            }
+            else {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b < min || (b >= 0xd800 && b <= 0xdfff)) {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b >= 0x10000) {
+                // Surrogate pair.
+                if (b > 0x10ffff) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b -= 0x10000;
+                chars.push(String.fromCharCode(0xd800 | (b >> 10)));
+                b = 0xdc00 | (b & 0x3ff);
+            }
+        }
+        chars.push(String.fromCharCode(b));
+    }
+    return chars.join("");
+}
+exports.decode = decode;
+//# sourceMappingURL=utf8.js.map
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// required so we don't have to do require('pusher').default etc.
+module.exports = __webpack_require__(3).default;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_receiver_factory.ts
+var ScriptReceiverFactory = (function () {
+    function ScriptReceiverFactory(prefix, name) {
+        this.lastId = 0;
+        this.prefix = prefix;
+        this.name = name;
+    }
+    ScriptReceiverFactory.prototype.create = function (callback) {
+        this.lastId++;
+        var number = this.lastId;
+        var id = this.prefix + number;
+        var name = this.name + '[' + number + ']';
+        var called = false;
+        var callbackWrapper = function () {
+            if (!called) {
+                callback.apply(null, arguments);
+                called = true;
+            }
+        };
+        this[number] = callbackWrapper;
+        return { number: number, id: id, name: name, callback: callbackWrapper };
+    };
+    ScriptReceiverFactory.prototype.remove = function (receiver) {
+        delete this[receiver.number];
+    };
+    return ScriptReceiverFactory;
+}());
+
+var ScriptReceivers = new ScriptReceiverFactory('_pusher_script_', 'Pusher.ScriptReceivers');
+
+// CONCATENATED MODULE: ./src/core/defaults.ts
+var Defaults = {
+    VERSION: "7.0.1",
+    PROTOCOL: 7,
+    wsPort: 80,
+    wssPort: 443,
+    wsPath: '',
+    httpHost: 'sockjs.pusher.com',
+    httpPort: 80,
+    httpsPort: 443,
+    httpPath: '/pusher',
+    stats_host: 'stats.pusher.com',
+    authEndpoint: '/pusher/auth',
+    authTransport: 'ajax',
+    activityTimeout: 120000,
+    pongTimeout: 30000,
+    unavailableTimeout: 10000,
+    cluster: 'mt1',
+    cdn_http: "http://js.pusher.com",
+    cdn_https: "https://js.pusher.com",
+    dependency_suffix: ""
+};
+/* harmony default export */ var defaults = (Defaults);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependency_loader.ts
+
+
+var dependency_loader_DependencyLoader = (function () {
+    function DependencyLoader(options) {
+        this.options = options;
+        this.receivers = options.receivers || ScriptReceivers;
+        this.loading = {};
+    }
+    DependencyLoader.prototype.load = function (name, options, callback) {
+        var self = this;
+        if (self.loading[name] && self.loading[name].length > 0) {
+            self.loading[name].push(callback);
+        }
+        else {
+            self.loading[name] = [callback];
+            var request = runtime.createScriptRequest(self.getPath(name, options));
+            var receiver = self.receivers.create(function (error) {
+                self.receivers.remove(receiver);
+                if (self.loading[name]) {
+                    var callbacks = self.loading[name];
+                    delete self.loading[name];
+                    var successCallback = function (wasSuccessful) {
+                        if (!wasSuccessful) {
+                            request.cleanup();
+                        }
+                    };
+                    for (var i = 0; i < callbacks.length; i++) {
+                        callbacks[i](error, successCallback);
+                    }
+                }
+            });
+            request.send(receiver);
+        }
+    };
+    DependencyLoader.prototype.getRoot = function (options) {
+        var cdn;
+        var protocol = runtime.getDocument().location.protocol;
+        if ((options && options.useTLS) || protocol === 'https:') {
+            cdn = this.options.cdn_https;
+        }
+        else {
+            cdn = this.options.cdn_http;
+        }
+        return cdn.replace(/\/*$/, '') + '/' + this.options.version;
+    };
+    DependencyLoader.prototype.getPath = function (name, options) {
+        return this.getRoot(options) + '/' + name + this.options.suffix + '.js';
+    };
+    return DependencyLoader;
+}());
+/* harmony default export */ var dependency_loader = (dependency_loader_DependencyLoader);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependencies.ts
+
+
+
+var DependenciesReceivers = new ScriptReceiverFactory('_pusher_dependencies', 'Pusher.DependenciesReceivers');
+var Dependencies = new dependency_loader({
+    cdn_http: defaults.cdn_http,
+    cdn_https: defaults.cdn_https,
+    version: defaults.VERSION,
+    suffix: defaults.dependency_suffix,
+    receivers: DependenciesReceivers
+});
+
+// CONCATENATED MODULE: ./src/core/utils/url_store.ts
+var urlStore = {
+    baseUrl: 'https://pusher.com',
+    urls: {
+        authenticationEndpoint: {
+            path: '/docs/authenticating_users'
+        },
+        javascriptQuickStart: {
+            path: '/docs/javascript_quick_start'
+        },
+        triggeringClientEvents: {
+            path: '/docs/client_api_guide/client_events#trigger-events'
+        },
+        encryptedChannelSupport: {
+            fullUrl: 'https://github.com/pusher/pusher-js/tree/cc491015371a4bde5743d1c87a0fbac0feb53195#encrypted-channel-support'
+        }
+    }
+};
+var buildLogSuffix = function (key) {
+    var urlPrefix = 'See:';
+    var urlObj = urlStore.urls[key];
+    if (!urlObj)
+        return '';
+    var url;
+    if (urlObj.fullUrl) {
+        url = urlObj.fullUrl;
+    }
+    else if (urlObj.path) {
+        url = urlStore.baseUrl + urlObj.path;
+    }
+    if (!url)
+        return '';
+    return urlPrefix + " " + url;
+};
+/* harmony default export */ var url_store = ({ buildLogSuffix: buildLogSuffix });
+
+// CONCATENATED MODULE: ./src/core/errors.ts
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BadEventName = (function (_super) {
+    __extends(BadEventName, _super);
+    function BadEventName(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return BadEventName;
+}(Error));
+
+var RequestTimedOut = (function (_super) {
+    __extends(RequestTimedOut, _super);
+    function RequestTimedOut(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return RequestTimedOut;
+}(Error));
+
+var TransportPriorityTooLow = (function (_super) {
+    __extends(TransportPriorityTooLow, _super);
+    function TransportPriorityTooLow(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return TransportPriorityTooLow;
+}(Error));
+
+var TransportClosed = (function (_super) {
+    __extends(TransportClosed, _super);
+    function TransportClosed(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return TransportClosed;
+}(Error));
+
+var UnsupportedFeature = (function (_super) {
+    __extends(UnsupportedFeature, _super);
+    function UnsupportedFeature(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedFeature;
+}(Error));
+
+var UnsupportedTransport = (function (_super) {
+    __extends(UnsupportedTransport, _super);
+    function UnsupportedTransport(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedTransport;
+}(Error));
+
+var UnsupportedStrategy = (function (_super) {
+    __extends(UnsupportedStrategy, _super);
+    function UnsupportedStrategy(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedStrategy;
+}(Error));
+
+var HTTPAuthError = (function (_super) {
+    __extends(HTTPAuthError, _super);
+    function HTTPAuthError(status, msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        _this.status = status;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return HTTPAuthError;
+}(Error));
+
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/auth/xhr_auth.ts
+
+
+
+var ajax = function (context, socketId, callback) {
+    var self = this, xhr;
+    xhr = runtime.createXHR();
+    xhr.open('POST', self.options.authEndpoint, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    for (var headerName in this.authOptions.headers) {
+        xhr.setRequestHeader(headerName, this.authOptions.headers[headerName]);
+    }
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var data = void 0;
+                var parsed = false;
+                try {
+                    data = JSON.parse(xhr.responseText);
+                    parsed = true;
+                }
+                catch (e) {
+                    callback(new HTTPAuthError(200, 'JSON returned from auth endpoint was invalid, yet status code was 200. Data was: ' +
+                        xhr.responseText), { auth: '' });
+                }
+                if (parsed) {
+                    callback(null, data);
+                }
+            }
+            else {
+                var suffix = url_store.buildLogSuffix('authenticationEndpoint');
+                callback(new HTTPAuthError(xhr.status, 'Unable to retrieve auth string from auth endpoint - ' +
+                    ("received status: " + xhr.status + " from " + self.options.authEndpoint + ". ") +
+                    ("Clients must be authenticated to join private or presence channels. " + suffix)), { auth: '' });
+            }
+        }
+    };
+    xhr.send(this.composeQuery(socketId));
+    return xhr;
+};
+/* harmony default export */ var xhr_auth = (ajax);
+
+// CONCATENATED MODULE: ./src/core/base64.ts
+function encode(s) {
+    return btoa(utob(s));
+}
+var fromCharCode = String.fromCharCode;
+var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+var b64tab = {};
+for (var base64_i = 0, l = b64chars.length; base64_i < l; base64_i++) {
+    b64tab[b64chars.charAt(base64_i)] = base64_i;
+}
+var cb_utob = function (c) {
+    var cc = c.charCodeAt(0);
+    return cc < 0x80
+        ? c
+        : cc < 0x800
+            ? fromCharCode(0xc0 | (cc >>> 6)) + fromCharCode(0x80 | (cc & 0x3f))
+            : fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) +
+                fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
+                fromCharCode(0x80 | (cc & 0x3f));
+};
+var utob = function (u) {
+    return u.replace(/[^\x00-\x7F]/g, cb_utob);
+};
+var cb_encode = function (ccc) {
+    var padlen = [0, 2, 1][ccc.length % 3];
+    var ord = (ccc.charCodeAt(0) << 16) |
+        ((ccc.length > 1 ? ccc.charCodeAt(1) : 0) << 8) |
+        (ccc.length > 2 ? ccc.charCodeAt(2) : 0);
+    var chars = [
+        b64chars.charAt(ord >>> 18),
+        b64chars.charAt((ord >>> 12) & 63),
+        padlen >= 2 ? '=' : b64chars.charAt((ord >>> 6) & 63),
+        padlen >= 1 ? '=' : b64chars.charAt(ord & 63)
+    ];
+    return chars.join('');
+};
+var btoa = window.btoa ||
+    function (b) {
+        return b.replace(/[\s\S]{1,3}/g, cb_encode);
+    };
+
+// CONCATENATED MODULE: ./src/core/utils/timers/abstract_timer.ts
+var Timer = (function () {
+    function Timer(set, clear, delay, callback) {
+        var _this = this;
+        this.clear = clear;
+        this.timer = set(function () {
+            if (_this.timer) {
+                _this.timer = callback(_this.timer);
+            }
+        }, delay);
+    }
+    Timer.prototype.isRunning = function () {
+        return this.timer !== null;
+    };
+    Timer.prototype.ensureAborted = function () {
+        if (this.timer) {
+            this.clear(this.timer);
+            this.timer = null;
+        }
+    };
+    return Timer;
+}());
+/* harmony default export */ var abstract_timer = (Timer);
+
+// CONCATENATED MODULE: ./src/core/utils/timers/index.ts
+var timers_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+function timers_clearTimeout(timer) {
+    window.clearTimeout(timer);
+}
+function timers_clearInterval(timer) {
+    window.clearInterval(timer);
+}
+var OneOffTimer = (function (_super) {
+    timers_extends(OneOffTimer, _super);
+    function OneOffTimer(delay, callback) {
+        return _super.call(this, setTimeout, timers_clearTimeout, delay, function (timer) {
+            callback();
+            return null;
+        }) || this;
+    }
+    return OneOffTimer;
+}(abstract_timer));
+
+var PeriodicTimer = (function (_super) {
+    timers_extends(PeriodicTimer, _super);
+    function PeriodicTimer(delay, callback) {
+        return _super.call(this, setInterval, timers_clearInterval, delay, function (timer) {
+            callback();
+            return timer;
+        }) || this;
+    }
+    return PeriodicTimer;
+}(abstract_timer));
+
+
+// CONCATENATED MODULE: ./src/core/util.ts
+
+var Util = {
+    now: function () {
+        if (Date.now) {
+            return Date.now();
+        }
+        else {
+            return new Date().valueOf();
+        }
+    },
+    defer: function (callback) {
+        return new OneOffTimer(0, callback);
+    },
+    method: function (name) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var boundArguments = Array.prototype.slice.call(arguments, 1);
+        return function (object) {
+            return object[name].apply(object, boundArguments.concat(arguments));
+        };
+    }
+};
+/* harmony default export */ var util = (Util);
+
+// CONCATENATED MODULE: ./src/core/utils/collections.ts
+
+
+function extend(target) {
+    var sources = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        sources[_i - 1] = arguments[_i];
+    }
+    for (var i = 0; i < sources.length; i++) {
+        var extensions = sources[i];
+        for (var property in extensions) {
+            if (extensions[property] &&
+                extensions[property].constructor &&
+                extensions[property].constructor === Object) {
+                target[property] = extend(target[property] || {}, extensions[property]);
+            }
+            else {
+                target[property] = extensions[property];
+            }
+        }
+    }
+    return target;
+}
+function stringify() {
+    var m = ['Pusher'];
+    for (var i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] === 'string') {
+            m.push(arguments[i]);
+        }
+        else {
+            m.push(safeJSONStringify(arguments[i]));
+        }
+    }
+    return m.join(' : ');
+}
+function arrayIndexOf(array, item) {
+    var nativeIndexOf = Array.prototype.indexOf;
+    if (array === null) {
+        return -1;
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) {
+        return array.indexOf(item);
+    }
+    for (var i = 0, l = array.length; i < l; i++) {
+        if (array[i] === item) {
+            return i;
+        }
+    }
+    return -1;
+}
+function objectApply(object, f) {
+    for (var key in object) {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
+            f(object[key], key, object);
+        }
+    }
+}
+function keys(object) {
+    var keys = [];
+    objectApply(object, function (_, key) {
+        keys.push(key);
+    });
+    return keys;
+}
+function values(object) {
+    var values = [];
+    objectApply(object, function (value) {
+        values.push(value);
+    });
+    return values;
+}
+function apply(array, f, context) {
+    for (var i = 0; i < array.length; i++) {
+        f.call(context || window, array[i], i, array);
+    }
+}
+function map(array, f) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        result.push(f(array[i], i, array, result));
+    }
+    return result;
+}
+function mapObject(object, f) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        result[key] = f(value);
+    });
+    return result;
+}
+function filter(array, test) {
+    test =
+        test ||
+            function (value) {
+                return !!value;
+            };
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array, result)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+function filterObject(object, test) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        if ((test && test(value, key, object, result)) || Boolean(value)) {
+            result[key] = value;
+        }
+    });
+    return result;
+}
+function flatten(object) {
+    var result = [];
+    objectApply(object, function (value, key) {
+        result.push([key, value]);
+    });
+    return result;
+}
+function any(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array)) {
+            return true;
+        }
+    }
+    return false;
+}
+function collections_all(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (!test(array[i], i, array)) {
+            return false;
+        }
+    }
+    return true;
+}
+function encodeParamsObject(data) {
+    return mapObject(data, function (value) {
+        if (typeof value === 'object') {
+            value = safeJSONStringify(value);
+        }
+        return encodeURIComponent(encode(value.toString()));
+    });
+}
+function buildQueryString(data) {
+    var params = filterObject(data, function (value) {
+        return value !== undefined;
+    });
+    var query = map(flatten(encodeParamsObject(params)), util.method('join', '=')).join('&');
+    return query;
+}
+function decycleObject(object) {
+    var objects = [], paths = [];
+    return (function derez(value, path) {
+        var i, name, nu;
+        switch (typeof value) {
+            case 'object':
+                if (!value) {
+                    return null;
+                }
+                for (i = 0; i < objects.length; i += 1) {
+                    if (objects[i] === value) {
+                        return { $ref: paths[i] };
+                    }
+                }
+                objects.push(value);
+                paths.push(path);
+                if (Object.prototype.toString.apply(value) === '[object Array]') {
+                    nu = [];
+                    for (i = 0; i < value.length; i += 1) {
+                        nu[i] = derez(value[i], path + '[' + i + ']');
+                    }
+                }
+                else {
+                    nu = {};
+                    for (name in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, name)) {
+                            nu[name] = derez(value[name], path + '[' + JSON.stringify(name) + ']');
+                        }
+                    }
+                }
+                return nu;
+            case 'number':
+            case 'string':
+            case 'boolean':
+                return value;
+        }
+    })(object, '$');
+}
+function safeJSONStringify(source) {
+    try {
+        return JSON.stringify(source);
+    }
+    catch (e) {
+        return JSON.stringify(decycleObject(source));
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/logger.ts
+
+
+var logger_Logger = (function () {
+    function Logger() {
+        this.globalLog = function (message) {
+            if (window.console && window.console.log) {
+                window.console.log(message);
+            }
+        };
+    }
+    Logger.prototype.debug = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLog, args);
+    };
+    Logger.prototype.warn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLogWarn, args);
+    };
+    Logger.prototype.error = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLogError, args);
+    };
+    Logger.prototype.globalLogWarn = function (message) {
+        if (window.console && window.console.warn) {
+            window.console.warn(message);
+        }
+        else {
+            this.globalLog(message);
+        }
+    };
+    Logger.prototype.globalLogError = function (message) {
+        if (window.console && window.console.error) {
+            window.console.error(message);
+        }
+        else {
+            this.globalLogWarn(message);
+        }
+    };
+    Logger.prototype.log = function (defaultLoggingFunction) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var message = stringify.apply(this, arguments);
+        if (core_pusher.log) {
+            core_pusher.log(message);
+        }
+        else if (core_pusher.logToConsole) {
+            var log = defaultLoggingFunction.bind(this);
+            log(message);
+        }
+    };
+    return Logger;
+}());
+/* harmony default export */ var logger = (new logger_Logger());
+
+// CONCATENATED MODULE: ./src/runtimes/web/auth/jsonp_auth.ts
+
+var jsonp = function (context, socketId, callback) {
+    if (this.authOptions.headers !== undefined) {
+        logger.warn('To send headers with the auth request, you must use AJAX, rather than JSONP.');
+    }
+    var callbackName = context.nextAuthCallbackID.toString();
+    context.nextAuthCallbackID++;
+    var document = context.getDocument();
+    var script = document.createElement('script');
+    context.auth_callbacks[callbackName] = function (data) {
+        callback(null, data);
+    };
+    var callback_name = "Pusher.auth_callbacks['" + callbackName + "']";
+    script.src =
+        this.options.authEndpoint +
+            '?callback=' +
+            encodeURIComponent(callback_name) +
+            '&' +
+            this.composeQuery(socketId);
+    var head = document.getElementsByTagName('head')[0] || document.documentElement;
+    head.insertBefore(script, head.firstChild);
+};
+/* harmony default export */ var jsonp_auth = (jsonp);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_request.ts
+var ScriptRequest = (function () {
+    function ScriptRequest(src) {
+        this.src = src;
+    }
+    ScriptRequest.prototype.send = function (receiver) {
+        var self = this;
+        var errorString = 'Error loading ' + self.src;
+        self.script = document.createElement('script');
+        self.script.id = receiver.id;
+        self.script.src = self.src;
+        self.script.type = 'text/javascript';
+        self.script.charset = 'UTF-8';
+        if (self.script.addEventListener) {
+            self.script.onerror = function () {
+                receiver.callback(errorString);
+            };
+            self.script.onload = function () {
+                receiver.callback(null);
+            };
+        }
+        else {
+            self.script.onreadystatechange = function () {
+                if (self.script.readyState === 'loaded' ||
+                    self.script.readyState === 'complete') {
+                    receiver.callback(null);
+                }
+            };
+        }
+        if (self.script.async === undefined &&
+            document.attachEvent &&
+            /opera/i.test(navigator.userAgent)) {
+            self.errorScript = document.createElement('script');
+            self.errorScript.id = receiver.id + '_error';
+            self.errorScript.text = receiver.name + "('" + errorString + "');";
+            self.script.async = self.errorScript.async = false;
+        }
+        else {
+            self.script.async = true;
+        }
+        var head = document.getElementsByTagName('head')[0];
+        head.insertBefore(self.script, head.firstChild);
+        if (self.errorScript) {
+            head.insertBefore(self.errorScript, self.script.nextSibling);
+        }
+    };
+    ScriptRequest.prototype.cleanup = function () {
+        if (this.script) {
+            this.script.onload = this.script.onerror = null;
+            this.script.onreadystatechange = null;
+        }
+        if (this.script && this.script.parentNode) {
+            this.script.parentNode.removeChild(this.script);
+        }
+        if (this.errorScript && this.errorScript.parentNode) {
+            this.errorScript.parentNode.removeChild(this.errorScript);
+        }
+        this.script = null;
+        this.errorScript = null;
+    };
+    return ScriptRequest;
+}());
+/* harmony default export */ var script_request = (ScriptRequest);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/jsonp_request.ts
+
+
+var jsonp_request_JSONPRequest = (function () {
+    function JSONPRequest(url, data) {
+        this.url = url;
+        this.data = data;
+    }
+    JSONPRequest.prototype.send = function (receiver) {
+        if (this.request) {
+            return;
+        }
+        var query = buildQueryString(this.data);
+        var url = this.url + '/' + receiver.number + '?' + query;
+        this.request = runtime.createScriptRequest(url);
+        this.request.send(receiver);
+    };
+    JSONPRequest.prototype.cleanup = function () {
+        if (this.request) {
+            this.request.cleanup();
+        }
+    };
+    return JSONPRequest;
+}());
+/* harmony default export */ var jsonp_request = (jsonp_request_JSONPRequest);
+
+// CONCATENATED MODULE: ./src/runtimes/web/timeline/jsonp_timeline.ts
+
+
+var getAgent = function (sender, useTLS) {
+    return function (data, callback) {
+        var scheme = 'http' + (useTLS ? 's' : '') + '://';
+        var url = scheme + (sender.host || sender.options.host) + sender.options.path;
+        var request = runtime.createJSONPRequest(url, data);
+        var receiver = runtime.ScriptReceivers.create(function (error, result) {
+            ScriptReceivers.remove(receiver);
+            request.cleanup();
+            if (result && result.host) {
+                sender.host = result.host;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        request.send(receiver);
+    };
+};
+var jsonp_timeline_jsonp = {
+    name: 'jsonp',
+    getAgent: getAgent
+};
+/* harmony default export */ var jsonp_timeline = (jsonp_timeline_jsonp);
+
+// CONCATENATED MODULE: ./src/core/transports/url_schemes.ts
+
+function getGenericURL(baseScheme, params, path) {
+    var scheme = baseScheme + (params.useTLS ? 's' : '');
+    var host = params.useTLS ? params.hostTLS : params.hostNonTLS;
+    return scheme + '://' + host + path;
+}
+function getGenericPath(key, queryString) {
+    var path = '/app/' + key;
+    var query = '?protocol=' +
+        defaults.PROTOCOL +
+        '&client=js' +
+        '&version=' +
+        defaults.VERSION +
+        (queryString ? '&' + queryString : '');
+    return path + query;
+}
+var ws = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '') + getGenericPath(key, 'flash=false');
+        return getGenericURL('ws', params, path);
+    }
+};
+var http = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '/pusher') + getGenericPath(key);
+        return getGenericURL('http', params, path);
+    }
+};
+var sockjs = {
+    getInitial: function (key, params) {
+        return getGenericURL('http', params, params.httpPath || '/pusher');
+    },
+    getPath: function (key, params) {
+        return getGenericPath(key);
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/events/callback_registry.ts
+
+var callback_registry_CallbackRegistry = (function () {
+    function CallbackRegistry() {
+        this._callbacks = {};
+    }
+    CallbackRegistry.prototype.get = function (name) {
+        return this._callbacks[prefix(name)];
+    };
+    CallbackRegistry.prototype.add = function (name, callback, context) {
+        var prefixedEventName = prefix(name);
+        this._callbacks[prefixedEventName] =
+            this._callbacks[prefixedEventName] || [];
+        this._callbacks[prefixedEventName].push({
+            fn: callback,
+            context: context
+        });
+    };
+    CallbackRegistry.prototype.remove = function (name, callback, context) {
+        if (!name && !callback && !context) {
+            this._callbacks = {};
+            return;
+        }
+        var names = name ? [prefix(name)] : keys(this._callbacks);
+        if (callback || context) {
+            this.removeCallback(names, callback, context);
+        }
+        else {
+            this.removeAllCallbacks(names);
+        }
+    };
+    CallbackRegistry.prototype.removeCallback = function (names, callback, context) {
+        apply(names, function (name) {
+            this._callbacks[name] = filter(this._callbacks[name] || [], function (binding) {
+                return ((callback && callback !== binding.fn) ||
+                    (context && context !== binding.context));
+            });
+            if (this._callbacks[name].length === 0) {
+                delete this._callbacks[name];
+            }
+        }, this);
+    };
+    CallbackRegistry.prototype.removeAllCallbacks = function (names) {
+        apply(names, function (name) {
+            delete this._callbacks[name];
+        }, this);
+    };
+    return CallbackRegistry;
+}());
+/* harmony default export */ var callback_registry = (callback_registry_CallbackRegistry);
+function prefix(name) {
+    return '_' + name;
+}
+
+// CONCATENATED MODULE: ./src/core/events/dispatcher.ts
+
+
+var dispatcher_Dispatcher = (function () {
+    function Dispatcher(failThrough) {
+        this.callbacks = new callback_registry();
+        this.global_callbacks = [];
+        this.failThrough = failThrough;
+    }
+    Dispatcher.prototype.bind = function (eventName, callback, context) {
+        this.callbacks.add(eventName, callback, context);
+        return this;
+    };
+    Dispatcher.prototype.bind_global = function (callback) {
+        this.global_callbacks.push(callback);
+        return this;
+    };
+    Dispatcher.prototype.unbind = function (eventName, callback, context) {
+        this.callbacks.remove(eventName, callback, context);
+        return this;
+    };
+    Dispatcher.prototype.unbind_global = function (callback) {
+        if (!callback) {
+            this.global_callbacks = [];
+            return this;
+        }
+        this.global_callbacks = filter(this.global_callbacks || [], function (c) { return c !== callback; });
+        return this;
+    };
+    Dispatcher.prototype.unbind_all = function () {
+        this.unbind();
+        this.unbind_global();
+        return this;
+    };
+    Dispatcher.prototype.emit = function (eventName, data, metadata) {
+        for (var i = 0; i < this.global_callbacks.length; i++) {
+            this.global_callbacks[i](eventName, data);
+        }
+        var callbacks = this.callbacks.get(eventName);
+        var args = [];
+        if (metadata) {
+            args.push(data, metadata);
+        }
+        else if (data) {
+            args.push(data);
+        }
+        if (callbacks && callbacks.length > 0) {
+            for (var i = 0; i < callbacks.length; i++) {
+                callbacks[i].fn.apply(callbacks[i].context || window, args);
+            }
+        }
+        else if (this.failThrough) {
+            this.failThrough(eventName, data);
+        }
+        return this;
+    };
+    return Dispatcher;
+}());
+/* harmony default export */ var dispatcher = (dispatcher_Dispatcher);
+
+// CONCATENATED MODULE: ./src/core/transports/transport_connection.ts
+var transport_connection_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var transport_connection_TransportConnection = (function (_super) {
+    transport_connection_extends(TransportConnection, _super);
+    function TransportConnection(hooks, name, priority, key, options) {
+        var _this = _super.call(this) || this;
+        _this.initialize = runtime.transportConnectionInitializer;
+        _this.hooks = hooks;
+        _this.name = name;
+        _this.priority = priority;
+        _this.key = key;
+        _this.options = options;
+        _this.state = 'new';
+        _this.timeline = options.timeline;
+        _this.activityTimeout = options.activityTimeout;
+        _this.id = _this.timeline.generateUniqueID();
+        return _this;
+    }
+    TransportConnection.prototype.handlesActivityChecks = function () {
+        return Boolean(this.hooks.handlesActivityChecks);
+    };
+    TransportConnection.prototype.supportsPing = function () {
+        return Boolean(this.hooks.supportsPing);
+    };
+    TransportConnection.prototype.connect = function () {
+        var _this = this;
+        if (this.socket || this.state !== 'initialized') {
+            return false;
+        }
+        var url = this.hooks.urls.getInitial(this.key, this.options);
+        try {
+            this.socket = this.hooks.getSocket(url, this.options);
+        }
+        catch (e) {
+            util.defer(function () {
+                _this.onError(e);
+                _this.changeState('closed');
+            });
+            return false;
+        }
+        this.bindListeners();
+        logger.debug('Connecting', { transport: this.name, url: url });
+        this.changeState('connecting');
+        return true;
+    };
+    TransportConnection.prototype.close = function () {
+        if (this.socket) {
+            this.socket.close();
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    TransportConnection.prototype.send = function (data) {
+        var _this = this;
+        if (this.state === 'open') {
+            util.defer(function () {
+                if (_this.socket) {
+                    _this.socket.send(data);
+                }
+            });
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    TransportConnection.prototype.ping = function () {
+        if (this.state === 'open' && this.supportsPing()) {
+            this.socket.ping();
+        }
+    };
+    TransportConnection.prototype.onOpen = function () {
+        if (this.hooks.beforeOpen) {
+            this.hooks.beforeOpen(this.socket, this.hooks.urls.getPath(this.key, this.options));
+        }
+        this.changeState('open');
+        this.socket.onopen = undefined;
+    };
+    TransportConnection.prototype.onError = function (error) {
+        this.emit('error', { type: 'WebSocketError', error: error });
+        this.timeline.error(this.buildTimelineMessage({ error: error.toString() }));
+    };
+    TransportConnection.prototype.onClose = function (closeEvent) {
+        if (closeEvent) {
+            this.changeState('closed', {
+                code: closeEvent.code,
+                reason: closeEvent.reason,
+                wasClean: closeEvent.wasClean
+            });
+        }
+        else {
+            this.changeState('closed');
+        }
+        this.unbindListeners();
+        this.socket = undefined;
+    };
+    TransportConnection.prototype.onMessage = function (message) {
+        this.emit('message', message);
+    };
+    TransportConnection.prototype.onActivity = function () {
+        this.emit('activity');
+    };
+    TransportConnection.prototype.bindListeners = function () {
+        var _this = this;
+        this.socket.onopen = function () {
+            _this.onOpen();
+        };
+        this.socket.onerror = function (error) {
+            _this.onError(error);
+        };
+        this.socket.onclose = function (closeEvent) {
+            _this.onClose(closeEvent);
+        };
+        this.socket.onmessage = function (message) {
+            _this.onMessage(message);
+        };
+        if (this.supportsPing()) {
+            this.socket.onactivity = function () {
+                _this.onActivity();
+            };
+        }
+    };
+    TransportConnection.prototype.unbindListeners = function () {
+        if (this.socket) {
+            this.socket.onopen = undefined;
+            this.socket.onerror = undefined;
+            this.socket.onclose = undefined;
+            this.socket.onmessage = undefined;
+            if (this.supportsPing()) {
+                this.socket.onactivity = undefined;
+            }
+        }
+    };
+    TransportConnection.prototype.changeState = function (state, params) {
+        this.state = state;
+        this.timeline.info(this.buildTimelineMessage({
+            state: state,
+            params: params
+        }));
+        this.emit(state, params);
+    };
+    TransportConnection.prototype.buildTimelineMessage = function (message) {
+        return extend({ cid: this.id }, message);
+    };
+    return TransportConnection;
+}(dispatcher));
+/* harmony default export */ var transport_connection = (transport_connection_TransportConnection);
+
+// CONCATENATED MODULE: ./src/core/transports/transport.ts
+
+var transport_Transport = (function () {
+    function Transport(hooks) {
+        this.hooks = hooks;
+    }
+    Transport.prototype.isSupported = function (environment) {
+        return this.hooks.isSupported(environment);
+    };
+    Transport.prototype.createConnection = function (name, priority, key, options) {
+        return new transport_connection(this.hooks, name, priority, key, options);
+    };
+    return Transport;
+}());
+/* harmony default export */ var transports_transport = (transport_Transport);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/transports/transports.ts
+
+
+
+
+var WSTransport = new transports_transport({
+    urls: ws,
+    handlesActivityChecks: false,
+    supportsPing: false,
+    isInitialized: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    isSupported: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    getSocket: function (url) {
+        return runtime.createWebSocket(url);
+    }
+});
+var httpConfiguration = {
+    urls: http,
+    handlesActivityChecks: false,
+    supportsPing: true,
+    isInitialized: function () {
+        return true;
+    }
+};
+var streamingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createStreamingSocket(url);
+    }
+}, httpConfiguration);
+var pollingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createPollingSocket(url);
+    }
+}, httpConfiguration);
+var xhrConfiguration = {
+    isSupported: function () {
+        return runtime.isXHRSupported();
+    }
+};
+var XHRStreamingTransport = new transports_transport((extend({}, streamingConfiguration, xhrConfiguration)));
+var XHRPollingTransport = new transports_transport(extend({}, pollingConfiguration, xhrConfiguration));
+var Transports = {
+    ws: WSTransport,
+    xhr_streaming: XHRStreamingTransport,
+    xhr_polling: XHRPollingTransport
+};
+/* harmony default export */ var transports = (Transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transports.ts
+
+
+
+
+
+
+var SockJSTransport = new transports_transport({
+    file: 'sockjs',
+    urls: sockjs,
+    handlesActivityChecks: true,
+    supportsPing: false,
+    isSupported: function () {
+        return true;
+    },
+    isInitialized: function () {
+        return window.SockJS !== undefined;
+    },
+    getSocket: function (url, options) {
+        return new window.SockJS(url, null, {
+            js_path: Dependencies.getPath('sockjs', {
+                useTLS: options.useTLS
+            }),
+            ignore_null_origin: options.ignoreNullOrigin
+        });
+    },
+    beforeOpen: function (socket, path) {
+        socket.send(JSON.stringify({
+            path: path
+        }));
+    }
+});
+var xdrConfiguration = {
+    isSupported: function (environment) {
+        var yes = runtime.isXDRSupported(environment.useTLS);
+        return yes;
+    }
+};
+var XDRStreamingTransport = new transports_transport((extend({}, streamingConfiguration, xdrConfiguration)));
+var XDRPollingTransport = new transports_transport(extend({}, pollingConfiguration, xdrConfiguration));
+transports.xdr_streaming = XDRStreamingTransport;
+transports.xdr_polling = XDRPollingTransport;
+transports.sockjs = SockJSTransport;
+/* harmony default export */ var transports_transports = (transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/net_info.ts
+var net_info_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var NetInfo = (function (_super) {
+    net_info_extends(NetInfo, _super);
+    function NetInfo() {
+        var _this = _super.call(this) || this;
+        var self = _this;
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('online', function () {
+                self.emit('online');
+            }, false);
+            window.addEventListener('offline', function () {
+                self.emit('offline');
+            }, false);
+        }
+        return _this;
+    }
+    NetInfo.prototype.isOnline = function () {
+        if (window.navigator.onLine === undefined) {
+            return true;
+        }
+        else {
+            return window.navigator.onLine;
+        }
+    };
+    return NetInfo;
+}(dispatcher));
+
+var net_info_Network = new NetInfo();
+
+// CONCATENATED MODULE: ./src/core/transports/assistant_to_the_transport_manager.ts
+
+
+var assistant_to_the_transport_manager_AssistantToTheTransportManager = (function () {
+    function AssistantToTheTransportManager(manager, transport, options) {
+        this.manager = manager;
+        this.transport = transport;
+        this.minPingDelay = options.minPingDelay;
+        this.maxPingDelay = options.maxPingDelay;
+        this.pingDelay = undefined;
+    }
+    AssistantToTheTransportManager.prototype.createConnection = function (name, priority, key, options) {
+        var _this = this;
+        options = extend({}, options, {
+            activityTimeout: this.pingDelay
+        });
+        var connection = this.transport.createConnection(name, priority, key, options);
+        var openTimestamp = null;
+        var onOpen = function () {
+            connection.unbind('open', onOpen);
+            connection.bind('closed', onClosed);
+            openTimestamp = util.now();
+        };
+        var onClosed = function (closeEvent) {
+            connection.unbind('closed', onClosed);
+            if (closeEvent.code === 1002 || closeEvent.code === 1003) {
+                _this.manager.reportDeath();
+            }
+            else if (!closeEvent.wasClean && openTimestamp) {
+                var lifespan = util.now() - openTimestamp;
+                if (lifespan < 2 * _this.maxPingDelay) {
+                    _this.manager.reportDeath();
+                    _this.pingDelay = Math.max(lifespan / 2, _this.minPingDelay);
+                }
+            }
+        };
+        connection.bind('open', onOpen);
+        return connection;
+    };
+    AssistantToTheTransportManager.prototype.isSupported = function (environment) {
+        return this.manager.isAlive() && this.transport.isSupported(environment);
+    };
+    return AssistantToTheTransportManager;
+}());
+/* harmony default export */ var assistant_to_the_transport_manager = (assistant_to_the_transport_manager_AssistantToTheTransportManager);
+
+// CONCATENATED MODULE: ./src/core/connection/protocol/protocol.ts
+var Protocol = {
+    decodeMessage: function (messageEvent) {
+        try {
+            var messageData = JSON.parse(messageEvent.data);
+            var pusherEventData = messageData.data;
+            if (typeof pusherEventData === 'string') {
+                try {
+                    pusherEventData = JSON.parse(messageData.data);
+                }
+                catch (e) { }
+            }
+            var pusherEvent = {
+                event: messageData.event,
+                channel: messageData.channel,
+                data: pusherEventData
+            };
+            if (messageData.user_id) {
+                pusherEvent.user_id = messageData.user_id;
+            }
+            return pusherEvent;
+        }
+        catch (e) {
+            throw { type: 'MessageParseError', error: e, data: messageEvent.data };
+        }
+    },
+    encodeMessage: function (event) {
+        return JSON.stringify(event);
+    },
+    processHandshake: function (messageEvent) {
+        var message = Protocol.decodeMessage(messageEvent);
+        if (message.event === 'pusher:connection_established') {
+            if (!message.data.activity_timeout) {
+                throw 'No activity timeout specified in handshake';
+            }
+            return {
+                action: 'connected',
+                id: message.data.socket_id,
+                activityTimeout: message.data.activity_timeout * 1000
+            };
+        }
+        else if (message.event === 'pusher:error') {
+            return {
+                action: this.getCloseAction(message.data),
+                error: this.getCloseError(message.data)
+            };
+        }
+        else {
+            throw 'Invalid handshake';
+        }
+    },
+    getCloseAction: function (closeEvent) {
+        if (closeEvent.code < 4000) {
+            if (closeEvent.code >= 1002 && closeEvent.code <= 1004) {
+                return 'backoff';
+            }
+            else {
+                return null;
+            }
+        }
+        else if (closeEvent.code === 4000) {
+            return 'tls_only';
+        }
+        else if (closeEvent.code < 4100) {
+            return 'refused';
+        }
+        else if (closeEvent.code < 4200) {
+            return 'backoff';
+        }
+        else if (closeEvent.code < 4300) {
+            return 'retry';
+        }
+        else {
+            return 'refused';
+        }
+    },
+    getCloseError: function (closeEvent) {
+        if (closeEvent.code !== 1000 && closeEvent.code !== 1001) {
+            return {
+                type: 'PusherError',
+                data: {
+                    code: closeEvent.code,
+                    message: closeEvent.reason || closeEvent.message
+                }
+            };
+        }
+        else {
+            return null;
+        }
+    }
+};
+/* harmony default export */ var protocol_protocol = (Protocol);
+
+// CONCATENATED MODULE: ./src/core/connection/connection.ts
+var connection_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var connection_Connection = (function (_super) {
+    connection_extends(Connection, _super);
+    function Connection(id, transport) {
+        var _this = _super.call(this) || this;
+        _this.id = id;
+        _this.transport = transport;
+        _this.activityTimeout = transport.activityTimeout;
+        _this.bindListeners();
+        return _this;
+    }
+    Connection.prototype.handlesActivityChecks = function () {
+        return this.transport.handlesActivityChecks();
+    };
+    Connection.prototype.send = function (data) {
+        return this.transport.send(data);
+    };
+    Connection.prototype.send_event = function (name, data, channel) {
+        var event = { event: name, data: data };
+        if (channel) {
+            event.channel = channel;
+        }
+        logger.debug('Event sent', event);
+        return this.send(protocol_protocol.encodeMessage(event));
+    };
+    Connection.prototype.ping = function () {
+        if (this.transport.supportsPing()) {
+            this.transport.ping();
+        }
+        else {
+            this.send_event('pusher:ping', {});
+        }
+    };
+    Connection.prototype.close = function () {
+        this.transport.close();
+    };
+    Connection.prototype.bindListeners = function () {
+        var _this = this;
+        var listeners = {
+            message: function (messageEvent) {
+                var pusherEvent;
+                try {
+                    pusherEvent = protocol_protocol.decodeMessage(messageEvent);
+                }
+                catch (e) {
+                    _this.emit('error', {
+                        type: 'MessageParseError',
+                        error: e,
+                        data: messageEvent.data
+                    });
+                }
+                if (pusherEvent !== undefined) {
+                    logger.debug('Event recd', pusherEvent);
+                    switch (pusherEvent.event) {
+                        case 'pusher:error':
+                            _this.emit('error', {
+                                type: 'PusherError',
+                                data: pusherEvent.data
+                            });
+                            break;
+                        case 'pusher:ping':
+                            _this.emit('ping');
+                            break;
+                        case 'pusher:pong':
+                            _this.emit('pong');
+                            break;
+                    }
+                    _this.emit('message', pusherEvent);
+                }
+            },
+            activity: function () {
+                _this.emit('activity');
+            },
+            error: function (error) {
+                _this.emit('error', error);
+            },
+            closed: function (closeEvent) {
+                unbindListeners();
+                if (closeEvent && closeEvent.code) {
+                    _this.handleCloseEvent(closeEvent);
+                }
+                _this.transport = null;
+                _this.emit('closed');
+            }
+        };
+        var unbindListeners = function () {
+            objectApply(listeners, function (listener, event) {
+                _this.transport.unbind(event, listener);
+            });
+        };
+        objectApply(listeners, function (listener, event) {
+            _this.transport.bind(event, listener);
+        });
+    };
+    Connection.prototype.handleCloseEvent = function (closeEvent) {
+        var action = protocol_protocol.getCloseAction(closeEvent);
+        var error = protocol_protocol.getCloseError(closeEvent);
+        if (error) {
+            this.emit('error', error);
+        }
+        if (action) {
+            this.emit(action, { action: action, error: error });
+        }
+    };
+    return Connection;
+}(dispatcher));
+/* harmony default export */ var connection_connection = (connection_Connection);
+
+// CONCATENATED MODULE: ./src/core/connection/handshake/index.ts
+
+
+
+var handshake_Handshake = (function () {
+    function Handshake(transport, callback) {
+        this.transport = transport;
+        this.callback = callback;
+        this.bindListeners();
+    }
+    Handshake.prototype.close = function () {
+        this.unbindListeners();
+        this.transport.close();
+    };
+    Handshake.prototype.bindListeners = function () {
+        var _this = this;
+        this.onMessage = function (m) {
+            _this.unbindListeners();
+            var result;
+            try {
+                result = protocol_protocol.processHandshake(m);
+            }
+            catch (e) {
+                _this.finish('error', { error: e });
+                _this.transport.close();
+                return;
+            }
+            if (result.action === 'connected') {
+                _this.finish('connected', {
+                    connection: new connection_connection(result.id, _this.transport),
+                    activityTimeout: result.activityTimeout
+                });
+            }
+            else {
+                _this.finish(result.action, { error: result.error });
+                _this.transport.close();
+            }
+        };
+        this.onClosed = function (closeEvent) {
+            _this.unbindListeners();
+            var action = protocol_protocol.getCloseAction(closeEvent) || 'backoff';
+            var error = protocol_protocol.getCloseError(closeEvent);
+            _this.finish(action, { error: error });
+        };
+        this.transport.bind('message', this.onMessage);
+        this.transport.bind('closed', this.onClosed);
+    };
+    Handshake.prototype.unbindListeners = function () {
+        this.transport.unbind('message', this.onMessage);
+        this.transport.unbind('closed', this.onClosed);
+    };
+    Handshake.prototype.finish = function (action, params) {
+        this.callback(extend({ transport: this.transport, action: action }, params));
+    };
+    return Handshake;
+}());
+/* harmony default export */ var connection_handshake = (handshake_Handshake);
+
+// CONCATENATED MODULE: ./src/core/auth/pusher_authorizer.ts
+
+var pusher_authorizer_PusherAuthorizer = (function () {
+    function PusherAuthorizer(channel, options) {
+        this.channel = channel;
+        var authTransport = options.authTransport;
+        if (typeof runtime.getAuthorizers()[authTransport] === 'undefined') {
+            throw "'" + authTransport + "' is not a recognized auth transport";
+        }
+        this.type = authTransport;
+        this.options = options;
+        this.authOptions = options.auth || {};
+    }
+    PusherAuthorizer.prototype.composeQuery = function (socketId) {
+        var query = 'socket_id=' +
+            encodeURIComponent(socketId) +
+            '&channel_name=' +
+            encodeURIComponent(this.channel.name);
+        for (var i in this.authOptions.params) {
+            query +=
+                '&' +
+                    encodeURIComponent(i) +
+                    '=' +
+                    encodeURIComponent(this.authOptions.params[i]);
+        }
+        return query;
+    };
+    PusherAuthorizer.prototype.authorize = function (socketId, callback) {
+        PusherAuthorizer.authorizers =
+            PusherAuthorizer.authorizers || runtime.getAuthorizers();
+        PusherAuthorizer.authorizers[this.type].call(this, runtime, socketId, callback);
+    };
+    return PusherAuthorizer;
+}());
+/* harmony default export */ var pusher_authorizer = (pusher_authorizer_PusherAuthorizer);
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline_sender.ts
+
+var timeline_sender_TimelineSender = (function () {
+    function TimelineSender(timeline, options) {
+        this.timeline = timeline;
+        this.options = options || {};
+    }
+    TimelineSender.prototype.send = function (useTLS, callback) {
+        if (this.timeline.isEmpty()) {
+            return;
+        }
+        this.timeline.send(runtime.TimelineTransport.getAgent(this, useTLS), callback);
+    };
+    return TimelineSender;
+}());
+/* harmony default export */ var timeline_sender = (timeline_sender_TimelineSender);
+
+// CONCATENATED MODULE: ./src/core/channels/channel.ts
+var channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var channel_Channel = (function (_super) {
+    channel_extends(Channel, _super);
+    function Channel(name, pusher) {
+        var _this = _super.call(this, function (event, data) {
+            logger.debug('No callbacks on ' + name + ' for ' + event);
+        }) || this;
+        _this.name = name;
+        _this.pusher = pusher;
+        _this.subscribed = false;
+        _this.subscriptionPending = false;
+        _this.subscriptionCancelled = false;
+        return _this;
+    }
+    Channel.prototype.authorize = function (socketId, callback) {
+        return callback(null, { auth: '' });
+    };
+    Channel.prototype.trigger = function (event, data) {
+        if (event.indexOf('client-') !== 0) {
+            throw new BadEventName("Event '" + event + "' does not start with 'client-'");
+        }
+        if (!this.subscribed) {
+            var suffix = url_store.buildLogSuffix('triggeringClientEvents');
+            logger.warn("Client event triggered before channel 'subscription_succeeded' event . " + suffix);
+        }
+        return this.pusher.send_event(event, data, this.name);
+    };
+    Channel.prototype.disconnect = function () {
+        this.subscribed = false;
+        this.subscriptionPending = false;
+    };
+    Channel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName === 'pusher_internal:subscription_succeeded') {
+            this.handleSubscriptionSucceededEvent(event);
+        }
+        else if (eventName.indexOf('pusher_internal:') !== 0) {
+            var metadata = {};
+            this.emit(eventName, data, metadata);
+        }
+    };
+    Channel.prototype.handleSubscriptionSucceededEvent = function (event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.emit('pusher:subscription_succeeded', event.data);
+        }
+    };
+    Channel.prototype.subscribe = function () {
+        var _this = this;
+        if (this.subscribed) {
+            return;
+        }
+        this.subscriptionPending = true;
+        this.subscriptionCancelled = false;
+        this.authorize(this.pusher.connection.socket_id, function (error, data) {
+            if (error) {
+                _this.subscriptionPending = false;
+                logger.error(error.toString());
+                _this.emit('pusher:subscription_error', Object.assign({}, {
+                    type: 'AuthError',
+                    error: error.message
+                }, error instanceof HTTPAuthError ? { status: error.status } : {}));
+            }
+            else {
+                _this.pusher.send_event('pusher:subscribe', {
+                    auth: data.auth,
+                    channel_data: data.channel_data,
+                    channel: _this.name
+                });
+            }
+        });
+    };
+    Channel.prototype.unsubscribe = function () {
+        this.subscribed = false;
+        this.pusher.send_event('pusher:unsubscribe', {
+            channel: this.name
+        });
+    };
+    Channel.prototype.cancelSubscription = function () {
+        this.subscriptionCancelled = true;
+    };
+    Channel.prototype.reinstateSubscription = function () {
+        this.subscriptionCancelled = false;
+    };
+    return Channel;
+}(dispatcher));
+/* harmony default export */ var channels_channel = (channel_Channel);
+
+// CONCATENATED MODULE: ./src/core/channels/private_channel.ts
+var private_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+var private_channel_PrivateChannel = (function (_super) {
+    private_channel_extends(PrivateChannel, _super);
+    function PrivateChannel() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PrivateChannel.prototype.authorize = function (socketId, callback) {
+        var authorizer = factory.createAuthorizer(this, this.pusher.config);
+        return authorizer.authorize(socketId, callback);
+    };
+    return PrivateChannel;
+}(channels_channel));
+/* harmony default export */ var private_channel = (private_channel_PrivateChannel);
+
+// CONCATENATED MODULE: ./src/core/channels/members.ts
+
+var members_Members = (function () {
+    function Members() {
+        this.reset();
+    }
+    Members.prototype.get = function (id) {
+        if (Object.prototype.hasOwnProperty.call(this.members, id)) {
+            return {
+                id: id,
+                info: this.members[id]
+            };
+        }
+        else {
+            return null;
+        }
+    };
+    Members.prototype.each = function (callback) {
+        var _this = this;
+        objectApply(this.members, function (member, id) {
+            callback(_this.get(id));
+        });
+    };
+    Members.prototype.setMyID = function (id) {
+        this.myID = id;
+    };
+    Members.prototype.onSubscription = function (subscriptionData) {
+        this.members = subscriptionData.presence.hash;
+        this.count = subscriptionData.presence.count;
+        this.me = this.get(this.myID);
+    };
+    Members.prototype.addMember = function (memberData) {
+        if (this.get(memberData.user_id) === null) {
+            this.count++;
+        }
+        this.members[memberData.user_id] = memberData.user_info;
+        return this.get(memberData.user_id);
+    };
+    Members.prototype.removeMember = function (memberData) {
+        var member = this.get(memberData.user_id);
+        if (member) {
+            delete this.members[memberData.user_id];
+            this.count--;
+        }
+        return member;
+    };
+    Members.prototype.reset = function () {
+        this.members = {};
+        this.count = 0;
+        this.myID = null;
+        this.me = null;
+    };
+    return Members;
+}());
+/* harmony default export */ var members = (members_Members);
+
+// CONCATENATED MODULE: ./src/core/channels/presence_channel.ts
+var presence_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var presence_channel_PresenceChannel = (function (_super) {
+    presence_channel_extends(PresenceChannel, _super);
+    function PresenceChannel(name, pusher) {
+        var _this = _super.call(this, name, pusher) || this;
+        _this.members = new members();
+        return _this;
+    }
+    PresenceChannel.prototype.authorize = function (socketId, callback) {
+        var _this = this;
+        _super.prototype.authorize.call(this, socketId, function (error, authData) {
+            if (!error) {
+                authData = authData;
+                if (authData.channel_data === undefined) {
+                    var suffix = url_store.buildLogSuffix('authenticationEndpoint');
+                    logger.error("Invalid auth response for channel '" + _this.name + "'," +
+                        ("expected 'channel_data' field. " + suffix));
+                    callback('Invalid auth response');
+                    return;
+                }
+                var channelData = JSON.parse(authData.channel_data);
+                _this.members.setMyID(channelData.user_id);
+            }
+            callback(error, authData);
+        });
+    };
+    PresenceChannel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        if (eventName.indexOf('pusher_internal:') === 0) {
+            this.handleInternalEvent(event);
+        }
+        else {
+            var data = event.data;
+            var metadata = {};
+            if (event.user_id) {
+                metadata.user_id = event.user_id;
+            }
+            this.emit(eventName, data, metadata);
+        }
+    };
+    PresenceChannel.prototype.handleInternalEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        switch (eventName) {
+            case 'pusher_internal:subscription_succeeded':
+                this.handleSubscriptionSucceededEvent(event);
+                break;
+            case 'pusher_internal:member_added':
+                var addedMember = this.members.addMember(data);
+                this.emit('pusher:member_added', addedMember);
+                break;
+            case 'pusher_internal:member_removed':
+                var removedMember = this.members.removeMember(data);
+                if (removedMember) {
+                    this.emit('pusher:member_removed', removedMember);
+                }
+                break;
+        }
+    };
+    PresenceChannel.prototype.handleSubscriptionSucceededEvent = function (event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.members.onSubscription(event.data);
+            this.emit('pusher:subscription_succeeded', this.members);
+        }
+    };
+    PresenceChannel.prototype.disconnect = function () {
+        this.members.reset();
+        _super.prototype.disconnect.call(this);
+    };
+    return PresenceChannel;
+}(private_channel));
+/* harmony default export */ var presence_channel = (presence_channel_PresenceChannel);
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/utf8/lib/utf8.js
+var utf8 = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/base64/lib/base64.js
+var base64 = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./src/core/channels/encrypted_channel.ts
+var encrypted_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var encrypted_channel_EncryptedChannel = (function (_super) {
+    encrypted_channel_extends(EncryptedChannel, _super);
+    function EncryptedChannel(name, pusher, nacl) {
+        var _this = _super.call(this, name, pusher) || this;
+        _this.key = null;
+        _this.nacl = nacl;
+        return _this;
+    }
+    EncryptedChannel.prototype.authorize = function (socketId, callback) {
+        var _this = this;
+        _super.prototype.authorize.call(this, socketId, function (error, authData) {
+            if (error) {
+                callback(error, authData);
+                return;
+            }
+            var sharedSecret = authData['shared_secret'];
+            if (!sharedSecret) {
+                callback(new Error("No shared_secret key in auth payload for encrypted channel: " + _this.name), null);
+                return;
+            }
+            _this.key = Object(base64["decode"])(sharedSecret);
+            delete authData['shared_secret'];
+            callback(null, authData);
+        });
+    };
+    EncryptedChannel.prototype.trigger = function (event, data) {
+        throw new UnsupportedFeature('Client events are not currently supported for encrypted channels');
+    };
+    EncryptedChannel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName.indexOf('pusher_internal:') === 0 ||
+            eventName.indexOf('pusher:') === 0) {
+            _super.prototype.handleEvent.call(this, event);
+            return;
+        }
+        this.handleEncryptedEvent(eventName, data);
+    };
+    EncryptedChannel.prototype.handleEncryptedEvent = function (event, data) {
+        var _this = this;
+        if (!this.key) {
+            logger.debug('Received encrypted event before key has been retrieved from the authEndpoint');
+            return;
+        }
+        if (!data.ciphertext || !data.nonce) {
+            logger.error('Unexpected format for encrypted event, expected object with `ciphertext` and `nonce` fields, got: ' +
+                data);
+            return;
+        }
+        var cipherText = Object(base64["decode"])(data.ciphertext);
+        if (cipherText.length < this.nacl.secretbox.overheadLength) {
+            logger.error("Expected encrypted event ciphertext length to be " + this.nacl.secretbox.overheadLength + ", got: " + cipherText.length);
+            return;
+        }
+        var nonce = Object(base64["decode"])(data.nonce);
+        if (nonce.length < this.nacl.secretbox.nonceLength) {
+            logger.error("Expected encrypted event nonce length to be " + this.nacl.secretbox.nonceLength + ", got: " + nonce.length);
+            return;
+        }
+        var bytes = this.nacl.secretbox.open(cipherText, nonce, this.key);
+        if (bytes === null) {
+            logger.debug('Failed to decrypt an event, probably because it was encrypted with a different key. Fetching a new key from the authEndpoint...');
+            this.authorize(this.pusher.connection.socket_id, function (error, authData) {
+                if (error) {
+                    logger.error("Failed to make a request to the authEndpoint: " + authData + ". Unable to fetch new key, so dropping encrypted event");
+                    return;
+                }
+                bytes = _this.nacl.secretbox.open(cipherText, nonce, _this.key);
+                if (bytes === null) {
+                    logger.error("Failed to decrypt event with new key. Dropping encrypted event");
+                    return;
+                }
+                _this.emit(event, _this.getDataToEmit(bytes));
+                return;
+            });
+            return;
+        }
+        this.emit(event, this.getDataToEmit(bytes));
+    };
+    EncryptedChannel.prototype.getDataToEmit = function (bytes) {
+        var raw = Object(utf8["decode"])(bytes);
+        try {
+            return JSON.parse(raw);
+        }
+        catch (_a) {
+            return raw;
+        }
+    };
+    return EncryptedChannel;
+}(private_channel));
+/* harmony default export */ var encrypted_channel = (encrypted_channel_EncryptedChannel);
+
+// CONCATENATED MODULE: ./src/core/connection/connection_manager.ts
+var connection_manager_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var connection_manager_ConnectionManager = (function (_super) {
+    connection_manager_extends(ConnectionManager, _super);
+    function ConnectionManager(key, options) {
+        var _this = _super.call(this) || this;
+        _this.state = 'initialized';
+        _this.connection = null;
+        _this.key = key;
+        _this.options = options;
+        _this.timeline = _this.options.timeline;
+        _this.usingTLS = _this.options.useTLS;
+        _this.errorCallbacks = _this.buildErrorCallbacks();
+        _this.connectionCallbacks = _this.buildConnectionCallbacks(_this.errorCallbacks);
+        _this.handshakeCallbacks = _this.buildHandshakeCallbacks(_this.errorCallbacks);
+        var Network = runtime.getNetwork();
+        Network.bind('online', function () {
+            _this.timeline.info({ netinfo: 'online' });
+            if (_this.state === 'connecting' || _this.state === 'unavailable') {
+                _this.retryIn(0);
+            }
+        });
+        Network.bind('offline', function () {
+            _this.timeline.info({ netinfo: 'offline' });
+            if (_this.connection) {
+                _this.sendActivityCheck();
+            }
+        });
+        _this.updateStrategy();
+        return _this;
+    }
+    ConnectionManager.prototype.connect = function () {
+        if (this.connection || this.runner) {
+            return;
+        }
+        if (!this.strategy.isSupported()) {
+            this.updateState('failed');
+            return;
+        }
+        this.updateState('connecting');
+        this.startConnecting();
+        this.setUnavailableTimer();
+    };
+    ConnectionManager.prototype.send = function (data) {
+        if (this.connection) {
+            return this.connection.send(data);
+        }
+        else {
+            return false;
+        }
+    };
+    ConnectionManager.prototype.send_event = function (name, data, channel) {
+        if (this.connection) {
+            return this.connection.send_event(name, data, channel);
+        }
+        else {
+            return false;
+        }
+    };
+    ConnectionManager.prototype.disconnect = function () {
+        this.disconnectInternally();
+        this.updateState('disconnected');
+    };
+    ConnectionManager.prototype.isUsingTLS = function () {
+        return this.usingTLS;
+    };
+    ConnectionManager.prototype.startConnecting = function () {
+        var _this = this;
+        var callback = function (error, handshake) {
+            if (error) {
+                _this.runner = _this.strategy.connect(0, callback);
+            }
+            else {
+                if (handshake.action === 'error') {
+                    _this.emit('error', {
+                        type: 'HandshakeError',
+                        error: handshake.error
+                    });
+                    _this.timeline.error({ handshakeError: handshake.error });
+                }
+                else {
+                    _this.abortConnecting();
+                    _this.handshakeCallbacks[handshake.action](handshake);
+                }
+            }
+        };
+        this.runner = this.strategy.connect(0, callback);
+    };
+    ConnectionManager.prototype.abortConnecting = function () {
+        if (this.runner) {
+            this.runner.abort();
+            this.runner = null;
+        }
+    };
+    ConnectionManager.prototype.disconnectInternally = function () {
+        this.abortConnecting();
+        this.clearRetryTimer();
+        this.clearUnavailableTimer();
+        if (this.connection) {
+            var connection = this.abandonConnection();
+            connection.close();
+        }
+    };
+    ConnectionManager.prototype.updateStrategy = function () {
+        this.strategy = this.options.getStrategy({
+            key: this.key,
+            timeline: this.timeline,
+            useTLS: this.usingTLS
+        });
+    };
+    ConnectionManager.prototype.retryIn = function (delay) {
+        var _this = this;
+        this.timeline.info({ action: 'retry', delay: delay });
+        if (delay > 0) {
+            this.emit('connecting_in', Math.round(delay / 1000));
+        }
+        this.retryTimer = new OneOffTimer(delay || 0, function () {
+            _this.disconnectInternally();
+            _this.connect();
+        });
+    };
+    ConnectionManager.prototype.clearRetryTimer = function () {
+        if (this.retryTimer) {
+            this.retryTimer.ensureAborted();
+            this.retryTimer = null;
+        }
+    };
+    ConnectionManager.prototype.setUnavailableTimer = function () {
+        var _this = this;
+        this.unavailableTimer = new OneOffTimer(this.options.unavailableTimeout, function () {
+            _this.updateState('unavailable');
+        });
+    };
+    ConnectionManager.prototype.clearUnavailableTimer = function () {
+        if (this.unavailableTimer) {
+            this.unavailableTimer.ensureAborted();
+        }
+    };
+    ConnectionManager.prototype.sendActivityCheck = function () {
+        var _this = this;
+        this.stopActivityCheck();
+        this.connection.ping();
+        this.activityTimer = new OneOffTimer(this.options.pongTimeout, function () {
+            _this.timeline.error({ pong_timed_out: _this.options.pongTimeout });
+            _this.retryIn(0);
+        });
+    };
+    ConnectionManager.prototype.resetActivityCheck = function () {
+        var _this = this;
+        this.stopActivityCheck();
+        if (this.connection && !this.connection.handlesActivityChecks()) {
+            this.activityTimer = new OneOffTimer(this.activityTimeout, function () {
+                _this.sendActivityCheck();
+            });
+        }
+    };
+    ConnectionManager.prototype.stopActivityCheck = function () {
+        if (this.activityTimer) {
+            this.activityTimer.ensureAborted();
+        }
+    };
+    ConnectionManager.prototype.buildConnectionCallbacks = function (errorCallbacks) {
+        var _this = this;
+        return extend({}, errorCallbacks, {
+            message: function (message) {
+                _this.resetActivityCheck();
+                _this.emit('message', message);
+            },
+            ping: function () {
+                _this.send_event('pusher:pong', {});
+            },
+            activity: function () {
+                _this.resetActivityCheck();
+            },
+            error: function (error) {
+                _this.emit('error', error);
+            },
+            closed: function () {
+                _this.abandonConnection();
+                if (_this.shouldRetry()) {
+                    _this.retryIn(1000);
+                }
+            }
+        });
+    };
+    ConnectionManager.prototype.buildHandshakeCallbacks = function (errorCallbacks) {
+        var _this = this;
+        return extend({}, errorCallbacks, {
+            connected: function (handshake) {
+                _this.activityTimeout = Math.min(_this.options.activityTimeout, handshake.activityTimeout, handshake.connection.activityTimeout || Infinity);
+                _this.clearUnavailableTimer();
+                _this.setConnection(handshake.connection);
+                _this.socket_id = _this.connection.id;
+                _this.updateState('connected', { socket_id: _this.socket_id });
+            }
+        });
+    };
+    ConnectionManager.prototype.buildErrorCallbacks = function () {
+        var _this = this;
+        var withErrorEmitted = function (callback) {
+            return function (result) {
+                if (result.error) {
+                    _this.emit('error', { type: 'WebSocketError', error: result.error });
+                }
+                callback(result);
+            };
+        };
+        return {
+            tls_only: withErrorEmitted(function () {
+                _this.usingTLS = true;
+                _this.updateStrategy();
+                _this.retryIn(0);
+            }),
+            refused: withErrorEmitted(function () {
+                _this.disconnect();
+            }),
+            backoff: withErrorEmitted(function () {
+                _this.retryIn(1000);
+            }),
+            retry: withErrorEmitted(function () {
+                _this.retryIn(0);
+            })
+        };
+    };
+    ConnectionManager.prototype.setConnection = function (connection) {
+        this.connection = connection;
+        for (var event in this.connectionCallbacks) {
+            this.connection.bind(event, this.connectionCallbacks[event]);
+        }
+        this.resetActivityCheck();
+    };
+    ConnectionManager.prototype.abandonConnection = function () {
+        if (!this.connection) {
+            return;
+        }
+        this.stopActivityCheck();
+        for (var event in this.connectionCallbacks) {
+            this.connection.unbind(event, this.connectionCallbacks[event]);
+        }
+        var connection = this.connection;
+        this.connection = null;
+        return connection;
+    };
+    ConnectionManager.prototype.updateState = function (newState, data) {
+        var previousState = this.state;
+        this.state = newState;
+        if (previousState !== newState) {
+            var newStateDescription = newState;
+            if (newStateDescription === 'connected') {
+                newStateDescription += ' with new socket ID ' + data.socket_id;
+            }
+            logger.debug('State changed', previousState + ' -> ' + newStateDescription);
+            this.timeline.info({ state: newState, params: data });
+            this.emit('state_change', { previous: previousState, current: newState });
+            this.emit(newState, data);
+        }
+    };
+    ConnectionManager.prototype.shouldRetry = function () {
+        return this.state === 'connecting' || this.state === 'connected';
+    };
+    return ConnectionManager;
+}(dispatcher));
+/* harmony default export */ var connection_manager = (connection_manager_ConnectionManager);
+
+// CONCATENATED MODULE: ./src/core/channels/channels.ts
+
+
+
+
+var channels_Channels = (function () {
+    function Channels() {
+        this.channels = {};
+    }
+    Channels.prototype.add = function (name, pusher) {
+        if (!this.channels[name]) {
+            this.channels[name] = createChannel(name, pusher);
+        }
+        return this.channels[name];
+    };
+    Channels.prototype.all = function () {
+        return values(this.channels);
+    };
+    Channels.prototype.find = function (name) {
+        return this.channels[name];
+    };
+    Channels.prototype.remove = function (name) {
+        var channel = this.channels[name];
+        delete this.channels[name];
+        return channel;
+    };
+    Channels.prototype.disconnect = function () {
+        objectApply(this.channels, function (channel) {
+            channel.disconnect();
+        });
+    };
+    return Channels;
+}());
+/* harmony default export */ var channels = (channels_Channels);
+function createChannel(name, pusher) {
+    if (name.indexOf('private-encrypted-') === 0) {
+        if (pusher.config.nacl) {
+            return factory.createEncryptedChannel(name, pusher, pusher.config.nacl);
+        }
+        var errMsg = 'Tried to subscribe to a private-encrypted- channel but no nacl implementation available';
+        var suffix = url_store.buildLogSuffix('encryptedChannelSupport');
+        throw new UnsupportedFeature(errMsg + ". " + suffix);
+    }
+    else if (name.indexOf('private-') === 0) {
+        return factory.createPrivateChannel(name, pusher);
+    }
+    else if (name.indexOf('presence-') === 0) {
+        return factory.createPresenceChannel(name, pusher);
+    }
+    else {
+        return factory.createChannel(name, pusher);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/utils/factory.ts
+
+
+
+
+
+
+
+
+
+
+var Factory = {
+    createChannels: function () {
+        return new channels();
+    },
+    createConnectionManager: function (key, options) {
+        return new connection_manager(key, options);
+    },
+    createChannel: function (name, pusher) {
+        return new channels_channel(name, pusher);
+    },
+    createPrivateChannel: function (name, pusher) {
+        return new private_channel(name, pusher);
+    },
+    createPresenceChannel: function (name, pusher) {
+        return new presence_channel(name, pusher);
+    },
+    createEncryptedChannel: function (name, pusher, nacl) {
+        return new encrypted_channel(name, pusher, nacl);
+    },
+    createTimelineSender: function (timeline, options) {
+        return new timeline_sender(timeline, options);
+    },
+    createAuthorizer: function (channel, options) {
+        if (options.authorizer) {
+            return options.authorizer(channel, options);
+        }
+        return new pusher_authorizer(channel, options);
+    },
+    createHandshake: function (transport, callback) {
+        return new connection_handshake(transport, callback);
+    },
+    createAssistantToTheTransportManager: function (manager, transport, options) {
+        return new assistant_to_the_transport_manager(manager, transport, options);
+    }
+};
+/* harmony default export */ var factory = (Factory);
+
+// CONCATENATED MODULE: ./src/core/transports/transport_manager.ts
+
+var transport_manager_TransportManager = (function () {
+    function TransportManager(options) {
+        this.options = options || {};
+        this.livesLeft = this.options.lives || Infinity;
+    }
+    TransportManager.prototype.getAssistant = function (transport) {
+        return factory.createAssistantToTheTransportManager(this, transport, {
+            minPingDelay: this.options.minPingDelay,
+            maxPingDelay: this.options.maxPingDelay
+        });
+    };
+    TransportManager.prototype.isAlive = function () {
+        return this.livesLeft > 0;
+    };
+    TransportManager.prototype.reportDeath = function () {
+        this.livesLeft -= 1;
+    };
+    return TransportManager;
+}());
+/* harmony default export */ var transport_manager = (transport_manager_TransportManager);
+
+// CONCATENATED MODULE: ./src/core/strategies/sequential_strategy.ts
+
+
+
+var sequential_strategy_SequentialStrategy = (function () {
+    function SequentialStrategy(strategies, options) {
+        this.strategies = strategies;
+        this.loop = Boolean(options.loop);
+        this.failFast = Boolean(options.failFast);
+        this.timeout = options.timeout;
+        this.timeoutLimit = options.timeoutLimit;
+    }
+    SequentialStrategy.prototype.isSupported = function () {
+        return any(this.strategies, util.method('isSupported'));
+    };
+    SequentialStrategy.prototype.connect = function (minPriority, callback) {
+        var _this = this;
+        var strategies = this.strategies;
+        var current = 0;
+        var timeout = this.timeout;
+        var runner = null;
+        var tryNextStrategy = function (error, handshake) {
+            if (handshake) {
+                callback(null, handshake);
+            }
+            else {
+                current = current + 1;
+                if (_this.loop) {
+                    current = current % strategies.length;
+                }
+                if (current < strategies.length) {
+                    if (timeout) {
+                        timeout = timeout * 2;
+                        if (_this.timeoutLimit) {
+                            timeout = Math.min(timeout, _this.timeoutLimit);
+                        }
+                    }
+                    runner = _this.tryStrategy(strategies[current], minPriority, { timeout: timeout, failFast: _this.failFast }, tryNextStrategy);
+                }
+                else {
+                    callback(true);
+                }
+            }
+        };
+        runner = this.tryStrategy(strategies[current], minPriority, { timeout: timeout, failFast: this.failFast }, tryNextStrategy);
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    SequentialStrategy.prototype.tryStrategy = function (strategy, minPriority, options, callback) {
+        var timer = null;
+        var runner = null;
+        if (options.timeout > 0) {
+            timer = new OneOffTimer(options.timeout, function () {
+                runner.abort();
+                callback(true);
+            });
+        }
+        runner = strategy.connect(minPriority, function (error, handshake) {
+            if (error && timer && timer.isRunning() && !options.failFast) {
+                return;
+            }
+            if (timer) {
+                timer.ensureAborted();
+            }
+            callback(error, handshake);
+        });
+        return {
+            abort: function () {
+                if (timer) {
+                    timer.ensureAborted();
+                }
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                runner.forceMinPriority(p);
+            }
+        };
+    };
+    return SequentialStrategy;
+}());
+/* harmony default export */ var sequential_strategy = (sequential_strategy_SequentialStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/best_connected_ever_strategy.ts
+
+
+var best_connected_ever_strategy_BestConnectedEverStrategy = (function () {
+    function BestConnectedEverStrategy(strategies) {
+        this.strategies = strategies;
+    }
+    BestConnectedEverStrategy.prototype.isSupported = function () {
+        return any(this.strategies, util.method('isSupported'));
+    };
+    BestConnectedEverStrategy.prototype.connect = function (minPriority, callback) {
+        return connect(this.strategies, minPriority, function (i, runners) {
+            return function (error, handshake) {
+                runners[i].error = error;
+                if (error) {
+                    if (allRunnersFailed(runners)) {
+                        callback(true);
+                    }
+                    return;
+                }
+                apply(runners, function (runner) {
+                    runner.forceMinPriority(handshake.transport.priority);
+                });
+                callback(null, handshake);
+            };
+        });
+    };
+    return BestConnectedEverStrategy;
+}());
+/* harmony default export */ var best_connected_ever_strategy = (best_connected_ever_strategy_BestConnectedEverStrategy);
+function connect(strategies, minPriority, callbackBuilder) {
+    var runners = map(strategies, function (strategy, i, _, rs) {
+        return strategy.connect(minPriority, callbackBuilder(i, rs));
+    });
+    return {
+        abort: function () {
+            apply(runners, abortRunner);
+        },
+        forceMinPriority: function (p) {
+            apply(runners, function (runner) {
+                runner.forceMinPriority(p);
+            });
+        }
+    };
+}
+function allRunnersFailed(runners) {
+    return collections_all(runners, function (runner) {
+        return Boolean(runner.error);
+    });
+}
+function abortRunner(runner) {
+    if (!runner.error && !runner.aborted) {
+        runner.abort();
+        runner.aborted = true;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/cached_strategy.ts
+
+
+
+
+var cached_strategy_CachedStrategy = (function () {
+    function CachedStrategy(strategy, transports, options) {
+        this.strategy = strategy;
+        this.transports = transports;
+        this.ttl = options.ttl || 1800 * 1000;
+        this.usingTLS = options.useTLS;
+        this.timeline = options.timeline;
+    }
+    CachedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    CachedStrategy.prototype.connect = function (minPriority, callback) {
+        var usingTLS = this.usingTLS;
+        var info = fetchTransportCache(usingTLS);
+        var strategies = [this.strategy];
+        if (info && info.timestamp + this.ttl >= util.now()) {
+            var transport = this.transports[info.transport];
+            if (transport) {
+                this.timeline.info({
+                    cached: true,
+                    transport: info.transport,
+                    latency: info.latency
+                });
+                strategies.push(new sequential_strategy([transport], {
+                    timeout: info.latency * 2 + 1000,
+                    failFast: true
+                }));
+            }
+        }
+        var startTimestamp = util.now();
+        var runner = strategies
+            .pop()
+            .connect(minPriority, function cb(error, handshake) {
+            if (error) {
+                flushTransportCache(usingTLS);
+                if (strategies.length > 0) {
+                    startTimestamp = util.now();
+                    runner = strategies.pop().connect(minPriority, cb);
+                }
+                else {
+                    callback(error);
+                }
+            }
+            else {
+                storeTransportCache(usingTLS, handshake.transport.name, util.now() - startTimestamp);
+                callback(null, handshake);
+            }
+        });
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    return CachedStrategy;
+}());
+/* harmony default export */ var cached_strategy = (cached_strategy_CachedStrategy);
+function getTransportCacheKey(usingTLS) {
+    return 'pusherTransport' + (usingTLS ? 'TLS' : 'NonTLS');
+}
+function fetchTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            var serializedCache = storage[getTransportCacheKey(usingTLS)];
+            if (serializedCache) {
+                return JSON.parse(serializedCache);
+            }
+        }
+        catch (e) {
+            flushTransportCache(usingTLS);
+        }
+    }
+    return null;
+}
+function storeTransportCache(usingTLS, transport, latency) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            storage[getTransportCacheKey(usingTLS)] = safeJSONStringify({
+                timestamp: util.now(),
+                transport: transport,
+                latency: latency
+            });
+        }
+        catch (e) {
+        }
+    }
+}
+function flushTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            delete storage[getTransportCacheKey(usingTLS)];
+        }
+        catch (e) {
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/delayed_strategy.ts
+
+var delayed_strategy_DelayedStrategy = (function () {
+    function DelayedStrategy(strategy, _a) {
+        var number = _a.delay;
+        this.strategy = strategy;
+        this.options = { delay: number };
+    }
+    DelayedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    DelayedStrategy.prototype.connect = function (minPriority, callback) {
+        var strategy = this.strategy;
+        var runner;
+        var timer = new OneOffTimer(this.options.delay, function () {
+            runner = strategy.connect(minPriority, callback);
+        });
+        return {
+            abort: function () {
+                timer.ensureAborted();
+                if (runner) {
+                    runner.abort();
+                }
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    return DelayedStrategy;
+}());
+/* harmony default export */ var delayed_strategy = (delayed_strategy_DelayedStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/if_strategy.ts
+var IfStrategy = (function () {
+    function IfStrategy(test, trueBranch, falseBranch) {
+        this.test = test;
+        this.trueBranch = trueBranch;
+        this.falseBranch = falseBranch;
+    }
+    IfStrategy.prototype.isSupported = function () {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.isSupported();
+    };
+    IfStrategy.prototype.connect = function (minPriority, callback) {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.connect(minPriority, callback);
+    };
+    return IfStrategy;
+}());
+/* harmony default export */ var if_strategy = (IfStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/first_connected_strategy.ts
+var FirstConnectedStrategy = (function () {
+    function FirstConnectedStrategy(strategy) {
+        this.strategy = strategy;
+    }
+    FirstConnectedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    FirstConnectedStrategy.prototype.connect = function (minPriority, callback) {
+        var runner = this.strategy.connect(minPriority, function (error, handshake) {
+            if (handshake) {
+                runner.abort();
+            }
+            callback(error, handshake);
+        });
+        return runner;
+    };
+    return FirstConnectedStrategy;
+}());
+/* harmony default export */ var first_connected_strategy = (FirstConnectedStrategy);
+
+// CONCATENATED MODULE: ./src/runtimes/web/default_strategy.ts
+
+
+
+
+
+
+
+function testSupportsStrategy(strategy) {
+    return function () {
+        return strategy.isSupported();
+    };
+}
+var getDefaultStrategy = function (config, baseOptions, defineTransport) {
+    var definedTransports = {};
+    function defineTransportStrategy(name, type, priority, options, manager) {
+        var transport = defineTransport(config, name, type, priority, options, manager);
+        definedTransports[name] = transport;
+        return transport;
+    }
+    var ws_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.wsHost + ':' + config.wsPort,
+        hostTLS: config.wsHost + ':' + config.wssPort,
+        httpPath: config.wsPath
+    });
+    var wss_options = Object.assign({}, ws_options, {
+        useTLS: true
+    });
+    var sockjs_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.httpHost + ':' + config.httpPort,
+        hostTLS: config.httpHost + ':' + config.httpsPort,
+        httpPath: config.httpPath
+    });
+    var timeouts = {
+        loop: true,
+        timeout: 15000,
+        timeoutLimit: 60000
+    };
+    var ws_manager = new transport_manager({
+        lives: 2,
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var streaming_manager = new transport_manager({
+        lives: 2,
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var ws_transport = defineTransportStrategy('ws', 'ws', 3, ws_options, ws_manager);
+    var wss_transport = defineTransportStrategy('wss', 'ws', 3, wss_options, ws_manager);
+    var sockjs_transport = defineTransportStrategy('sockjs', 'sockjs', 1, sockjs_options);
+    var xhr_streaming_transport = defineTransportStrategy('xhr_streaming', 'xhr_streaming', 1, sockjs_options, streaming_manager);
+    var xdr_streaming_transport = defineTransportStrategy('xdr_streaming', 'xdr_streaming', 1, sockjs_options, streaming_manager);
+    var xhr_polling_transport = defineTransportStrategy('xhr_polling', 'xhr_polling', 1, sockjs_options);
+    var xdr_polling_transport = defineTransportStrategy('xdr_polling', 'xdr_polling', 1, sockjs_options);
+    var ws_loop = new sequential_strategy([ws_transport], timeouts);
+    var wss_loop = new sequential_strategy([wss_transport], timeouts);
+    var sockjs_loop = new sequential_strategy([sockjs_transport], timeouts);
+    var streaming_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(xhr_streaming_transport), xhr_streaming_transport, xdr_streaming_transport)
+    ], timeouts);
+    var polling_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(xhr_polling_transport), xhr_polling_transport, xdr_polling_transport)
+    ], timeouts);
+    var http_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(streaming_loop), new best_connected_ever_strategy([
+            streaming_loop,
+            new delayed_strategy(polling_loop, { delay: 4000 })
+        ]), polling_loop)
+    ], timeouts);
+    var http_fallback_loop = new if_strategy(testSupportsStrategy(http_loop), http_loop, sockjs_loop);
+    var wsStrategy;
+    if (baseOptions.useTLS) {
+        wsStrategy = new best_connected_ever_strategy([
+            ws_loop,
+            new delayed_strategy(http_fallback_loop, { delay: 2000 })
+        ]);
+    }
+    else {
+        wsStrategy = new best_connected_ever_strategy([
+            ws_loop,
+            new delayed_strategy(wss_loop, { delay: 2000 }),
+            new delayed_strategy(http_fallback_loop, { delay: 5000 })
+        ]);
+    }
+    return new cached_strategy(new first_connected_strategy(new if_strategy(testSupportsStrategy(ws_transport), wsStrategy, http_fallback_loop)), definedTransports, {
+        ttl: 1800000,
+        timeline: baseOptions.timeline,
+        useTLS: baseOptions.useTLS
+    });
+};
+/* harmony default export */ var default_strategy = (getDefaultStrategy);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transport_connection_initializer.ts
+
+/* harmony default export */ var transport_connection_initializer = (function () {
+    var self = this;
+    self.timeline.info(self.buildTimelineMessage({
+        transport: self.name + (self.options.useTLS ? 's' : '')
+    }));
+    if (self.hooks.isInitialized()) {
+        self.changeState('initialized');
+    }
+    else if (self.hooks.file) {
+        self.changeState('initializing');
+        Dependencies.load(self.hooks.file, { useTLS: self.options.useTLS }, function (error, callback) {
+            if (self.hooks.isInitialized()) {
+                self.changeState('initialized');
+                callback(true);
+            }
+            else {
+                if (error) {
+                    self.onError(error);
+                }
+                self.onClose();
+                callback(false);
+            }
+        });
+    }
+    else {
+        self.onClose();
+    }
+});
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http_xdomain_request.ts
+
+var http_xdomain_request_hooks = {
+    getRequest: function (socket) {
+        var xdr = new window.XDomainRequest();
+        xdr.ontimeout = function () {
+            socket.emit('error', new RequestTimedOut());
+            socket.close();
+        };
+        xdr.onerror = function (e) {
+            socket.emit('error', e);
+            socket.close();
+        };
+        xdr.onprogress = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+        };
+        xdr.onload = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+            socket.emit('finished', 200);
+            socket.close();
+        };
+        return xdr;
+    },
+    abortRequest: function (xdr) {
+        xdr.ontimeout = xdr.onerror = xdr.onprogress = xdr.onload = null;
+        xdr.abort();
+    }
+};
+/* harmony default export */ var http_xdomain_request = (http_xdomain_request_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_request.ts
+var http_request_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+var MAX_BUFFER_LENGTH = 256 * 1024;
+var http_request_HTTPRequest = (function (_super) {
+    http_request_extends(HTTPRequest, _super);
+    function HTTPRequest(hooks, method, url) {
+        var _this = _super.call(this) || this;
+        _this.hooks = hooks;
+        _this.method = method;
+        _this.url = url;
+        return _this;
+    }
+    HTTPRequest.prototype.start = function (payload) {
+        var _this = this;
+        this.position = 0;
+        this.xhr = this.hooks.getRequest(this);
+        this.unloader = function () {
+            _this.close();
+        };
+        runtime.addUnloadListener(this.unloader);
+        this.xhr.open(this.method, this.url, true);
+        if (this.xhr.setRequestHeader) {
+            this.xhr.setRequestHeader('Content-Type', 'application/json');
+        }
+        this.xhr.send(payload);
+    };
+    HTTPRequest.prototype.close = function () {
+        if (this.unloader) {
+            runtime.removeUnloadListener(this.unloader);
+            this.unloader = null;
+        }
+        if (this.xhr) {
+            this.hooks.abortRequest(this.xhr);
+            this.xhr = null;
+        }
+    };
+    HTTPRequest.prototype.onChunk = function (status, data) {
+        while (true) {
+            var chunk = this.advanceBuffer(data);
+            if (chunk) {
+                this.emit('chunk', { status: status, data: chunk });
+            }
+            else {
+                break;
+            }
+        }
+        if (this.isBufferTooLong(data)) {
+            this.emit('buffer_too_long');
+        }
+    };
+    HTTPRequest.prototype.advanceBuffer = function (buffer) {
+        var unreadData = buffer.slice(this.position);
+        var endOfLinePosition = unreadData.indexOf('\n');
+        if (endOfLinePosition !== -1) {
+            this.position += endOfLinePosition + 1;
+            return unreadData.slice(0, endOfLinePosition);
+        }
+        else {
+            return null;
+        }
+    };
+    HTTPRequest.prototype.isBufferTooLong = function (buffer) {
+        return this.position === buffer.length && buffer.length > MAX_BUFFER_LENGTH;
+    };
+    return HTTPRequest;
+}(dispatcher));
+/* harmony default export */ var http_request = (http_request_HTTPRequest);
+
+// CONCATENATED MODULE: ./src/core/http/state.ts
+var State;
+(function (State) {
+    State[State["CONNECTING"] = 0] = "CONNECTING";
+    State[State["OPEN"] = 1] = "OPEN";
+    State[State["CLOSED"] = 3] = "CLOSED";
+})(State || (State = {}));
+/* harmony default export */ var state = (State);
+
+// CONCATENATED MODULE: ./src/core/http/http_socket.ts
+
+
+
+var autoIncrement = 1;
+var http_socket_HTTPSocket = (function () {
+    function HTTPSocket(hooks, url) {
+        this.hooks = hooks;
+        this.session = randomNumber(1000) + '/' + randomString(8);
+        this.location = getLocation(url);
+        this.readyState = state.CONNECTING;
+        this.openStream();
+    }
+    HTTPSocket.prototype.send = function (payload) {
+        return this.sendRaw(JSON.stringify([payload]));
+    };
+    HTTPSocket.prototype.ping = function () {
+        this.hooks.sendHeartbeat(this);
+    };
+    HTTPSocket.prototype.close = function (code, reason) {
+        this.onClose(code, reason, true);
+    };
+    HTTPSocket.prototype.sendRaw = function (payload) {
+        if (this.readyState === state.OPEN) {
+            try {
+                runtime.createSocketRequest('POST', getUniqueURL(getSendURL(this.location, this.session))).start(payload);
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    };
+    HTTPSocket.prototype.reconnect = function () {
+        this.closeStream();
+        this.openStream();
+    };
+    HTTPSocket.prototype.onClose = function (code, reason, wasClean) {
+        this.closeStream();
+        this.readyState = state.CLOSED;
+        if (this.onclose) {
+            this.onclose({
+                code: code,
+                reason: reason,
+                wasClean: wasClean
+            });
+        }
+    };
+    HTTPSocket.prototype.onChunk = function (chunk) {
+        if (chunk.status !== 200) {
+            return;
+        }
+        if (this.readyState === state.OPEN) {
+            this.onActivity();
+        }
+        var payload;
+        var type = chunk.data.slice(0, 1);
+        switch (type) {
+            case 'o':
+                payload = JSON.parse(chunk.data.slice(1) || '{}');
+                this.onOpen(payload);
+                break;
+            case 'a':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                for (var i = 0; i < payload.length; i++) {
+                    this.onEvent(payload[i]);
+                }
+                break;
+            case 'm':
+                payload = JSON.parse(chunk.data.slice(1) || 'null');
+                this.onEvent(payload);
+                break;
+            case 'h':
+                this.hooks.onHeartbeat(this);
+                break;
+            case 'c':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                this.onClose(payload[0], payload[1], true);
+                break;
+        }
+    };
+    HTTPSocket.prototype.onOpen = function (options) {
+        if (this.readyState === state.CONNECTING) {
+            if (options && options.hostname) {
+                this.location.base = replaceHost(this.location.base, options.hostname);
+            }
+            this.readyState = state.OPEN;
+            if (this.onopen) {
+                this.onopen();
+            }
+        }
+        else {
+            this.onClose(1006, 'Server lost session', true);
+        }
+    };
+    HTTPSocket.prototype.onEvent = function (event) {
+        if (this.readyState === state.OPEN && this.onmessage) {
+            this.onmessage({ data: event });
+        }
+    };
+    HTTPSocket.prototype.onActivity = function () {
+        if (this.onactivity) {
+            this.onactivity();
+        }
+    };
+    HTTPSocket.prototype.onError = function (error) {
+        if (this.onerror) {
+            this.onerror(error);
+        }
+    };
+    HTTPSocket.prototype.openStream = function () {
+        var _this = this;
+        this.stream = runtime.createSocketRequest('POST', getUniqueURL(this.hooks.getReceiveURL(this.location, this.session)));
+        this.stream.bind('chunk', function (chunk) {
+            _this.onChunk(chunk);
+        });
+        this.stream.bind('finished', function (status) {
+            _this.hooks.onFinished(_this, status);
+        });
+        this.stream.bind('buffer_too_long', function () {
+            _this.reconnect();
+        });
+        try {
+            this.stream.start();
+        }
+        catch (error) {
+            util.defer(function () {
+                _this.onError(error);
+                _this.onClose(1006, 'Could not start streaming', false);
+            });
+        }
+    };
+    HTTPSocket.prototype.closeStream = function () {
+        if (this.stream) {
+            this.stream.unbind_all();
+            this.stream.close();
+            this.stream = null;
+        }
+    };
+    return HTTPSocket;
+}());
+function getLocation(url) {
+    var parts = /([^\?]*)\/*(\??.*)/.exec(url);
+    return {
+        base: parts[1],
+        queryString: parts[2]
+    };
+}
+function getSendURL(url, session) {
+    return url.base + '/' + session + '/xhr_send';
+}
+function getUniqueURL(url) {
+    var separator = url.indexOf('?') === -1 ? '?' : '&';
+    return url + separator + 't=' + +new Date() + '&n=' + autoIncrement++;
+}
+function replaceHost(url, hostname) {
+    var urlParts = /(https?:\/\/)([^\/:]+)((\/|:)?.*)/.exec(url);
+    return urlParts[1] + hostname + urlParts[3];
+}
+function randomNumber(max) {
+    return Math.floor(Math.random() * max);
+}
+function randomString(length) {
+    var result = [];
+    for (var i = 0; i < length; i++) {
+        result.push(randomNumber(32).toString(32));
+    }
+    return result.join('');
+}
+/* harmony default export */ var http_socket = (http_socket_HTTPSocket);
+
+// CONCATENATED MODULE: ./src/core/http/http_streaming_socket.ts
+var http_streaming_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr_streaming' + url.queryString;
+    },
+    onHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+    }
+};
+/* harmony default export */ var http_streaming_socket = (http_streaming_socket_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_polling_socket.ts
+var http_polling_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr' + url.queryString;
+    },
+    onHeartbeat: function () {
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        if (status === 200) {
+            socket.reconnect();
+        }
+        else {
+            socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+        }
+    }
+};
+/* harmony default export */ var http_polling_socket = (http_polling_socket_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http_xhr_request.ts
+
+var http_xhr_request_hooks = {
+    getRequest: function (socket) {
+        var Constructor = runtime.getXHRAPI();
+        var xhr = new Constructor();
+        xhr.onreadystatechange = xhr.onprogress = function () {
+            switch (xhr.readyState) {
+                case 3:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    break;
+                case 4:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    socket.emit('finished', xhr.status);
+                    socket.close();
+                    break;
+            }
+        };
+        return xhr;
+    },
+    abortRequest: function (xhr) {
+        xhr.onreadystatechange = null;
+        xhr.abort();
+    }
+};
+/* harmony default export */ var http_xhr_request = (http_xhr_request_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http.ts
+
+
+
+
+
+var HTTP = {
+    createStreamingSocket: function (url) {
+        return this.createSocket(http_streaming_socket, url);
+    },
+    createPollingSocket: function (url) {
+        return this.createSocket(http_polling_socket, url);
+    },
+    createSocket: function (hooks, url) {
+        return new http_socket(hooks, url);
+    },
+    createXHR: function (method, url) {
+        return this.createRequest(http_xhr_request, method, url);
+    },
+    createRequest: function (hooks, method, url) {
+        return new http_request(hooks, method, url);
+    }
+};
+/* harmony default export */ var http_http = (HTTP);
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http.ts
+
+
+http_http.createXDR = function (method, url) {
+    return this.createRequest(http_xdomain_request, method, url);
+};
+/* harmony default export */ var web_http_http = (http_http);
+
+// CONCATENATED MODULE: ./src/runtimes/web/runtime.ts
+
+
+
+
+
+
+
+
+
+
+
+
+var Runtime = {
+    nextAuthCallbackID: 1,
+    auth_callbacks: {},
+    ScriptReceivers: ScriptReceivers,
+    DependenciesReceivers: DependenciesReceivers,
+    getDefaultStrategy: default_strategy,
+    Transports: transports_transports,
+    transportConnectionInitializer: transport_connection_initializer,
+    HTTPFactory: web_http_http,
+    TimelineTransport: jsonp_timeline,
+    getXHRAPI: function () {
+        return window.XMLHttpRequest;
+    },
+    getWebSocketAPI: function () {
+        return window.WebSocket || window.MozWebSocket;
+    },
+    setup: function (PusherClass) {
+        var _this = this;
+        window.Pusher = PusherClass;
+        var initializeOnDocumentBody = function () {
+            _this.onDocumentBody(PusherClass.ready);
+        };
+        if (!window.JSON) {
+            Dependencies.load('json2', {}, initializeOnDocumentBody);
+        }
+        else {
+            initializeOnDocumentBody();
+        }
+    },
+    getDocument: function () {
+        return document;
+    },
+    getProtocol: function () {
+        return this.getDocument().location.protocol;
+    },
+    getAuthorizers: function () {
+        return { ajax: xhr_auth, jsonp: jsonp_auth };
+    },
+    onDocumentBody: function (callback) {
+        var _this = this;
+        if (document.body) {
+            callback();
+        }
+        else {
+            setTimeout(function () {
+                _this.onDocumentBody(callback);
+            }, 0);
+        }
+    },
+    createJSONPRequest: function (url, data) {
+        return new jsonp_request(url, data);
+    },
+    createScriptRequest: function (src) {
+        return new script_request(src);
+    },
+    getLocalStorage: function () {
+        try {
+            return window.localStorage;
+        }
+        catch (e) {
+            return undefined;
+        }
+    },
+    createXHR: function () {
+        if (this.getXHRAPI()) {
+            return this.createXMLHttpRequest();
+        }
+        else {
+            return this.createMicrosoftXHR();
+        }
+    },
+    createXMLHttpRequest: function () {
+        var Constructor = this.getXHRAPI();
+        return new Constructor();
+    },
+    createMicrosoftXHR: function () {
+        return new ActiveXObject('Microsoft.XMLHTTP');
+    },
+    getNetwork: function () {
+        return net_info_Network;
+    },
+    createWebSocket: function (url) {
+        var Constructor = this.getWebSocketAPI();
+        return new Constructor(url);
+    },
+    createSocketRequest: function (method, url) {
+        if (this.isXHRSupported()) {
+            return this.HTTPFactory.createXHR(method, url);
+        }
+        else if (this.isXDRSupported(url.indexOf('https:') === 0)) {
+            return this.HTTPFactory.createXDR(method, url);
+        }
+        else {
+            throw 'Cross-origin HTTP requests are not supported';
+        }
+    },
+    isXHRSupported: function () {
+        var Constructor = this.getXHRAPI();
+        return (Boolean(Constructor) && new Constructor().withCredentials !== undefined);
+    },
+    isXDRSupported: function (useTLS) {
+        var protocol = useTLS ? 'https:' : 'http:';
+        var documentProtocol = this.getProtocol();
+        return (Boolean(window['XDomainRequest']) && documentProtocol === protocol);
+    },
+    addUnloadListener: function (listener) {
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('unload', listener, false);
+        }
+        else if (window.attachEvent !== undefined) {
+            window.attachEvent('onunload', listener);
+        }
+    },
+    removeUnloadListener: function (listener) {
+        if (window.addEventListener !== undefined) {
+            window.removeEventListener('unload', listener, false);
+        }
+        else if (window.detachEvent !== undefined) {
+            window.detachEvent('onunload', listener);
+        }
+    }
+};
+/* harmony default export */ var runtime = (Runtime);
+
+// CONCATENATED MODULE: ./src/core/timeline/level.ts
+var TimelineLevel;
+(function (TimelineLevel) {
+    TimelineLevel[TimelineLevel["ERROR"] = 3] = "ERROR";
+    TimelineLevel[TimelineLevel["INFO"] = 6] = "INFO";
+    TimelineLevel[TimelineLevel["DEBUG"] = 7] = "DEBUG";
+})(TimelineLevel || (TimelineLevel = {}));
+/* harmony default export */ var timeline_level = (TimelineLevel);
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline.ts
+
+
+
+var timeline_Timeline = (function () {
+    function Timeline(key, session, options) {
+        this.key = key;
+        this.session = session;
+        this.events = [];
+        this.options = options || {};
+        this.sent = 0;
+        this.uniqueID = 0;
+    }
+    Timeline.prototype.log = function (level, event) {
+        if (level <= this.options.level) {
+            this.events.push(extend({}, event, { timestamp: util.now() }));
+            if (this.options.limit && this.events.length > this.options.limit) {
+                this.events.shift();
+            }
+        }
+    };
+    Timeline.prototype.error = function (event) {
+        this.log(timeline_level.ERROR, event);
+    };
+    Timeline.prototype.info = function (event) {
+        this.log(timeline_level.INFO, event);
+    };
+    Timeline.prototype.debug = function (event) {
+        this.log(timeline_level.DEBUG, event);
+    };
+    Timeline.prototype.isEmpty = function () {
+        return this.events.length === 0;
+    };
+    Timeline.prototype.send = function (sendfn, callback) {
+        var _this = this;
+        var data = extend({
+            session: this.session,
+            bundle: this.sent + 1,
+            key: this.key,
+            lib: 'js',
+            version: this.options.version,
+            cluster: this.options.cluster,
+            features: this.options.features,
+            timeline: this.events
+        }, this.options.params);
+        this.events = [];
+        sendfn(data, function (error, result) {
+            if (!error) {
+                _this.sent++;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        return true;
+    };
+    Timeline.prototype.generateUniqueID = function () {
+        this.uniqueID++;
+        return this.uniqueID;
+    };
+    return Timeline;
+}());
+/* harmony default export */ var timeline_timeline = (timeline_Timeline);
+
+// CONCATENATED MODULE: ./src/core/strategies/transport_strategy.ts
+
+
+
+
+var transport_strategy_TransportStrategy = (function () {
+    function TransportStrategy(name, priority, transport, options) {
+        this.name = name;
+        this.priority = priority;
+        this.transport = transport;
+        this.options = options || {};
+    }
+    TransportStrategy.prototype.isSupported = function () {
+        return this.transport.isSupported({
+            useTLS: this.options.useTLS
+        });
+    };
+    TransportStrategy.prototype.connect = function (minPriority, callback) {
+        var _this = this;
+        if (!this.isSupported()) {
+            return failAttempt(new UnsupportedStrategy(), callback);
+        }
+        else if (this.priority < minPriority) {
+            return failAttempt(new TransportPriorityTooLow(), callback);
+        }
+        var connected = false;
+        var transport = this.transport.createConnection(this.name, this.priority, this.options.key, this.options);
+        var handshake = null;
+        var onInitialized = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.connect();
+        };
+        var onOpen = function () {
+            handshake = factory.createHandshake(transport, function (result) {
+                connected = true;
+                unbindListeners();
+                callback(null, result);
+            });
+        };
+        var onError = function (error) {
+            unbindListeners();
+            callback(error);
+        };
+        var onClosed = function () {
+            unbindListeners();
+            var serializedTransport;
+            serializedTransport = safeJSONStringify(transport);
+            callback(new TransportClosed(serializedTransport));
+        };
+        var unbindListeners = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.unbind('open', onOpen);
+            transport.unbind('error', onError);
+            transport.unbind('closed', onClosed);
+        };
+        transport.bind('initialized', onInitialized);
+        transport.bind('open', onOpen);
+        transport.bind('error', onError);
+        transport.bind('closed', onClosed);
+        transport.initialize();
+        return {
+            abort: function () {
+                if (connected) {
+                    return;
+                }
+                unbindListeners();
+                if (handshake) {
+                    handshake.close();
+                }
+                else {
+                    transport.close();
+                }
+            },
+            forceMinPriority: function (p) {
+                if (connected) {
+                    return;
+                }
+                if (_this.priority < p) {
+                    if (handshake) {
+                        handshake.close();
+                    }
+                    else {
+                        transport.close();
+                    }
+                }
+            }
+        };
+    };
+    return TransportStrategy;
+}());
+/* harmony default export */ var transport_strategy = (transport_strategy_TransportStrategy);
+function failAttempt(error, callback) {
+    util.defer(function () {
+        callback(error);
+    });
+    return {
+        abort: function () { },
+        forceMinPriority: function () { }
+    };
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/strategy_builder.ts
+
+
+
+
+
+var strategy_builder_Transports = runtime.Transports;
+var strategy_builder_defineTransport = function (config, name, type, priority, options, manager) {
+    var transportClass = strategy_builder_Transports[type];
+    if (!transportClass) {
+        throw new UnsupportedTransport(type);
+    }
+    var enabled = (!config.enabledTransports ||
+        arrayIndexOf(config.enabledTransports, name) !== -1) &&
+        (!config.disabledTransports ||
+            arrayIndexOf(config.disabledTransports, name) === -1);
+    var transport;
+    if (enabled) {
+        options = Object.assign({ ignoreNullOrigin: config.ignoreNullOrigin }, options);
+        transport = new transport_strategy(name, priority, manager ? manager.getAssistant(transportClass) : transportClass, options);
+    }
+    else {
+        transport = strategy_builder_UnsupportedStrategy;
+    }
+    return transport;
+};
+var strategy_builder_UnsupportedStrategy = {
+    isSupported: function () {
+        return false;
+    },
+    connect: function (_, callback) {
+        var deferred = util.defer(function () {
+            callback(new UnsupportedStrategy());
+        });
+        return {
+            abort: function () {
+                deferred.ensureAborted();
+            },
+            forceMinPriority: function () { }
+        };
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/config.ts
+
+
+function getConfig(opts) {
+    var config = {
+        activityTimeout: opts.activityTimeout || defaults.activityTimeout,
+        authEndpoint: opts.authEndpoint || defaults.authEndpoint,
+        authTransport: opts.authTransport || defaults.authTransport,
+        cluster: opts.cluster || defaults.cluster,
+        httpPath: opts.httpPath || defaults.httpPath,
+        httpPort: opts.httpPort || defaults.httpPort,
+        httpsPort: opts.httpsPort || defaults.httpsPort,
+        pongTimeout: opts.pongTimeout || defaults.pongTimeout,
+        statsHost: opts.statsHost || defaults.stats_host,
+        unavailableTimeout: opts.unavailableTimeout || defaults.unavailableTimeout,
+        wsPath: opts.wsPath || defaults.wsPath,
+        wsPort: opts.wsPort || defaults.wsPort,
+        wssPort: opts.wssPort || defaults.wssPort,
+        enableStats: getEnableStatsConfig(opts),
+        httpHost: getHttpHost(opts),
+        useTLS: shouldUseTLS(opts),
+        wsHost: getWebsocketHost(opts)
+    };
+    if ('auth' in opts)
+        config.auth = opts.auth;
+    if ('authorizer' in opts)
+        config.authorizer = opts.authorizer;
+    if ('disabledTransports' in opts)
+        config.disabledTransports = opts.disabledTransports;
+    if ('enabledTransports' in opts)
+        config.enabledTransports = opts.enabledTransports;
+    if ('ignoreNullOrigin' in opts)
+        config.ignoreNullOrigin = opts.ignoreNullOrigin;
+    if ('timelineParams' in opts)
+        config.timelineParams = opts.timelineParams;
+    if ('nacl' in opts) {
+        config.nacl = opts.nacl;
+    }
+    return config;
+}
+function getHttpHost(opts) {
+    if (opts.httpHost) {
+        return opts.httpHost;
+    }
+    if (opts.cluster) {
+        return "sockjs-" + opts.cluster + ".pusher.com";
+    }
+    return defaults.httpHost;
+}
+function getWebsocketHost(opts) {
+    if (opts.wsHost) {
+        return opts.wsHost;
+    }
+    if (opts.cluster) {
+        return getWebsocketHostFromCluster(opts.cluster);
+    }
+    return getWebsocketHostFromCluster(defaults.cluster);
+}
+function getWebsocketHostFromCluster(cluster) {
+    return "ws-" + cluster + ".pusher.com";
+}
+function shouldUseTLS(opts) {
+    if (runtime.getProtocol() === 'https:') {
+        return true;
+    }
+    else if (opts.forceTLS === false) {
+        return false;
+    }
+    return true;
+}
+function getEnableStatsConfig(opts) {
+    if ('enableStats' in opts) {
+        return opts.enableStats;
+    }
+    if ('disableStats' in opts) {
+        return !opts.disableStats;
+    }
+    return false;
+}
+
+// CONCATENATED MODULE: ./src/core/pusher.ts
+
+
+
+
+
+
+
+
+
+
+
+
+var pusher_Pusher = (function () {
+    function Pusher(app_key, options) {
+        var _this = this;
+        checkAppKey(app_key);
+        options = options || {};
+        if (!options.cluster && !(options.wsHost || options.httpHost)) {
+            var suffix = url_store.buildLogSuffix('javascriptQuickStart');
+            logger.warn("You should always specify a cluster when connecting. " + suffix);
+        }
+        if ('disableStats' in options) {
+            logger.warn('The disableStats option is deprecated in favor of enableStats');
+        }
+        this.key = app_key;
+        this.config = getConfig(options);
+        this.channels = factory.createChannels();
+        this.global_emitter = new dispatcher();
+        this.sessionID = Math.floor(Math.random() * 1000000000);
+        this.timeline = new timeline_timeline(this.key, this.sessionID, {
+            cluster: this.config.cluster,
+            features: Pusher.getClientFeatures(),
+            params: this.config.timelineParams || {},
+            limit: 50,
+            level: timeline_level.INFO,
+            version: defaults.VERSION
+        });
+        if (this.config.enableStats) {
+            this.timelineSender = factory.createTimelineSender(this.timeline, {
+                host: this.config.statsHost,
+                path: '/timeline/v2/' + runtime.TimelineTransport.name
+            });
+        }
+        var getStrategy = function (options) {
+            return runtime.getDefaultStrategy(_this.config, options, strategy_builder_defineTransport);
+        };
+        this.connection = factory.createConnectionManager(this.key, {
+            getStrategy: getStrategy,
+            timeline: this.timeline,
+            activityTimeout: this.config.activityTimeout,
+            pongTimeout: this.config.pongTimeout,
+            unavailableTimeout: this.config.unavailableTimeout,
+            useTLS: Boolean(this.config.useTLS)
+        });
+        this.connection.bind('connected', function () {
+            _this.subscribeAll();
+            if (_this.timelineSender) {
+                _this.timelineSender.send(_this.connection.isUsingTLS());
+            }
+        });
+        this.connection.bind('message', function (event) {
+            var eventName = event.event;
+            var internal = eventName.indexOf('pusher_internal:') === 0;
+            if (event.channel) {
+                var channel = _this.channel(event.channel);
+                if (channel) {
+                    channel.handleEvent(event);
+                }
+            }
+            if (!internal) {
+                _this.global_emitter.emit(event.event, event.data);
+            }
+        });
+        this.connection.bind('connecting', function () {
+            _this.channels.disconnect();
+        });
+        this.connection.bind('disconnected', function () {
+            _this.channels.disconnect();
+        });
+        this.connection.bind('error', function (err) {
+            logger.warn(err);
+        });
+        Pusher.instances.push(this);
+        this.timeline.info({ instances: Pusher.instances.length });
+        if (Pusher.isReady) {
+            this.connect();
+        }
+    }
+    Pusher.ready = function () {
+        Pusher.isReady = true;
+        for (var i = 0, l = Pusher.instances.length; i < l; i++) {
+            Pusher.instances[i].connect();
+        }
+    };
+    Pusher.getClientFeatures = function () {
+        return keys(filterObject({ ws: runtime.Transports.ws }, function (t) {
+            return t.isSupported({});
+        }));
+    };
+    Pusher.prototype.channel = function (name) {
+        return this.channels.find(name);
+    };
+    Pusher.prototype.allChannels = function () {
+        return this.channels.all();
+    };
+    Pusher.prototype.connect = function () {
+        this.connection.connect();
+        if (this.timelineSender) {
+            if (!this.timelineSenderTimer) {
+                var usingTLS = this.connection.isUsingTLS();
+                var timelineSender = this.timelineSender;
+                this.timelineSenderTimer = new PeriodicTimer(60000, function () {
+                    timelineSender.send(usingTLS);
+                });
+            }
+        }
+    };
+    Pusher.prototype.disconnect = function () {
+        this.connection.disconnect();
+        if (this.timelineSenderTimer) {
+            this.timelineSenderTimer.ensureAborted();
+            this.timelineSenderTimer = null;
+        }
+    };
+    Pusher.prototype.bind = function (event_name, callback, context) {
+        this.global_emitter.bind(event_name, callback, context);
+        return this;
+    };
+    Pusher.prototype.unbind = function (event_name, callback, context) {
+        this.global_emitter.unbind(event_name, callback, context);
+        return this;
+    };
+    Pusher.prototype.bind_global = function (callback) {
+        this.global_emitter.bind_global(callback);
+        return this;
+    };
+    Pusher.prototype.unbind_global = function (callback) {
+        this.global_emitter.unbind_global(callback);
+        return this;
+    };
+    Pusher.prototype.unbind_all = function (callback) {
+        this.global_emitter.unbind_all();
+        return this;
+    };
+    Pusher.prototype.subscribeAll = function () {
+        var channelName;
+        for (channelName in this.channels.channels) {
+            if (this.channels.channels.hasOwnProperty(channelName)) {
+                this.subscribe(channelName);
+            }
+        }
+    };
+    Pusher.prototype.subscribe = function (channel_name) {
+        var channel = this.channels.add(channel_name, this);
+        if (channel.subscriptionPending && channel.subscriptionCancelled) {
+            channel.reinstateSubscription();
+        }
+        else if (!channel.subscriptionPending &&
+            this.connection.state === 'connected') {
+            channel.subscribe();
+        }
+        return channel;
+    };
+    Pusher.prototype.unsubscribe = function (channel_name) {
+        var channel = this.channels.find(channel_name);
+        if (channel && channel.subscriptionPending) {
+            channel.cancelSubscription();
+        }
+        else {
+            channel = this.channels.remove(channel_name);
+            if (channel && channel.subscribed) {
+                channel.unsubscribe();
+            }
+        }
+    };
+    Pusher.prototype.send_event = function (event_name, data, channel) {
+        return this.connection.send_event(event_name, data, channel);
+    };
+    Pusher.prototype.shouldUseTLS = function () {
+        return this.config.useTLS;
+    };
+    Pusher.instances = [];
+    Pusher.isReady = false;
+    Pusher.logToConsole = false;
+    Pusher.Runtime = runtime;
+    Pusher.ScriptReceivers = runtime.ScriptReceivers;
+    Pusher.DependenciesReceivers = runtime.DependenciesReceivers;
+    Pusher.auth_callbacks = runtime.auth_callbacks;
+    return Pusher;
+}());
+/* harmony default export */ var core_pusher = __webpack_exports__["default"] = (pusher_Pusher);
+function checkAppKey(key) {
+    if (key === null || key === undefined) {
+        throw 'You must pass your app key when you instantiate Pusher.';
+    }
+}
+runtime.setup(pusher_Pusher);
+
+
+/***/ })
+/******/ ]);
+});
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -37701,6 +44016,545 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./ConversationComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/addStyles.js":
+/*!****************************************************!*\
+  !*** ./node_modules/style-loader/lib/addStyles.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getTarget = function (target, parent) {
+  if (parent){
+    return parent.querySelector(target);
+  }
+  return document.querySelector(target);
+};
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(target, parent) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target, parent);
+			// Special case to return head of iframe instead of iframe itself
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[target] = styleTarget;
+		}
+		return memo[target]
+	};
+})();
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(/*! ./urls */ "./node_modules/style-loader/lib/urls.js");
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+        if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertAt.before, target);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+
+	if(options.attrs.nonce === undefined) {
+		var nonce = getNonce();
+		if (nonce) {
+			options.attrs.nonce = nonce;
+		}
+	}
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function getNonce() {
+	if (false) {}
+
+	return __webpack_require__.nc;
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = typeof options.transform === 'function'
+		 ? options.transform(obj.css) 
+		 : options.transform.default(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/urls.js":
+/*!***********************************************!*\
+  !*** ./node_modules/style-loader/lib/urls.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/timers-browserify/main.js":
 /*!************************************************!*\
   !*** ./node_modules/timers-browserify/main.js ***!
@@ -37776,6 +44630,2794 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/v-emoji-picker/lib/v-emoji-picker.esm.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/v-emoji-picker/lib/v-emoji-picker.esm.js ***!
+  \***************************************************************/
+/*! exports provided: default, VEmojiPicker, categoriesDefault, emojisDefault */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VEmojiPicker", function() { return __vue_component__$6; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "categoriesDefault", function() { return categoriesDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emojisDefault", function() { return emojisDefault; });
+/* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}var Emoji = /** @class */ (function () {
+    function Emoji(data, category, aliases) {
+        this.data = data;
+        this.category = category;
+        this.aliases = aliases;
+    }
+    return Emoji;
+}());var emojisDefault = [
+    new Emoji("😀", "Peoples", ["grinning"]),
+    new Emoji("😃", "Peoples", ["smiley"]),
+    new Emoji("😄", "Peoples", ["smile"]),
+    new Emoji("😁", "Peoples", ["grin"]),
+    new Emoji("😆", "Peoples", ["laughing", "satisfied"]),
+    new Emoji("😅", "Peoples", ["sweat_smile"]),
+    new Emoji("😂", "Peoples", ["joy"]),
+    new Emoji("🤣", "Peoples", ["rofl"]),
+    new Emoji("😌", "Peoples", ["relaxed"]),
+    new Emoji("😊", "Peoples", ["blush"]),
+    new Emoji("😇", "Peoples", ["innocent"]),
+    new Emoji("🙂", "Peoples", ["slightly_smiling_face"]),
+    new Emoji("🙃", "Peoples", ["upside_down_face"]),
+    new Emoji("😉", "Peoples", ["wink"]),
+    new Emoji("😌", "Peoples", ["relieved"]),
+    new Emoji("😍", "Peoples", ["heart_eyes"]),
+    new Emoji("😘", "Peoples", ["kissing_heart"]),
+    new Emoji("😗", "Peoples", ["kissing"]),
+    new Emoji("😙", "Peoples", ["kissing_smiling_eyes"]),
+    new Emoji("😚", "Peoples", ["kissing_closed_eyes"]),
+    new Emoji("😋", "Peoples", ["yum"]),
+    new Emoji("😜", "Peoples", ["stuck_out_tongue_winking_eye"]),
+    new Emoji("😝", "Peoples", ["stuck_out_tongue_closed_eyes"]),
+    new Emoji("😛", "Peoples", ["stuck_out_tongue"]),
+    new Emoji("🤑", "Peoples", ["money_mouth_face"]),
+    new Emoji("🤗", "Peoples", ["hugs"]),
+    new Emoji("🤓", "Peoples", ["nerd_face"]),
+    new Emoji("😎", "Peoples", ["sunglasses"]),
+    new Emoji("🤡", "Peoples", ["clown_face"]),
+    new Emoji("🤠", "Peoples", ["cowboy_hat_face"]),
+    new Emoji("😏", "Peoples", ["smirk"]),
+    new Emoji("😒", "Peoples", ["unamused"]),
+    new Emoji("😞", "Peoples", ["disappointed"]),
+    new Emoji("😔", "Peoples", ["pensive"]),
+    new Emoji("😟", "Peoples", ["worried"]),
+    new Emoji("😕", "Peoples", ["confused"]),
+    new Emoji("🙁", "Peoples", ["slightly_frowning_face"]),
+    new Emoji("☹️", "Peoples", ["frowning_face"]),
+    new Emoji("😣", "Peoples", ["persevere"]),
+    new Emoji("😖", "Peoples", ["confounded"]),
+    new Emoji("😫", "Peoples", ["tired_face"]),
+    new Emoji("😩", "Peoples", ["weary"]),
+    new Emoji("😤", "Peoples", ["triumph"]),
+    new Emoji("😠", "Peoples", ["angry"]),
+    new Emoji("😡", "Peoples", ["rage", "pout"]),
+    new Emoji("😶", "Peoples", ["no_mouth"]),
+    new Emoji("😐", "Peoples", ["neutral_face"]),
+    new Emoji("😑", "Peoples", ["expressionless"]),
+    new Emoji("😯", "Peoples", ["hushed"]),
+    new Emoji("😦", "Peoples", ["frowning"]),
+    new Emoji("😧", "Peoples", ["anguished"]),
+    new Emoji("😮", "Peoples", ["open_mouth"]),
+    new Emoji("😲", "Peoples", ["astonished"]),
+    new Emoji("😵", "Peoples", ["dizzy_face"]),
+    new Emoji("😳", "Peoples", ["flushed"]),
+    new Emoji("😱", "Peoples", ["scream"]),
+    new Emoji("😨", "Peoples", ["fearful"]),
+    new Emoji("😰", "Peoples", ["cold_sweat"]),
+    new Emoji("😢", "Peoples", ["cry"]),
+    new Emoji("😥", "Peoples", ["disappointed_relieved"]),
+    new Emoji("🤤", "Peoples", ["drooling_face"]),
+    new Emoji("😭", "Peoples", ["sob"]),
+    new Emoji("😓", "Peoples", ["sweat"]),
+    new Emoji("😪", "Peoples", ["sleepy"]),
+    new Emoji("😴", "Peoples", ["sleeping"]),
+    new Emoji("🙄", "Peoples", ["roll_eyes"]),
+    new Emoji("🤔", "Peoples", ["thinking"]),
+    new Emoji("🤥", "Peoples", ["lying_face"]),
+    new Emoji("😬", "Peoples", ["grimacing"]),
+    new Emoji("🤐", "Peoples", ["zipper_mouth_face"]),
+    new Emoji("🤢", "Peoples", ["nauseated_face"]),
+    new Emoji("🤧", "Peoples", ["sneezing_face"]),
+    new Emoji("😷", "Peoples", ["mask"]),
+    new Emoji("🤒", "Peoples", ["face_with_thermometer"]),
+    new Emoji("🤕", "Peoples", ["face_with_head_bandage"]),
+    new Emoji("😈", "Peoples", ["smiling_imp"]),
+    new Emoji("👿", "Peoples", ["imp"]),
+    new Emoji("👹", "Peoples", ["japanese_ogre"]),
+    new Emoji("👺", "Peoples", ["japanese_goblin"]),
+    new Emoji("💩", "Peoples", ["hankey", "poop", "shit"]),
+    new Emoji("👻", "Peoples", ["ghost"]),
+    new Emoji("💀", "Peoples", ["skull"]),
+    new Emoji("☠️", "Peoples", ["skull_and_crossbones"]),
+    new Emoji("👽", "Peoples", ["alien"]),
+    new Emoji("👾", "Peoples", ["space_invader"]),
+    new Emoji("🤖", "Peoples", ["robot"]),
+    new Emoji("🎃", "Peoples", ["jack_o_lantern"]),
+    new Emoji("😺", "Peoples", ["smiley_cat"]),
+    new Emoji("😸", "Peoples", ["smile_cat"]),
+    new Emoji("😹", "Peoples", ["joy_cat"]),
+    new Emoji("😻", "Peoples", ["heart_eyes_cat"]),
+    new Emoji("😼", "Peoples", ["smirk_cat"]),
+    new Emoji("😽", "Peoples", ["kissing_cat"]),
+    new Emoji("🙀", "Peoples", ["scream_cat"]),
+    new Emoji("😿", "Peoples", ["crying_cat_face"]),
+    new Emoji("😾", "Peoples", ["pouting_cat"]),
+    new Emoji("👐", "Peoples", ["open_hands"]),
+    new Emoji("🙌", "Peoples", ["raised_hands"]),
+    new Emoji("👏", "Peoples", ["clap"]),
+    new Emoji("🙏", "Peoples", ["pray"]),
+    new Emoji("🤝", "Peoples", ["handshake"]),
+    new Emoji("👍", "Peoples", ["+1", "thumbsup"]),
+    new Emoji("👎", "Peoples", ["-1", "thumbsdown"]),
+    new Emoji("👊", "Peoples", ["fist_oncoming", "facepunch", "punch"]),
+    new Emoji("✊", "Peoples", ["fist_raised", "fist"]),
+    new Emoji("🤛", "Peoples", ["fist_left"]),
+    new Emoji("🤜", "Peoples", ["fist_right"]),
+    new Emoji("🤞", "Peoples", ["crossed_fingers"]),
+    new Emoji("✌️", "Peoples", ["v"]),
+    new Emoji("🤘", "Peoples", ["metal"]),
+    new Emoji("👌", "Peoples", ["ok_hand"]),
+    new Emoji("👈", "Peoples", ["point_left"]),
+    new Emoji("👉", "Peoples", ["point_right"]),
+    new Emoji("👆", "Peoples", ["point_up_2"]),
+    new Emoji("👇", "Peoples", ["point_down"]),
+    new Emoji("☝️", "Peoples", ["point_up"]),
+    new Emoji("✋", "Peoples", ["hand", "raised_hand"]),
+    new Emoji("🤚", "Peoples", ["raised_back_of_hand"]),
+    new Emoji("🖐", "Peoples", ["raised_hand_with_fingers_splayed"]),
+    new Emoji("🖖", "Peoples", ["vulcan_salute"]),
+    new Emoji("👋", "Peoples", ["wave"]),
+    new Emoji("🤙", "Peoples", ["call_me_hand"]),
+    new Emoji("💪", "Peoples", ["muscle"]),
+    new Emoji("🖕", "Peoples", ["middle_finger", "fu"]),
+    new Emoji("✍️", "Peoples", ["writing_hand"]),
+    new Emoji("🤳", "Peoples", ["selfie"]),
+    new Emoji("💅", "Peoples", ["nail_care"]),
+    new Emoji("💍", "Peoples", ["ring"]),
+    new Emoji("💄", "Peoples", ["lipstick"]),
+    new Emoji("💋", "Peoples", ["kiss"]),
+    new Emoji("👄", "Peoples", ["lips"]),
+    new Emoji("👅", "Peoples", ["tongue"]),
+    new Emoji("👂", "Peoples", ["ear"]),
+    new Emoji("👃", "Peoples", ["nose"]),
+    new Emoji("👣", "Peoples", ["footprints"]),
+    new Emoji("👁", "Peoples", ["eye"]),
+    new Emoji("👀", "Peoples", ["eyes"]),
+    new Emoji("🗣", "Peoples", ["speaking_head"]),
+    new Emoji("👤", "Peoples", ["bust_in_silhouette"]),
+    new Emoji("👥", "Peoples", ["busts_in_silhouette"]),
+    new Emoji("👶", "Peoples", ["baby"]),
+    new Emoji("👦", "Peoples", ["boy"]),
+    new Emoji("👧", "Peoples", ["girl"]),
+    new Emoji("👨", "Peoples", ["man"]),
+    new Emoji("👩", "Peoples", ["woman"]),
+    new Emoji("👱‍♀", "Peoples", ["blonde_woman"]),
+    new Emoji("👱", "Peoples", ["blonde_man", "person_with_blond_hair"]),
+    new Emoji("👴", "Peoples", ["older_man"]),
+    new Emoji("👵", "Peoples", ["older_woman"]),
+    new Emoji("👲", "Peoples", ["man_with_gua_pi_mao"]),
+    new Emoji("👳‍♀", "Peoples", ["woman_with_turban"]),
+    new Emoji("👳", "Peoples", ["man_with_turban"]),
+    new Emoji("👮‍♀", "Peoples", ["policewoman"]),
+    new Emoji("👮", "Peoples", ["policeman", "cop"]),
+    new Emoji("👷‍♀", "Peoples", ["construction_worker_woman"]),
+    new Emoji("👷", "Peoples", ["construction_worker_man", "construction_worker"]),
+    new Emoji("💂‍♀", "Peoples", ["guardswoman"]),
+    new Emoji("💂", "Peoples", ["guardsman"]),
+    new Emoji("👩‍⚕", "Peoples", ["woman_health_worker"]),
+    new Emoji("👨‍⚕", "Peoples", ["man_health_worker"]),
+    new Emoji("👩‍🌾", "Peoples", ["woman_farmer"]),
+    new Emoji("👨‍🌾", "Peoples", ["man_farmer"]),
+    new Emoji("👩‍🍳", "Peoples", ["woman_cook"]),
+    new Emoji("👨‍🍳", "Peoples", ["man_cook"]),
+    new Emoji("👩‍🎓", "Peoples", ["woman_student"]),
+    new Emoji("👨‍🎓", "Peoples", ["man_student"]),
+    new Emoji("👩‍🎤", "Peoples", ["woman_singer"]),
+    new Emoji("👨‍🎤", "Peoples", ["man_singer"]),
+    new Emoji("👩‍🏫", "Peoples", ["woman_teacher"]),
+    new Emoji("👨‍🏫", "Peoples", ["man_teacher"]),
+    new Emoji("👩‍🏭", "Peoples", ["woman_factory_worker"]),
+    new Emoji("👨‍🏭", "Peoples", ["man_factory_worker"]),
+    new Emoji("👩‍💻", "Peoples", ["woman_technologist"]),
+    new Emoji("👨‍💻", "Peoples", ["man_technologist"]),
+    new Emoji("👩‍💼", "Peoples", ["woman_office_worker"]),
+    new Emoji("👨‍💼", "Peoples", ["man_office_worker"]),
+    new Emoji("👩‍🔧", "Peoples", ["woman_mechanic"]),
+    new Emoji("👨‍🔧", "Peoples", ["man_mechanic"]),
+    new Emoji("👩‍🔬", "Peoples", ["woman_scientist"]),
+    new Emoji("👨‍🔬", "Peoples", ["man_scientist"]),
+    new Emoji("👩‍🎨", "Peoples", ["woman_artist"]),
+    new Emoji("👨‍🎨", "Peoples", ["man_artist"]),
+    new Emoji("👩‍🚒", "Peoples", ["woman_firefighter"]),
+    new Emoji("👨‍🚒", "Peoples", ["man_firefighter"]),
+    new Emoji("👩‍🚀", "Peoples", ["woman_astronaut"]),
+    new Emoji("👨‍🚀", "Peoples", ["man_astronaut"]),
+    new Emoji("🤶", "Peoples", ["mrs_claus"]),
+    new Emoji("🎅", "Peoples", ["santa"]),
+    new Emoji("👸", "Peoples", ["princess"]),
+    new Emoji("🤴", "Peoples", ["prince"]),
+    new Emoji("👰", "Peoples", ["bride_with_veil"]),
+    new Emoji("🤵", "Peoples", ["man_in_tuxedo"]),
+    new Emoji("👼", "Peoples", ["angel"]),
+    new Emoji("🤰", "Peoples", ["pregnant_woman"]),
+    new Emoji("🙇‍♀", "Peoples", ["bowing_woman"]),
+    new Emoji("🙇", "Peoples", ["bowing_man", "bow"]),
+    new Emoji("💁", "Peoples", ["tipping_hand_woman", "information_desk_person", "sassy_woman"]),
+    new Emoji("💁‍♂", "Peoples", ["tipping_hand_man", "sassy_man"]),
+    new Emoji("🙅", "Peoples", ["no_good_woman", "no_good", "ng_woman"]),
+    new Emoji("🙅‍♂", "Peoples", ["no_good_man", "ng_man"]),
+    new Emoji("🙆", "Peoples", ["ok_woman"]),
+    new Emoji("🙆‍♂", "Peoples", ["ok_man"]),
+    new Emoji("🙋", "Peoples", ["raising_hand_woman", "raising_hand"]),
+    new Emoji("🙋‍♂", "Peoples", ["raising_hand_man"]),
+    new Emoji("🤦‍♀", "Peoples", ["woman_facepalming"]),
+    new Emoji("🤦‍♂", "Peoples", ["man_facepalming"]),
+    new Emoji("🤷‍♀", "Peoples", ["woman_shrugging"]),
+    new Emoji("🤷‍♂", "Peoples", ["man_shrugging"]),
+    new Emoji("🙎", "Peoples", ["pouting_woman", "person_with_pouting_face"]),
+    new Emoji("🙎‍♂", "Peoples", ["pouting_man"]),
+    new Emoji("🙍", "Peoples", ["frowning_woman", "person_frowning"]),
+    new Emoji("🙍‍♂", "Peoples", ["frowning_man"]),
+    new Emoji("💇", "Peoples", ["haircut_woman", "haircut"]),
+    new Emoji("💇‍♂", "Peoples", ["haircut_man"]),
+    new Emoji("💆", "Peoples", ["massage_woman", "massage"]),
+    new Emoji("💆‍♂", "Peoples", ["massage_man"]),
+    new Emoji("🕴", "Peoples", ["business_suit_levitating"]),
+    new Emoji("💃", "Peoples", ["dancer"]),
+    new Emoji("🕺", "Peoples", ["man_dancing"]),
+    new Emoji("👯", "Peoples", ["dancing_women", "dancers"]),
+    new Emoji("👯‍♂", "Peoples", ["dancing_men"]),
+    new Emoji("🚶‍♀", "Peoples", ["walking_woman"]),
+    new Emoji("🚶", "Peoples", ["walking_man", "walking"]),
+    new Emoji("🏃‍♀", "Peoples", ["running_woman"]),
+    new Emoji("🏃", "Peoples", ["running_man", "runner", "running"]),
+    new Emoji("👫", "Peoples", ["couple"]),
+    new Emoji("👭", "Peoples", ["two_women_holding_hands"]),
+    new Emoji("👬", "Peoples", ["two_men_holding_hands"]),
+    new Emoji("💑", "Peoples", ["couple_with_heart_woman_man", "couple_with_heart"]),
+    new Emoji("👩‍❤️‍👩", "Peoples", ["couple_with_heart_woman_woman"]),
+    new Emoji("👨‍❤️‍👨", "Peoples", ["couple_with_heart_man_man"]),
+    new Emoji("💏", "Peoples", ["couplekiss_man_woman"]),
+    new Emoji("👩‍❤️‍💋‍👩", "Peoples", ["couplekiss_woman_woman"]),
+    new Emoji("👨‍❤️‍💋‍👨", "Peoples", ["couplekiss_man_man"]),
+    new Emoji("👪", "Peoples", ["family_man_woman_boy", "family"]),
+    new Emoji("👨‍👩‍👧", "Peoples", ["family_man_woman_girl"]),
+    new Emoji("👨‍👩‍👧‍👦", "Peoples", ["family_man_woman_girl_boy"]),
+    new Emoji("👨‍👩‍👦‍👦", "Peoples", ["family_man_woman_boy_boy"]),
+    new Emoji("👨‍👩‍👧‍👧", "Peoples", ["family_man_woman_girl_girl"]),
+    new Emoji("👩‍👩‍👦", "Peoples", ["family_woman_woman_boy"]),
+    new Emoji("👩‍👩‍👧", "Peoples", ["family_woman_woman_girl"]),
+    new Emoji("👩‍👩‍👧‍👦", "Peoples", ["family_woman_woman_girl_boy"]),
+    new Emoji("👩‍👩‍👦‍👦", "Peoples", ["family_woman_woman_boy_boy"]),
+    new Emoji("👩‍👩‍👧‍👧", "Peoples", ["family_woman_woman_girl_girl"]),
+    new Emoji("👨‍👨‍👦", "Peoples", ["family_man_man_boy"]),
+    new Emoji("👨‍👨‍👧", "Peoples", ["family_man_man_girl"]),
+    new Emoji("👨‍👨‍👧‍👦", "Peoples", ["family_man_man_girl_boy"]),
+    new Emoji("👨‍👨‍👦‍👦", "Peoples", ["family_man_man_boy_boy"]),
+    new Emoji("👨‍👨‍👧‍👧", "Peoples", ["family_man_man_girl_girl"]),
+    new Emoji("👩‍👦", "Peoples", ["family_woman_boy"]),
+    new Emoji("👩‍👧", "Peoples", ["family_woman_girl"]),
+    new Emoji("👩‍👧‍👦", "Peoples", ["family_woman_girl_boy"]),
+    new Emoji("👩‍👦‍👦", "Peoples", ["family_woman_boy_boy"]),
+    new Emoji("👩‍👧‍👧", "Peoples", ["family_woman_girl_girl"]),
+    new Emoji("👨‍👦", "Peoples", ["family_man_boy"]),
+    new Emoji("👨‍👧", "Peoples", ["family_man_girl"]),
+    new Emoji("👨‍👧‍👦", "Peoples", ["family_man_girl_boy"]),
+    new Emoji("👨‍👦‍👦", "Peoples", ["family_man_boy_boy"]),
+    new Emoji("👨‍👧‍👧", "Peoples", ["family_man_girl_girl"]),
+    new Emoji("👚", "Peoples", ["womans_clothes"]),
+    new Emoji("👕", "Peoples", ["shirt", "tshirt"]),
+    new Emoji("👖", "Peoples", ["jeans"]),
+    new Emoji("👔", "Peoples", ["necktie"]),
+    new Emoji("👗", "Peoples", ["dress"]),
+    new Emoji("👙", "Peoples", ["bikini"]),
+    new Emoji("👘", "Peoples", ["kimono"]),
+    new Emoji("👠", "Peoples", ["high_heel"]),
+    new Emoji("👡", "Peoples", ["sandal"]),
+    new Emoji("👢", "Peoples", ["boot"]),
+    new Emoji("👞", "Peoples", ["mans_shoe", "shoe"]),
+    new Emoji("👟", "Peoples", ["athletic_shoe"]),
+    new Emoji("👒", "Peoples", ["womans_hat"]),
+    new Emoji("🎩", "Peoples", ["tophat"]),
+    new Emoji("🎓", "Peoples", ["mortar_board"]),
+    new Emoji("👑", "Peoples", ["crown"]),
+    new Emoji("⛑", "Peoples", ["rescue_worker_helmet"]),
+    new Emoji("🎒", "Peoples", ["school_satchel"]),
+    new Emoji("👝", "Peoples", ["pouch"]),
+    new Emoji("👛", "Peoples", ["purse"]),
+    new Emoji("👜", "Peoples", ["handbag"]),
+    new Emoji("💼", "Peoples", ["briefcase"]),
+    new Emoji("👓", "Peoples", ["eyeglasses"]),
+    new Emoji("🕶", "Peoples", ["dark_sunglasses"]),
+    new Emoji("🌂", "Peoples", ["closed_umbrella"]),
+    new Emoji("☂️", "Peoples", ["open_umbrella"]),
+    new Emoji("🐶", "Nature", ["dog"]),
+    new Emoji("🐱", "Nature", ["cat"]),
+    new Emoji("🐭", "Nature", ["mouse"]),
+    new Emoji("🐹", "Nature", ["hamster"]),
+    new Emoji("🐰", "Nature", ["rabbit"]),
+    new Emoji("🦊", "Nature", ["fox_face"]),
+    new Emoji("🐻", "Nature", ["bear"]),
+    new Emoji("🐼", "Nature", ["panda_face"]),
+    new Emoji("🐨", "Nature", ["koala"]),
+    new Emoji("🐯", "Nature", ["tiger"]),
+    new Emoji("🦁", "Nature", ["lion"]),
+    new Emoji("🐮", "Nature", ["cow"]),
+    new Emoji("🐷", "Nature", ["pig"]),
+    new Emoji("🐽", "Nature", ["pig_nose"]),
+    new Emoji("🐸", "Nature", ["frog"]),
+    new Emoji("🐵", "Nature", ["monkey_face"]),
+    new Emoji("🙈", "Nature", ["see_no_evil"]),
+    new Emoji("🙉", "Nature", ["hear_no_evil"]),
+    new Emoji("🙊", "Nature", ["speak_no_evil"]),
+    new Emoji("🐒", "Nature", ["monkey"]),
+    new Emoji("🐔", "Nature", ["chicken"]),
+    new Emoji("🐧", "Nature", ["penguin"]),
+    new Emoji("🐦", "Nature", ["bird"]),
+    new Emoji("🐤", "Nature", ["baby_chick"]),
+    new Emoji("🐣", "Nature", ["hatching_chick"]),
+    new Emoji("🐥", "Nature", ["hatched_chick"]),
+    new Emoji("🦆", "Nature", ["duck"]),
+    new Emoji("🦅", "Nature", ["eagle"]),
+    new Emoji("🦉", "Nature", ["owl"]),
+    new Emoji("🦇", "Nature", ["bat"]),
+    new Emoji("🐺", "Nature", ["wolf"]),
+    new Emoji("🐗", "Nature", ["boar"]),
+    new Emoji("🐴", "Nature", ["horse"]),
+    new Emoji("🦄", "Nature", ["unicorn"]),
+    new Emoji("🐝", "Nature", ["bee", "honeybee"]),
+    new Emoji("🐛", "Nature", ["bug"]),
+    new Emoji("🦋", "Nature", ["butterfly"]),
+    new Emoji("🐌", "Nature", ["snail"]),
+    new Emoji("🐚", "Nature", ["shell"]),
+    new Emoji("🐞", "Nature", ["beetle"]),
+    new Emoji("🐜", "Nature", ["ant"]),
+    new Emoji("🕷", "Nature", ["spider"]),
+    new Emoji("🕸", "Nature", ["spider_web"]),
+    new Emoji("🐢", "Nature", ["turtle"]),
+    new Emoji("🐍", "Nature", ["snake"]),
+    new Emoji("🦎", "Nature", ["lizard"]),
+    new Emoji("🦂", "Nature", ["scorpion"]),
+    new Emoji("🦀", "Nature", ["crab"]),
+    new Emoji("🦑", "Nature", ["squid"]),
+    new Emoji("🐙", "Nature", ["octopus"]),
+    new Emoji("🦐", "Nature", ["shrimp"]),
+    new Emoji("🐠", "Nature", ["tropical_fish"]),
+    new Emoji("🐟", "Nature", ["fish"]),
+    new Emoji("🐡", "Nature", ["blowfish"]),
+    new Emoji("🐬", "Nature", ["dolphin", "flipper"]),
+    new Emoji("🦈", "Nature", ["shark"]),
+    new Emoji("🐳", "Nature", ["whale"]),
+    new Emoji("🐋", "Nature", ["whale2"]),
+    new Emoji("🐊", "Nature", ["crocodile"]),
+    new Emoji("🐆", "Nature", ["leopard"]),
+    new Emoji("🐅", "Nature", ["tiger2"]),
+    new Emoji("🐃", "Nature", ["water_buffalo"]),
+    new Emoji("🐂", "Nature", ["ox"]),
+    new Emoji("🐄", "Nature", ["cow2"]),
+    new Emoji("🦌", "Nature", ["deer"]),
+    new Emoji("🐪", "Nature", ["dromedary_camel"]),
+    new Emoji("🐫", "Nature", ["camel"]),
+    new Emoji("🐘", "Nature", ["elephant"]),
+    new Emoji("🦏", "Nature", ["rhinoceros"]),
+    new Emoji("🦍", "Nature", ["gorilla"]),
+    new Emoji("🐎", "Nature", ["racehorse"]),
+    new Emoji("🐖", "Nature", ["pig2"]),
+    new Emoji("🐐", "Nature", ["goat"]),
+    new Emoji("🐏", "Nature", ["ram"]),
+    new Emoji("🐑", "Nature", ["sheep"]),
+    new Emoji("🐕", "Nature", ["dog2"]),
+    new Emoji("🐩", "Nature", ["poodle"]),
+    new Emoji("🐈", "Nature", ["cat2"]),
+    new Emoji("🐓", "Nature", ["rooster"]),
+    new Emoji("🦃", "Nature", ["turkey"]),
+    new Emoji("🕊", "Nature", ["dove"]),
+    new Emoji("🐇", "Nature", ["rabbit2"]),
+    new Emoji("🐁", "Nature", ["mouse2"]),
+    new Emoji("🐀", "Nature", ["rat"]),
+    new Emoji("🐿", "Nature", ["chipmunk"]),
+    new Emoji("🐾", "Nature", ["feet", "paw_prints"]),
+    new Emoji("🐉", "Nature", ["dragon"]),
+    new Emoji("🐲", "Nature", ["dragon_face"]),
+    new Emoji("🌵", "Nature", ["cactus"]),
+    new Emoji("🎄", "Nature", ["christmas_tree"]),
+    new Emoji("🌲", "Nature", ["evergreen_tree"]),
+    new Emoji("🌳", "Nature", ["deciduous_tree"]),
+    new Emoji("🌴", "Nature", ["palm_tree"]),
+    new Emoji("🌱", "Nature", ["seedling"]),
+    new Emoji("🌿", "Nature", ["herb"]),
+    new Emoji("☘️", "Nature", ["shamrock"]),
+    new Emoji("🍀", "Nature", ["four_leaf_clover"]),
+    new Emoji("🎍", "Nature", ["bamboo"]),
+    new Emoji("🎋", "Nature", ["tanabata_tree"]),
+    new Emoji("🍃", "Nature", ["leaves"]),
+    new Emoji("🍂", "Nature", ["fallen_leaf"]),
+    new Emoji("🍁", "Nature", ["maple_leaf"]),
+    new Emoji("🍄", "Nature", ["mushroom"]),
+    new Emoji("🌾", "Nature", ["ear_of_rice"]),
+    new Emoji("💐", "Nature", ["bouquet"]),
+    new Emoji("🌷", "Nature", ["tulip"]),
+    new Emoji("🌹", "Nature", ["rose"]),
+    new Emoji("🥀", "Nature", ["wilted_flower"]),
+    new Emoji("🌻", "Nature", ["sunflower"]),
+    new Emoji("🌼", "Nature", ["blossom"]),
+    new Emoji("🌸", "Nature", ["cherry_blossom"]),
+    new Emoji("🌺", "Nature", ["hibiscus"]),
+    new Emoji("🌎", "Nature", ["earth_americas"]),
+    new Emoji("🌍", "Nature", ["earth_africa"]),
+    new Emoji("🌏", "Nature", ["earth_asia"]),
+    new Emoji("🌕", "Nature", ["full_moon"]),
+    new Emoji("🌖", "Nature", ["waning_gibbous_moon"]),
+    new Emoji("🌗", "Nature", ["last_quarter_moon"]),
+    new Emoji("🌘", "Nature", ["waning_crescent_moon"]),
+    new Emoji("🌑", "Nature", ["new_moon"]),
+    new Emoji("🌒", "Nature", ["waxing_crescent_moon"]),
+    new Emoji("🌓", "Nature", ["first_quarter_moon"]),
+    new Emoji("🌔", "Nature", ["moon", "waxing_gibbous_moon"]),
+    new Emoji("🌚", "Nature", ["new_moon_with_face"]),
+    new Emoji("🌝", "Nature", ["full_moon_with_face"]),
+    new Emoji("🌞", "Nature", ["sun_with_face"]),
+    new Emoji("🌛", "Nature", ["first_quarter_moon_with_face"]),
+    new Emoji("🌜", "Nature", ["last_quarter_moon_with_face"]),
+    new Emoji("🌙", "Nature", ["crescent_moon"]),
+    new Emoji("💫", "Nature", ["dizzy"]),
+    new Emoji("⭐️", "Nature", ["star"]),
+    new Emoji("🌟", "Nature", ["star2"]),
+    new Emoji("✨", "Nature", ["sparkles"]),
+    new Emoji("⚡️", "Nature", ["zap"]),
+    new Emoji("🔥", "Nature", ["fire"]),
+    new Emoji("💥", "Nature", ["boom", "collision"]),
+    new Emoji("☄", "Nature", ["comet"]),
+    new Emoji("☀️", "Nature", ["sunny"]),
+    new Emoji("🌤", "Nature", ["sun_behind_small_cloud"]),
+    new Emoji("⛅️", "Nature", ["partly_sunny"]),
+    new Emoji("🌥", "Nature", ["sun_behind_large_cloud"]),
+    new Emoji("🌦", "Nature", ["sun_behind_rain_cloud"]),
+    new Emoji("🌈", "Nature", ["rainbow"]),
+    new Emoji("☁️", "Nature", ["cloud"]),
+    new Emoji("🌧", "Nature", ["cloud_with_rain"]),
+    new Emoji("⛈", "Nature", ["cloud_with_lightning_and_rain"]),
+    new Emoji("🌩", "Nature", ["cloud_with_lightning"]),
+    new Emoji("🌨", "Nature", ["cloud_with_snow"]),
+    new Emoji("☃️", "Nature", ["snowman_with_snow"]),
+    new Emoji("⛄️", "Nature", ["snowman"]),
+    new Emoji("❄️", "Nature", ["snowflake"]),
+    new Emoji("🌬", "Nature", ["wind_face"]),
+    new Emoji("💨", "Nature", ["dash"]),
+    new Emoji("🌪", "Nature", ["tornado"]),
+    new Emoji("🌫", "Nature", ["fog"]),
+    new Emoji("🌊", "Nature", ["ocean"]),
+    new Emoji("💧", "Nature", ["droplet"]),
+    new Emoji("💦", "Nature", ["sweat_drops"]),
+    new Emoji("☔️", "Nature", ["umbrella"]),
+    new Emoji("🍏", "Foods", ["green_apple"]),
+    new Emoji("🍎", "Foods", ["apple"]),
+    new Emoji("🍐", "Foods", ["pear"]),
+    new Emoji("🍊", "Foods", ["tangerine", "orange", "mandarin"]),
+    new Emoji("🍋", "Foods", ["lemon"]),
+    new Emoji("🍌", "Foods", ["banana"]),
+    new Emoji("🍉", "Foods", ["watermelon"]),
+    new Emoji("🍇", "Foods", ["grapes"]),
+    new Emoji("🍓", "Foods", ["strawberry"]),
+    new Emoji("🍈", "Foods", ["melon"]),
+    new Emoji("🍒", "Foods", ["cherries"]),
+    new Emoji("🍑", "Foods", ["peach"]),
+    new Emoji("🍍", "Foods", ["pineapple"]),
+    new Emoji("🥝", "Foods", ["kiwi_fruit"]),
+    new Emoji("🥑", "Foods", ["avocado"]),
+    new Emoji("🍅", "Foods", ["tomato"]),
+    new Emoji("🍆", "Foods", ["eggplant"]),
+    new Emoji("🥒", "Foods", ["cucumber"]),
+    new Emoji("🥕", "Foods", ["carrot"]),
+    new Emoji("🌽", "Foods", ["corn"]),
+    new Emoji("🌶", "Foods", ["hot_pepper"]),
+    new Emoji("🥔", "Foods", ["potato"]),
+    new Emoji("🍠", "Foods", ["sweet_potato"]),
+    new Emoji("🌰", "Foods", ["chestnut"]),
+    new Emoji("🥜", "Foods", ["peanuts"]),
+    new Emoji("🍯", "Foods", ["honey_pot"]),
+    new Emoji("🥐", "Foods", ["croissant"]),
+    new Emoji("🍞", "Foods", ["bread"]),
+    new Emoji("🥖", "Foods", ["baguette_bread"]),
+    new Emoji("🧀", "Foods", ["cheese"]),
+    new Emoji("🥚", "Foods", ["egg"]),
+    new Emoji("🍳", "Foods", ["fried_egg"]),
+    new Emoji("🥓", "Foods", ["bacon"]),
+    new Emoji("🥞", "Foods", ["pancakes"]),
+    new Emoji("🍤", "Foods", ["fried_shrimp"]),
+    new Emoji("🍗", "Foods", ["poultry_leg"]),
+    new Emoji("🍖", "Foods", ["meat_on_bone"]),
+    new Emoji("🍕", "Foods", ["pizza"]),
+    new Emoji("🌭", "Foods", ["hotdog"]),
+    new Emoji("🍔", "Foods", ["hamburger"]),
+    new Emoji("🍟", "Foods", ["fries"]),
+    new Emoji("🥙", "Foods", ["stuffed_flatbread"]),
+    new Emoji("🌮", "Foods", ["taco"]),
+    new Emoji("🌯", "Foods", ["burrito"]),
+    new Emoji("🥗", "Foods", ["green_salad"]),
+    new Emoji("🥘", "Foods", ["shallow_pan_of_food"]),
+    new Emoji("🍝", "Foods", ["spaghetti"]),
+    new Emoji("🍜", "Foods", ["ramen"]),
+    new Emoji("🍲", "Foods", ["stew"]),
+    new Emoji("🍥", "Foods", ["fish_cake"]),
+    new Emoji("🍣", "Foods", ["sushi"]),
+    new Emoji("🍱", "Foods", ["bento"]),
+    new Emoji("🍛", "Foods", ["curry"]),
+    new Emoji("🍚", "Foods", ["rice"]),
+    new Emoji("🍙", "Foods", ["rice_ball"]),
+    new Emoji("🍘", "Foods", ["rice_cracker"]),
+    new Emoji("🍢", "Foods", ["oden"]),
+    new Emoji("🍡", "Foods", ["dango"]),
+    new Emoji("🍧", "Foods", ["shaved_ice"]),
+    new Emoji("🍨", "Foods", ["ice_cream"]),
+    new Emoji("🍦", "Foods", ["icecream"]),
+    new Emoji("🍰", "Foods", ["cake"]),
+    new Emoji("🎂", "Foods", ["birthday"]),
+    new Emoji("🍮", "Foods", ["custard"]),
+    new Emoji("🍭", "Foods", ["lollipop"]),
+    new Emoji("🍬", "Foods", ["candy"]),
+    new Emoji("🍫", "Foods", ["chocolate_bar"]),
+    new Emoji("🍿", "Foods", ["popcorn"]),
+    new Emoji("🍩", "Foods", ["doughnut"]),
+    new Emoji("🍪", "Foods", ["cookie"]),
+    new Emoji("🥛", "Foods", ["milk_glass"]),
+    new Emoji("🍼", "Foods", ["baby_bottle"]),
+    new Emoji("☕️", "Foods", ["coffee"]),
+    new Emoji("🍵", "Foods", ["tea"]),
+    new Emoji("🍶", "Foods", ["sake"]),
+    new Emoji("🍺", "Foods", ["beer"]),
+    new Emoji("🍻", "Foods", ["beers"]),
+    new Emoji("🥂", "Foods", ["clinking_glasses"]),
+    new Emoji("🍷", "Foods", ["wine_glass"]),
+    new Emoji("🥃", "Foods", ["tumbler_glass"]),
+    new Emoji("🍸", "Foods", ["cocktail"]),
+    new Emoji("🍹", "Foods", ["tropical_drink"]),
+    new Emoji("🍾", "Foods", ["champagne"]),
+    new Emoji("🥄", "Foods", ["spoon"]),
+    new Emoji("🍴", "Foods", ["fork_and_knife"]),
+    new Emoji("🍽", "Foods", ["plate_with_cutlery"]),
+    new Emoji("⚽️", "Activity", ["soccer"]),
+    new Emoji("🏀", "Activity", ["basketball"]),
+    new Emoji("🏈", "Activity", ["football"]),
+    new Emoji("⚾️", "Activity", ["baseball"]),
+    new Emoji("🎾", "Activity", ["tennis"]),
+    new Emoji("🏐", "Activity", ["volleyball"]),
+    new Emoji("🏉", "Activity", ["rugby_football"]),
+    new Emoji("🎱", "Activity", ["8ball"]),
+    new Emoji("🏓", "Activity", ["ping_pong"]),
+    new Emoji("🏸", "Activity", ["badminton"]),
+    new Emoji("🥅", "Activity", ["goal_net"]),
+    new Emoji("🏒", "Activity", ["ice_hockey"]),
+    new Emoji("🏑", "Activity", ["field_hockey"]),
+    new Emoji("🏏", "Activity", ["cricket"]),
+    new Emoji("⛳️", "Activity", ["golf"]),
+    new Emoji("🏹", "Activity", ["bow_and_arrow"]),
+    new Emoji("🎣", "Activity", ["fishing_pole_and_fish"]),
+    new Emoji("🥊", "Activity", ["boxing_glove"]),
+    new Emoji("🥋", "Activity", ["martial_arts_uniform"]),
+    new Emoji("⛸", "Activity", ["ice_skate"]),
+    new Emoji("🎿", "Activity", ["ski"]),
+    new Emoji("⛷", "Activity", ["skier"]),
+    new Emoji("🏂", "Activity", ["snowboarder"]),
+    new Emoji("🏋️‍♀️", "Activity", ["weight_lifting_woman"]),
+    new Emoji("🏋", "Activity", ["weight_lifting_man"]),
+    new Emoji("🤺", "Activity", ["person_fencing"]),
+    new Emoji("🤼‍♀", "Activity", ["women_wrestling"]),
+    new Emoji("🤼‍♂", "Activity", ["men_wrestling"]),
+    new Emoji("🤸‍♀", "Activity", ["woman_cartwheeling"]),
+    new Emoji("🤸‍♂", "Activity", ["man_cartwheeling"]),
+    new Emoji("⛹️‍♀️", "Activity", ["basketball_woman"]),
+    new Emoji("⛹", "Activity", ["basketball_man"]),
+    new Emoji("🤾‍♀", "Activity", ["woman_playing_handball"]),
+    new Emoji("🤾‍♂", "Activity", ["man_playing_handball"]),
+    new Emoji("🏌️‍♀️", "Activity", ["golfing_woman"]),
+    new Emoji("🏌", "Activity", ["golfing_man"]),
+    new Emoji("🏄‍♀", "Activity", ["surfing_woman"]),
+    new Emoji("🏄", "Activity", ["surfing_man", "surfer"]),
+    new Emoji("🏊‍♀", "Activity", ["swimming_woman"]),
+    new Emoji("🏊", "Activity", ["swimming_man", "swimmer"]),
+    new Emoji("🤽‍♀", "Activity", ["woman_playing_water_polo"]),
+    new Emoji("🤽‍♂", "Activity", ["man_playing_water_polo"]),
+    new Emoji("🚣‍♀", "Activity", ["rowing_woman"]),
+    new Emoji("🚣", "Activity", ["rowing_man", "rowboat"]),
+    new Emoji("🏇", "Activity", ["horse_racing"]),
+    new Emoji("🚴‍♀", "Activity", ["biking_woman"]),
+    new Emoji("🚴", "Activity", ["biking_man", "bicyclist"]),
+    new Emoji("🚵‍♀", "Activity", ["mountain_biking_woman"]),
+    new Emoji("🚵", "Activity", ["mountain_biking_man", "mountain_bicyclist"]),
+    new Emoji("🎽", "Activity", ["running_shirt_with_sash"]),
+    new Emoji("🏅", "Activity", ["medal_sports"]),
+    new Emoji("🎖", "Activity", ["medal_military"]),
+    new Emoji("🥇", "Activity", ["1st_place_medal"]),
+    new Emoji("🥈", "Activity", ["2nd_place_medal"]),
+    new Emoji("🥉", "Activity", ["3rd_place_medal"]),
+    new Emoji("🏆", "Activity", ["trophy"]),
+    new Emoji("🏵", "Activity", ["rosette"]),
+    new Emoji("🎗", "Activity", ["reminder_ribbon"]),
+    new Emoji("🎫", "Activity", ["ticket"]),
+    new Emoji("🎟", "Activity", ["tickets"]),
+    new Emoji("🎪", "Activity", ["circus_tent"]),
+    new Emoji("🤹‍♀", "Activity", ["woman_juggling"]),
+    new Emoji("🤹‍♂", "Activity", ["man_juggling"]),
+    new Emoji("🎭", "Activity", ["performing_arts"]),
+    new Emoji("🎨", "Activity", ["art"]),
+    new Emoji("🎬", "Activity", ["clapper"]),
+    new Emoji("🎤", "Activity", ["microphone"]),
+    new Emoji("🎧", "Activity", ["headphones"]),
+    new Emoji("🎼", "Activity", ["musical_score"]),
+    new Emoji("🎹", "Activity", ["musical_keyboard"]),
+    new Emoji("🥁", "Activity", ["drum"]),
+    new Emoji("🎷", "Activity", ["saxophone"]),
+    new Emoji("🎺", "Activity", ["trumpet"]),
+    new Emoji("🎸", "Activity", ["guitar"]),
+    new Emoji("🎻", "Activity", ["violin"]),
+    new Emoji("🎲", "Activity", ["game_die"]),
+    new Emoji("🎯", "Activity", ["dart"]),
+    new Emoji("🎳", "Activity", ["bowling"]),
+    new Emoji("🎮", "Activity", ["video_game"]),
+    new Emoji("🎰", "Activity", ["slot_machine"]),
+    new Emoji("🚗", "Places", ["car", "red_car"]),
+    new Emoji("🚕", "Places", ["taxi"]),
+    new Emoji("🚙", "Places", ["blue_car"]),
+    new Emoji("🚌", "Places", ["bus"]),
+    new Emoji("🚎", "Places", ["trolleybus"]),
+    new Emoji("🏎", "Places", ["racing_car"]),
+    new Emoji("🚓", "Places", ["police_car"]),
+    new Emoji("🚑", "Places", ["ambulance"]),
+    new Emoji("🚒", "Places", ["fire_engine"]),
+    new Emoji("🚐", "Places", ["minibus"]),
+    new Emoji("🚚", "Places", ["truck"]),
+    new Emoji("🚛", "Places", ["articulated_lorry"]),
+    new Emoji("🚜", "Places", ["tractor"]),
+    new Emoji("🛴", "Places", ["kick_scooter"]),
+    new Emoji("🚲", "Places", ["bike"]),
+    new Emoji("🛵", "Places", ["motor_scooter"]),
+    new Emoji("🏍", "Places", ["motorcycle"]),
+    new Emoji("🚨", "Places", ["rotating_light"]),
+    new Emoji("🚔", "Places", ["oncoming_police_car"]),
+    new Emoji("🚍", "Places", ["oncoming_bus"]),
+    new Emoji("🚘", "Places", ["oncoming_automobile"]),
+    new Emoji("🚖", "Places", ["oncoming_taxi"]),
+    new Emoji("🚡", "Places", ["aerial_tramway"]),
+    new Emoji("🚠", "Places", ["mountain_cableway"]),
+    new Emoji("🚟", "Places", ["suspension_railway"]),
+    new Emoji("🚃", "Places", ["railway_car"]),
+    new Emoji("🚋", "Places", ["train"]),
+    new Emoji("🚞", "Places", ["mountain_railway"]),
+    new Emoji("🚝", "Places", ["monorail"]),
+    new Emoji("🚄", "Places", ["bullettrain_side"]),
+    new Emoji("🚅", "Places", ["bullettrain_front"]),
+    new Emoji("🚈", "Places", ["light_rail"]),
+    new Emoji("🚂", "Places", ["steam_locomotive"]),
+    new Emoji("🚆", "Places", ["train2"]),
+    new Emoji("🚇", "Places", ["metro"]),
+    new Emoji("🚊", "Places", ["tram"]),
+    new Emoji("🚉", "Places", ["station"]),
+    new Emoji("🚁", "Places", ["helicopter"]),
+    new Emoji("🛩", "Places", ["small_airplane"]),
+    new Emoji("✈️", "Places", ["airplane"]),
+    new Emoji("🛫", "Places", ["flight_departure"]),
+    new Emoji("🛬", "Places", ["flight_arrival"]),
+    new Emoji("🚀", "Places", ["rocket"]),
+    new Emoji("🛰", "Places", ["artificial_satellite"]),
+    new Emoji("💺", "Places", ["seat"]),
+    new Emoji("🛶", "Places", ["canoe"]),
+    new Emoji("⛵️", "Places", ["boat", "sailboat"]),
+    new Emoji("🛥", "Places", ["motor_boat"]),
+    new Emoji("🚤", "Places", ["speedboat"]),
+    new Emoji("🛳", "Places", ["passenger_ship"]),
+    new Emoji("⛴", "Places", ["ferry"]),
+    new Emoji("🚢", "Places", ["ship"]),
+    new Emoji("⚓️", "Places", ["anchor"]),
+    new Emoji("🚧", "Places", ["construction"]),
+    new Emoji("⛽️", "Places", ["fuelpump"]),
+    new Emoji("🚏", "Places", ["busstop"]),
+    new Emoji("🚦", "Places", ["vertical_traffic_light"]),
+    new Emoji("🚥", "Places", ["traffic_light"]),
+    new Emoji("🗺", "Places", ["world_map"]),
+    new Emoji("🗿", "Places", ["moyai"]),
+    new Emoji("🗽", "Places", ["statue_of_liberty"]),
+    new Emoji("⛲️", "Places", ["fountain"]),
+    new Emoji("🗼", "Places", ["tokyo_tower"]),
+    new Emoji("🏰", "Places", ["european_castle"]),
+    new Emoji("🏯", "Places", ["japanese_castle"]),
+    new Emoji("🏟", "Places", ["stadium"]),
+    new Emoji("🎡", "Places", ["ferris_wheel"]),
+    new Emoji("🎢", "Places", ["roller_coaster"]),
+    new Emoji("🎠", "Places", ["carousel_horse"]),
+    new Emoji("⛱", "Places", ["parasol_on_ground"]),
+    new Emoji("🏖", "Places", ["beach_umbrella"]),
+    new Emoji("🏝", "Places", ["desert_island"]),
+    new Emoji("⛰", "Places", ["mountain"]),
+    new Emoji("🏔", "Places", ["mountain_snow"]),
+    new Emoji("🗻", "Places", ["mount_fuji"]),
+    new Emoji("🌋", "Places", ["volcano"]),
+    new Emoji("🏜", "Places", ["desert"]),
+    new Emoji("🏕", "Places", ["camping"]),
+    new Emoji("⛺️", "Places", ["tent"]),
+    new Emoji("🛤", "Places", ["railway_track"]),
+    new Emoji("🛣", "Places", ["motorway"]),
+    new Emoji("🏗", "Places", ["building_construction"]),
+    new Emoji("🏭", "Places", ["factory"]),
+    new Emoji("🏠", "Places", ["house"]),
+    new Emoji("🏡", "Places", ["house_with_garden"]),
+    new Emoji("🏘", "Places", ["houses"]),
+    new Emoji("🏚", "Places", ["derelict_house"]),
+    new Emoji("🏢", "Places", ["office"]),
+    new Emoji("🏬", "Places", ["department_store"]),
+    new Emoji("🏣", "Places", ["post_office"]),
+    new Emoji("🏤", "Places", ["european_post_office"]),
+    new Emoji("🏥", "Places", ["hospital"]),
+    new Emoji("🏦", "Places", ["bank"]),
+    new Emoji("🏨", "Places", ["hotel"]),
+    new Emoji("🏪", "Places", ["convenience_store"]),
+    new Emoji("🏫", "Places", ["school"]),
+    new Emoji("🏩", "Places", ["love_hotel"]),
+    new Emoji("💒", "Places", ["wedding"]),
+    new Emoji("🏛", "Places", ["classical_building"]),
+    new Emoji("⛪️", "Places", ["church"]),
+    new Emoji("🕌", "Places", ["mosque"]),
+    new Emoji("🕍", "Places", ["synagogue"]),
+    new Emoji("🕋", "Places", ["kaaba"]),
+    new Emoji("⛩", "Places", ["shinto_shrine"]),
+    new Emoji("🗾", "Places", ["japan"]),
+    new Emoji("🎑", "Places", ["rice_scene"]),
+    new Emoji("🏞", "Places", ["national_park"]),
+    new Emoji("🌅", "Places", ["sunrise"]),
+    new Emoji("🌄", "Places", ["sunrise_over_mountains"]),
+    new Emoji("🌠", "Places", ["stars"]),
+    new Emoji("🎇", "Places", ["sparkler"]),
+    new Emoji("🎆", "Places", ["fireworks"]),
+    new Emoji("🌇", "Places", ["city_sunrise"]),
+    new Emoji("🌆", "Places", ["city_sunset"]),
+    new Emoji("🏙", "Places", ["cityscape"]),
+    new Emoji("🌃", "Places", ["night_with_stars"]),
+    new Emoji("🌌", "Places", ["milky_way"]),
+    new Emoji("🌉", "Places", ["bridge_at_night"]),
+    new Emoji("🌁", "Places", ["foggy"]),
+    new Emoji("⌚️", "Objects", ["watch"]),
+    new Emoji("📱", "Objects", ["iphone"]),
+    new Emoji("📲", "Objects", ["calling"]),
+    new Emoji("💻", "Objects", ["computer"]),
+    new Emoji("⌨️", "Objects", ["keyboard"]),
+    new Emoji("🖥", "Objects", ["desktop_computer"]),
+    new Emoji("🖨", "Objects", ["printer"]),
+    new Emoji("🖱", "Objects", ["computer_mouse"]),
+    new Emoji("🖲", "Objects", ["trackball"]),
+    new Emoji("🕹", "Objects", ["joystick"]),
+    new Emoji("🗜", "Objects", ["clamp"]),
+    new Emoji("💽", "Objects", ["minidisc"]),
+    new Emoji("💾", "Objects", ["floppy_disk"]),
+    new Emoji("💿", "Objects", ["cd"]),
+    new Emoji("📀", "Objects", ["dvd"]),
+    new Emoji("📼", "Objects", ["vhs"]),
+    new Emoji("📷", "Objects", ["camera"]),
+    new Emoji("📸", "Objects", ["camera_flash"]),
+    new Emoji("📹", "Objects", ["video_camera"]),
+    new Emoji("🎥", "Objects", ["movie_camera"]),
+    new Emoji("📽", "Objects", ["film_projector"]),
+    new Emoji("🎞", "Objects", ["film_strip"]),
+    new Emoji("📞", "Objects", ["telephone_receiver"]),
+    new Emoji("☎️", "Objects", ["phone", "telephone"]),
+    new Emoji("📟", "Objects", ["pager"]),
+    new Emoji("📠", "Objects", ["fax"]),
+    new Emoji("📺", "Objects", ["tv"]),
+    new Emoji("📻", "Objects", ["radio"]),
+    new Emoji("🎙", "Objects", ["studio_microphone"]),
+    new Emoji("🎚", "Objects", ["level_slider"]),
+    new Emoji("🎛", "Objects", ["control_knobs"]),
+    new Emoji("⏱", "Objects", ["stopwatch"]),
+    new Emoji("⏲", "Objects", ["timer_clock"]),
+    new Emoji("⏰", "Objects", ["alarm_clock"]),
+    new Emoji("🕰", "Objects", ["mantelpiece_clock"]),
+    new Emoji("⌛️", "Objects", ["hourglass"]),
+    new Emoji("⏳", "Objects", ["hourglass_flowing_sand"]),
+    new Emoji("📡", "Objects", ["satellite"]),
+    new Emoji("🔋", "Objects", ["battery"]),
+    new Emoji("🔌", "Objects", ["electric_plug"]),
+    new Emoji("💡", "Objects", ["bulb"]),
+    new Emoji("🔦", "Objects", ["flashlight"]),
+    new Emoji("🕯", "Objects", ["candle"]),
+    new Emoji("🗑", "Objects", ["wastebasket"]),
+    new Emoji("🛢", "Objects", ["oil_drum"]),
+    new Emoji("💸", "Objects", ["money_with_wings"]),
+    new Emoji("💵", "Objects", ["dollar"]),
+    new Emoji("💴", "Objects", ["yen"]),
+    new Emoji("💶", "Objects", ["euro"]),
+    new Emoji("💷", "Objects", ["pound"]),
+    new Emoji("💰", "Objects", ["moneybag"]),
+    new Emoji("💳", "Objects", ["credit_card"]),
+    new Emoji("💎", "Objects", ["gem"]),
+    new Emoji("⚖️", "Objects", ["balance_scale"]),
+    new Emoji("🔧", "Objects", ["wrench"]),
+    new Emoji("🔨", "Objects", ["hammer"]),
+    new Emoji("⚒", "Objects", ["hammer_and_pick"]),
+    new Emoji("🛠", "Objects", ["hammer_and_wrench"]),
+    new Emoji("⛏", "Objects", ["pick"]),
+    new Emoji("🔩", "Objects", ["nut_and_bolt"]),
+    new Emoji("⚙️", "Objects", ["gear"]),
+    new Emoji("⛓", "Objects", ["chains"]),
+    new Emoji("🔫", "Objects", ["gun"]),
+    new Emoji("💣", "Objects", ["bomb"]),
+    new Emoji("🔪", "Objects", ["hocho", "knife"]),
+    new Emoji("🗡", "Objects", ["dagger"]),
+    new Emoji("⚔️", "Objects", ["crossed_swords"]),
+    new Emoji("🛡", "Objects", ["shield"]),
+    new Emoji("🚬", "Objects", ["smoking"]),
+    new Emoji("⚰️", "Objects", ["coffin"]),
+    new Emoji("⚱️", "Objects", ["funeral_urn"]),
+    new Emoji("🏺", "Objects", ["amphora"]),
+    new Emoji("🔮", "Objects", ["crystal_ball"]),
+    new Emoji("📿", "Objects", ["prayer_beads"]),
+    new Emoji("💈", "Objects", ["barber"]),
+    new Emoji("⚗️", "Objects", ["alembic"]),
+    new Emoji("🔭", "Objects", ["telescope"]),
+    new Emoji("🔬", "Objects", ["microscope"]),
+    new Emoji("🕳", "Objects", ["hole"]),
+    new Emoji("💊", "Objects", ["pill"]),
+    new Emoji("💉", "Objects", ["syringe"]),
+    new Emoji("🌡", "Objects", ["thermometer"]),
+    new Emoji("🚽", "Objects", ["toilet"]),
+    new Emoji("🚰", "Objects", ["potable_water"]),
+    new Emoji("🚿", "Objects", ["shower"]),
+    new Emoji("🛁", "Objects", ["bathtub"]),
+    new Emoji("🛀", "Objects", ["bath"]),
+    new Emoji("🛎", "Objects", ["bellhop_bell"]),
+    new Emoji("🔑", "Objects", ["key"]),
+    new Emoji("🗝", "Objects", ["old_key"]),
+    new Emoji("🚪", "Objects", ["door"]),
+    new Emoji("🛋", "Objects", ["couch_and_lamp"]),
+    new Emoji("🛏", "Objects", ["bed"]),
+    new Emoji("🛌", "Objects", ["sleeping_bed"]),
+    new Emoji("🖼", "Objects", ["framed_picture"]),
+    new Emoji("🛍", "Objects", ["shopping"]),
+    new Emoji("🛒", "Objects", ["shopping_cart"]),
+    new Emoji("🎁", "Objects", ["gift"]),
+    new Emoji("🎈", "Objects", ["balloon"]),
+    new Emoji("🎏", "Objects", ["flags"]),
+    new Emoji("🎀", "Objects", ["ribbon"]),
+    new Emoji("🎊", "Objects", ["confetti_ball"]),
+    new Emoji("🎉", "Objects", ["tada"]),
+    new Emoji("🎎", "Objects", ["dolls"]),
+    new Emoji("🏮", "Objects", ["izakaya_lantern", "lantern"]),
+    new Emoji("🎐", "Objects", ["wind_chime"]),
+    new Emoji("✉️", "Objects", ["email", "envelope"]),
+    new Emoji("📩", "Objects", ["envelope_with_arrow"]),
+    new Emoji("📨", "Objects", ["incoming_envelope"]),
+    new Emoji("📧", "Objects", ["e-mail"]),
+    new Emoji("💌", "Objects", ["love_letter"]),
+    new Emoji("📥", "Objects", ["inbox_tray"]),
+    new Emoji("📤", "Objects", ["outbox_tray"]),
+    new Emoji("📦", "Objects", ["package"]),
+    new Emoji("🏷", "Objects", ["label"]),
+    new Emoji("📪", "Objects", ["mailbox_closed"]),
+    new Emoji("📫", "Objects", ["mailbox"]),
+    new Emoji("📬", "Objects", ["mailbox_with_mail"]),
+    new Emoji("📭", "Objects", ["mailbox_with_no_mail"]),
+    new Emoji("📮", "Objects", ["postbox"]),
+    new Emoji("📯", "Objects", ["postal_horn"]),
+    new Emoji("📜", "Objects", ["scroll"]),
+    new Emoji("📃", "Objects", ["page_with_curl"]),
+    new Emoji("📄", "Objects", ["page_facing_up"]),
+    new Emoji("📑", "Objects", ["bookmark_tabs"]),
+    new Emoji("📊", "Objects", ["bar_chart"]),
+    new Emoji("📈", "Objects", ["chart_with_upwards_trend"]),
+    new Emoji("📉", "Objects", ["chart_with_downwards_trend"]),
+    new Emoji("🗒", "Objects", ["spiral_notepad"]),
+    new Emoji("🗓", "Objects", ["spiral_calendar"]),
+    new Emoji("📆", "Objects", ["calendar"]),
+    new Emoji("📅", "Objects", ["date"]),
+    new Emoji("📇", "Objects", ["card_index"]),
+    new Emoji("🗃", "Objects", ["card_file_box"]),
+    new Emoji("🗳", "Objects", ["ballot_box"]),
+    new Emoji("🗄", "Objects", ["file_cabinet"]),
+    new Emoji("📋", "Objects", ["clipboard"]),
+    new Emoji("📁", "Objects", ["file_folder"]),
+    new Emoji("📂", "Objects", ["open_file_folder"]),
+    new Emoji("🗂", "Objects", ["card_index_dividers"]),
+    new Emoji("🗞", "Objects", ["newspaper_roll"]),
+    new Emoji("📰", "Objects", ["newspaper"]),
+    new Emoji("📓", "Objects", ["notebook"]),
+    new Emoji("📔", "Objects", ["notebook_with_decorative_cover"]),
+    new Emoji("📒", "Objects", ["ledger"]),
+    new Emoji("📕", "Objects", ["closed_book"]),
+    new Emoji("📗", "Objects", ["green_book"]),
+    new Emoji("📘", "Objects", ["blue_book"]),
+    new Emoji("📙", "Objects", ["orange_book"]),
+    new Emoji("📚", "Objects", ["books"]),
+    new Emoji("📖", "Objects", ["book", "open_book"]),
+    new Emoji("🔖", "Objects", ["bookmark"]),
+    new Emoji("🔗", "Objects", ["link"]),
+    new Emoji("📎", "Objects", ["paperclip"]),
+    new Emoji("🖇", "Objects", ["paperclips"]),
+    new Emoji("📐", "Objects", ["triangular_ruler"]),
+    new Emoji("📏", "Objects", ["straight_ruler"]),
+    new Emoji("📌", "Objects", ["pushpin"]),
+    new Emoji("📍", "Objects", ["round_pushpin"]),
+    new Emoji("✂️", "Objects", ["scissors"]),
+    new Emoji("🖊", "Objects", ["pen"]),
+    new Emoji("🖋", "Objects", ["fountain_pen"]),
+    new Emoji("✒️", "Objects", ["black_nib"]),
+    new Emoji("🖌", "Objects", ["paintbrush"]),
+    new Emoji("🖍", "Objects", ["crayon"]),
+    new Emoji("📝", "Objects", ["memo", "pencil"]),
+    new Emoji("✏️", "Objects", ["pencil2"]),
+    new Emoji("🔍", "Objects", ["mag"]),
+    new Emoji("🔎", "Objects", ["mag_right"]),
+    new Emoji("🔏", "Objects", ["lock_with_ink_pen"]),
+    new Emoji("🔐", "Objects", ["closed_lock_with_key"]),
+    new Emoji("🔒", "Objects", ["lock"]),
+    new Emoji("🔓", "Objects", ["unlock"]),
+    new Emoji("❤️", "Symbols", ["heart"]),
+    new Emoji("💛", "Symbols", ["yellow_heart"]),
+    new Emoji("💚", "Symbols", ["green_heart"]),
+    new Emoji("💙", "Symbols", ["blue_heart"]),
+    new Emoji("💜", "Symbols", ["purple_heart"]),
+    new Emoji("🖤", "Symbols", ["black_heart"]),
+    new Emoji("💔", "Symbols", ["broken_heart"]),
+    new Emoji("❣️", "Symbols", ["heavy_heart_exclamation"]),
+    new Emoji("💕", "Symbols", ["two_hearts"]),
+    new Emoji("💞", "Symbols", ["revolving_hearts"]),
+    new Emoji("💓", "Symbols", ["heartbeat"]),
+    new Emoji("💗", "Symbols", ["heartpulse"]),
+    new Emoji("💖", "Symbols", ["sparkling_heart"]),
+    new Emoji("💘", "Symbols", ["cupid"]),
+    new Emoji("💝", "Symbols", ["gift_heart"]),
+    new Emoji("💟", "Symbols", ["heart_decoration"]),
+    new Emoji("☮️", "Symbols", ["peace_symbol"]),
+    new Emoji("✝️", "Symbols", ["latin_cross"]),
+    new Emoji("☪️", "Symbols", ["star_and_crescent"]),
+    new Emoji("🕉", "Symbols", ["om"]),
+    new Emoji("☸️", "Symbols", ["wheel_of_dharma"]),
+    new Emoji("✡️", "Symbols", ["star_of_david"]),
+    new Emoji("🔯", "Symbols", ["six_pointed_star"]),
+    new Emoji("🕎", "Symbols", ["menorah"]),
+    new Emoji("☯️", "Symbols", ["yin_yang"]),
+    new Emoji("☦️", "Symbols", ["orthodox_cross"]),
+    new Emoji("🛐", "Symbols", ["place_of_worship"]),
+    new Emoji("⛎", "Symbols", ["ophiuchus"]),
+    new Emoji("♈️", "Symbols", ["aries"]),
+    new Emoji("♉️", "Symbols", ["taurus"]),
+    new Emoji("♊️", "Symbols", ["gemini"]),
+    new Emoji("♋️", "Symbols", ["cancer"]),
+    new Emoji("♌️", "Symbols", ["leo"]),
+    new Emoji("♍️", "Symbols", ["virgo"]),
+    new Emoji("♎️", "Symbols", ["libra"]),
+    new Emoji("♏️", "Symbols", ["scorpius"]),
+    new Emoji("♐️", "Symbols", ["sagittarius"]),
+    new Emoji("♑️", "Symbols", ["capricorn"]),
+    new Emoji("♒️", "Symbols", ["aquarius"]),
+    new Emoji("♓️", "Symbols", ["pisces"]),
+    new Emoji("🆔", "Symbols", ["id"]),
+    new Emoji("⚛️", "Symbols", ["atom_symbol"]),
+    new Emoji("🉑", "Symbols", ["accept"]),
+    new Emoji("☢️", "Symbols", ["radioactive"]),
+    new Emoji("☣️", "Symbols", ["biohazard"]),
+    new Emoji("📴", "Symbols", ["mobile_phone_off"]),
+    new Emoji("📳", "Symbols", ["vibration_mode"]),
+    new Emoji("🈶", "Symbols", ["u6709"]),
+    new Emoji("🈚️", "Symbols", ["u7121"]),
+    new Emoji("🈸", "Symbols", ["u7533"]),
+    new Emoji("🈺", "Symbols", ["u55b6"]),
+    new Emoji("🈷️", "Symbols", ["u6708"]),
+    new Emoji("✴️", "Symbols", ["eight_pointed_black_star"]),
+    new Emoji("🆚", "Symbols", ["vs"]),
+    new Emoji("💮", "Symbols", ["white_flower"]),
+    new Emoji("🉐", "Symbols", ["ideograph_advantage"]),
+    new Emoji("㊙️", "Symbols", ["secret"]),
+    new Emoji("㊗️", "Symbols", ["congratulations"]),
+    new Emoji("🈴", "Symbols", ["u5408"]),
+    new Emoji("🈵", "Symbols", ["u6e80"]),
+    new Emoji("🈹", "Symbols", ["u5272"]),
+    new Emoji("🈲", "Symbols", ["u7981"]),
+    new Emoji("🅰️", "Symbols", ["a"]),
+    new Emoji("🅱️", "Symbols", ["b"]),
+    new Emoji("🆎", "Symbols", ["ab"]),
+    new Emoji("🆑", "Symbols", ["cl"]),
+    new Emoji("🅾️", "Symbols", ["o2"]),
+    new Emoji("🆘", "Symbols", ["sos"]),
+    new Emoji("❌", "Symbols", ["x"]),
+    new Emoji("⭕️", "Symbols", ["o"]),
+    new Emoji("🛑", "Symbols", ["stop_sign"]),
+    new Emoji("⛔️", "Symbols", ["no_entry"]),
+    new Emoji("📛", "Symbols", ["name_badge"]),
+    new Emoji("🚫", "Symbols", ["no_entry_sign"]),
+    new Emoji("💯", "Symbols", ["100"]),
+    new Emoji("💢", "Symbols", ["anger"]),
+    new Emoji("♨️", "Symbols", ["hotsprings"]),
+    new Emoji("🚷", "Symbols", ["no_pedestrians"]),
+    new Emoji("🚯", "Symbols", ["do_not_litter"]),
+    new Emoji("🚳", "Symbols", ["no_bicycles"]),
+    new Emoji("🚱", "Symbols", ["non-potable_water"]),
+    new Emoji("🔞", "Symbols", ["underage"]),
+    new Emoji("📵", "Symbols", ["no_mobile_phones"]),
+    new Emoji("🚭", "Symbols", ["no_smoking"]),
+    new Emoji("❗️", "Symbols", ["exclamation", "heavy_exclamation_mark"]),
+    new Emoji("❕", "Symbols", ["grey_exclamation"]),
+    new Emoji("❓", "Symbols", ["question"]),
+    new Emoji("❔", "Symbols", ["grey_question"]),
+    new Emoji("‼️", "Symbols", ["bangbang"]),
+    new Emoji("⁉️", "Symbols", ["interrobang"]),
+    new Emoji("🔅", "Symbols", ["low_brightness"]),
+    new Emoji("🔆", "Symbols", ["high_brightness"]),
+    new Emoji("〽️", "Symbols", ["part_alternation_mark"]),
+    new Emoji("⚠️", "Symbols", ["warning"]),
+    new Emoji("🚸", "Symbols", ["children_crossing"]),
+    new Emoji("🔱", "Symbols", ["trident"]),
+    new Emoji("⚜️", "Symbols", ["fleur_de_lis"]),
+    new Emoji("🔰", "Symbols", ["beginner"]),
+    new Emoji("♻️", "Symbols", ["recycle"]),
+    new Emoji("✅", "Symbols", ["white_check_mark"]),
+    new Emoji("🈯️", "Symbols", ["u6307"]),
+    new Emoji("💹", "Symbols", ["chart"]),
+    new Emoji("❇️", "Symbols", ["sparkle"]),
+    new Emoji("✳️", "Symbols", ["eight_spoked_asterisk"]),
+    new Emoji("❎", "Symbols", ["negative_squared_cross_mark"]),
+    new Emoji("🌐", "Symbols", ["globe_with_meridians"]),
+    new Emoji("💠", "Symbols", ["diamond_shape_with_a_dot_inside"]),
+    new Emoji("Ⓜ️", "Symbols", ["m"]),
+    new Emoji("🌀", "Symbols", ["cyclone"]),
+    new Emoji("💤", "Symbols", ["zzz"]),
+    new Emoji("🏧", "Symbols", ["atm"]),
+    new Emoji("🚾", "Symbols", ["wc"]),
+    new Emoji("♿️", "Symbols", ["wheelchair"]),
+    new Emoji("🅿️", "Symbols", ["parking"]),
+    new Emoji("🈳", "Symbols", ["u7a7a"]),
+    new Emoji("🈂️", "Symbols", ["sa"]),
+    new Emoji("🛂", "Symbols", ["passport_control"]),
+    new Emoji("🛃", "Symbols", ["customs"]),
+    new Emoji("🛄", "Symbols", ["baggage_claim"]),
+    new Emoji("🛅", "Symbols", ["left_luggage"]),
+    new Emoji("🚹", "Symbols", ["mens"]),
+    new Emoji("🚺", "Symbols", ["womens"]),
+    new Emoji("🚼", "Symbols", ["baby_symbol"]),
+    new Emoji("🚻", "Symbols", ["restroom"]),
+    new Emoji("🚮", "Symbols", ["put_litter_in_its_place"]),
+    new Emoji("🎦", "Symbols", ["cinema"]),
+    new Emoji("📶", "Symbols", ["signal_strength"]),
+    new Emoji("🈁", "Symbols", ["koko"]),
+    new Emoji("🔣", "Symbols", ["symbols"]),
+    new Emoji("ℹ️", "Symbols", ["information_source"]),
+    new Emoji("🔤", "Symbols", ["abc"]),
+    new Emoji("🔡", "Symbols", ["abcd"]),
+    new Emoji("🔠", "Symbols", ["capital_abcd"]),
+    new Emoji("🆖", "Symbols", ["ng"]),
+    new Emoji("🆗", "Symbols", ["ok"]),
+    new Emoji("🆙", "Symbols", ["up"]),
+    new Emoji("🆒", "Symbols", ["cool"]),
+    new Emoji("🆕", "Symbols", ["new"]),
+    new Emoji("🆓", "Symbols", ["free"]),
+    new Emoji("0️⃣", "Symbols", ["zero"]),
+    new Emoji("1️⃣", "Symbols", ["one"]),
+    new Emoji("2️⃣", "Symbols", ["two"]),
+    new Emoji("3️⃣", "Symbols", ["three"]),
+    new Emoji("4️⃣", "Symbols", ["four"]),
+    new Emoji("5️⃣", "Symbols", ["five"]),
+    new Emoji("6️⃣", "Symbols", ["six"]),
+    new Emoji("7️⃣", "Symbols", ["seven"]),
+    new Emoji("8️⃣", "Symbols", ["eight"]),
+    new Emoji("9️⃣", "Symbols", ["nine"]),
+    new Emoji("🔟", "Symbols", ["keycap_ten"]),
+    new Emoji("🔢", "Symbols", ["1234"]),
+    new Emoji("#️⃣", "Symbols", ["hash"]),
+    new Emoji("*️⃣", "Symbols", ["asterisk"]),
+    new Emoji("▶️", "Symbols", ["arrow_forward"]),
+    new Emoji("⏸", "Symbols", ["pause_button"]),
+    new Emoji("⏯", "Symbols", ["play_or_pause_button"]),
+    new Emoji("⏹", "Symbols", ["stop_button"]),
+    new Emoji("⏺", "Symbols", ["record_button"]),
+    new Emoji("⏭", "Symbols", ["next_track_button"]),
+    new Emoji("⏮", "Symbols", ["previous_track_button"]),
+    new Emoji("⏩", "Symbols", ["fast_forward"]),
+    new Emoji("⏪", "Symbols", ["rewind"]),
+    new Emoji("⏫", "Symbols", ["arrow_double_up"]),
+    new Emoji("⏬", "Symbols", ["arrow_double_down"]),
+    new Emoji("◀️", "Symbols", ["arrow_backward"]),
+    new Emoji("🔼", "Symbols", ["arrow_up_small"]),
+    new Emoji("🔽", "Symbols", ["arrow_down_small"]),
+    new Emoji("➡️", "Symbols", ["arrow_right"]),
+    new Emoji("⬅️", "Symbols", ["arrow_left"]),
+    new Emoji("⬆️", "Symbols", ["arrow_up"]),
+    new Emoji("⬇️", "Symbols", ["arrow_down"]),
+    new Emoji("↗️", "Symbols", ["arrow_upper_right"]),
+    new Emoji("↘️", "Symbols", ["arrow_lower_right"]),
+    new Emoji("↙️", "Symbols", ["arrow_lower_left"]),
+    new Emoji("↖️", "Symbols", ["arrow_upper_left"]),
+    new Emoji("↕️", "Symbols", ["arrow_up_down"]),
+    new Emoji("↔️", "Symbols", ["left_right_arrow"]),
+    new Emoji("↪️", "Symbols", ["arrow_right_hook"]),
+    new Emoji("↩️", "Symbols", ["leftwards_arrow_with_hook"]),
+    new Emoji("⤴️", "Symbols", ["arrow_heading_up"]),
+    new Emoji("⤵️", "Symbols", ["arrow_heading_down"]),
+    new Emoji("🔀", "Symbols", ["twisted_rightwards_arrows"]),
+    new Emoji("🔁", "Symbols", ["repeat"]),
+    new Emoji("🔂", "Symbols", ["repeat_one"]),
+    new Emoji("🔄", "Symbols", ["arrows_counterclockwise"]),
+    new Emoji("🔃", "Symbols", ["arrows_clockwise"]),
+    new Emoji("🎵", "Symbols", ["musical_note"]),
+    new Emoji("🎶", "Symbols", ["notes"]),
+    new Emoji("➕", "Symbols", ["heavy_plus_sign"]),
+    new Emoji("➖", "Symbols", ["heavy_minus_sign"]),
+    new Emoji("➗", "Symbols", ["heavy_division_sign"]),
+    new Emoji("✖️", "Symbols", ["heavy_multiplication_x"]),
+    new Emoji("💲", "Symbols", ["heavy_dollar_sign"]),
+    new Emoji("💱", "Symbols", ["currency_exchange"]),
+    new Emoji("™️", "Symbols", ["tm"]),
+    new Emoji("©️", "Symbols", ["copyright"]),
+    new Emoji("®️", "Symbols", ["registered"]),
+    new Emoji("〰️", "Symbols", ["wavy_dash"]),
+    new Emoji("➰", "Symbols", ["curly_loop"]),
+    new Emoji("➿", "Symbols", ["loop"]),
+    new Emoji("🔚", "Symbols", ["end"]),
+    new Emoji("🔙", "Symbols", ["back"]),
+    new Emoji("🔛", "Symbols", ["on"]),
+    new Emoji("🔝", "Symbols", ["top"]),
+    new Emoji("🔜", "Symbols", ["soon"]),
+    new Emoji("✔️", "Symbols", ["heavy_check_mark"]),
+    new Emoji("☑️", "Symbols", ["ballot_box_with_check"]),
+    new Emoji("🔘", "Symbols", ["radio_button"]),
+    new Emoji("⚪️", "Symbols", ["white_circle"]),
+    new Emoji("⚫️", "Symbols", ["black_circle"]),
+    new Emoji("🔴", "Symbols", ["red_circle"]),
+    new Emoji("🔵", "Symbols", ["large_blue_circle"]),
+    new Emoji("🔺", "Symbols", ["small_red_triangle"]),
+    new Emoji("🔻", "Symbols", ["small_red_triangle_down"]),
+    new Emoji("🔸", "Symbols", ["small_orange_diamond"]),
+    new Emoji("🔹", "Symbols", ["small_blue_diamond"]),
+    new Emoji("🔶", "Symbols", ["large_orange_diamond"]),
+    new Emoji("🔷", "Symbols", ["large_blue_diamond"]),
+    new Emoji("🔳", "Symbols", ["white_square_button"]),
+    new Emoji("🔲", "Symbols", ["black_square_button"]),
+    new Emoji("▪️", "Symbols", ["black_small_square"]),
+    new Emoji("▫️", "Symbols", ["white_small_square"]),
+    new Emoji("◾️", "Symbols", ["black_medium_small_square"]),
+    new Emoji("◽️", "Symbols", ["white_medium_small_square"]),
+    new Emoji("◼️", "Symbols", ["black_medium_square"]),
+    new Emoji("◻️", "Symbols", ["white_medium_square"]),
+    new Emoji("⬛️", "Symbols", ["black_large_square"]),
+    new Emoji("⬜️", "Symbols", ["white_large_square"]),
+    new Emoji("🔈", "Symbols", ["speaker"]),
+    new Emoji("🔇", "Symbols", ["mute"]),
+    new Emoji("🔉", "Symbols", ["sound"]),
+    new Emoji("🔊", "Symbols", ["loud_sound"]),
+    new Emoji("🔔", "Symbols", ["bell"]),
+    new Emoji("🔕", "Symbols", ["no_bell"]),
+    new Emoji("📣", "Symbols", ["mega"]),
+    new Emoji("📢", "Symbols", ["loudspeaker"]),
+    new Emoji("👁‍🗨", "Symbols", ["eye_speech_bubble"]),
+    new Emoji("💬", "Symbols", ["speech_balloon"]),
+    new Emoji("💭", "Symbols", ["thought_balloon"]),
+    new Emoji("🗯", "Symbols", ["right_anger_bubble"]),
+    new Emoji("♠️", "Symbols", ["spades"]),
+    new Emoji("♣️", "Symbols", ["clubs"]),
+    new Emoji("♥️", "Symbols", ["hearts"]),
+    new Emoji("♦️", "Symbols", ["diamonds"]),
+    new Emoji("🃏", "Symbols", ["black_joker"]),
+    new Emoji("🎴", "Symbols", ["flower_playing_cards"]),
+    new Emoji("🀄️", "Symbols", ["mahjong"]),
+    new Emoji("🕐", "Symbols", ["clock1"]),
+    new Emoji("🕑", "Symbols", ["clock2"]),
+    new Emoji("🕒", "Symbols", ["clock3"]),
+    new Emoji("🕓", "Symbols", ["clock4"]),
+    new Emoji("🕔", "Symbols", ["clock5"]),
+    new Emoji("🕕", "Symbols", ["clock6"]),
+    new Emoji("🕖", "Symbols", ["clock7"]),
+    new Emoji("🕗", "Symbols", ["clock8"]),
+    new Emoji("🕘", "Symbols", ["clock9"]),
+    new Emoji("🕙", "Symbols", ["clock10"]),
+    new Emoji("🕚", "Symbols", ["clock11"]),
+    new Emoji("🕛", "Symbols", ["clock12"]),
+    new Emoji("🕜", "Symbols", ["clock130"]),
+    new Emoji("🕝", "Symbols", ["clock230"]),
+    new Emoji("🕞", "Symbols", ["clock330"]),
+    new Emoji("🕟", "Symbols", ["clock430"]),
+    new Emoji("🕠", "Symbols", ["clock530"]),
+    new Emoji("🕡", "Symbols", ["clock630"]),
+    new Emoji("🕢", "Symbols", ["clock730"]),
+    new Emoji("🕣", "Symbols", ["clock830"]),
+    new Emoji("🕤", "Symbols", ["clock930"]),
+    new Emoji("🕥", "Symbols", ["clock1030"]),
+    new Emoji("🕦", "Symbols", ["clock1130"]),
+    new Emoji("🕧", "Symbols", ["clock1230"]),
+    new Emoji("🏳️", "Flags", ["white_flag"]),
+    new Emoji("🏴", "Flags", ["black_flag"]),
+    new Emoji("🏁", "Flags", ["checkered_flag"]),
+    new Emoji("🚩", "Flags", ["triangular_flag_on_post"]),
+    new Emoji("🏳️‍🌈", "Flags", ["rainbow_flag"]),
+    new Emoji("🇦🇫", "Flags", ["afghanistan"]),
+    new Emoji("🇦🇽", "Flags", ["aland_islands"]),
+    new Emoji("🇦🇱", "Flags", ["albania"]),
+    new Emoji("🇩🇿", "Flags", ["algeria"]),
+    new Emoji("🇦🇸", "Flags", ["american_samoa"]),
+    new Emoji("🇦🇩", "Flags", ["andorra"]),
+    new Emoji("🇦🇴", "Flags", ["angola"]),
+    new Emoji("🇦🇮", "Flags", ["anguilla"]),
+    new Emoji("🇦🇶", "Flags", ["antarctica"]),
+    new Emoji("🇦🇬", "Flags", ["antigua_barbuda"]),
+    new Emoji("🇦🇷", "Flags", ["argentina"]),
+    new Emoji("🇦🇲", "Flags", ["armenia"]),
+    new Emoji("🇦🇼", "Flags", ["aruba"]),
+    new Emoji("🇦🇺", "Flags", ["australia"]),
+    new Emoji("🇦🇹", "Flags", ["austria"]),
+    new Emoji("🇦🇿", "Flags", ["azerbaijan"]),
+    new Emoji("🇧🇸", "Flags", ["bahamas"]),
+    new Emoji("🇧🇭", "Flags", ["bahrain"]),
+    new Emoji("🇧🇩", "Flags", ["bangladesh"]),
+    new Emoji("🇧🇧", "Flags", ["barbados"]),
+    new Emoji("🇧🇾", "Flags", ["belarus"]),
+    new Emoji("🇧🇪", "Flags", ["belgium"]),
+    new Emoji("🇧🇿", "Flags", ["belize"]),
+    new Emoji("🇧🇯", "Flags", ["benin"]),
+    new Emoji("🇧🇲", "Flags", ["bermuda"]),
+    new Emoji("🇧🇹", "Flags", ["bhutan"]),
+    new Emoji("🇧🇴", "Flags", ["bolivia"]),
+    new Emoji("🇧🇶", "Flags", ["caribbean_netherlands"]),
+    new Emoji("🇧🇦", "Flags", ["bosnia_herzegovina"]),
+    new Emoji("🇧🇼", "Flags", ["botswana"]),
+    new Emoji("🇧🇷", "Flags", ["brazil"]),
+    new Emoji("🇮🇴", "Flags", ["british_indian_ocean_territory"]),
+    new Emoji("🇻🇬", "Flags", ["british_virgin_islands"]),
+    new Emoji("🇧🇳", "Flags", ["brunei"]),
+    new Emoji("🇧🇬", "Flags", ["bulgaria"]),
+    new Emoji("🇧🇫", "Flags", ["burkina_faso"]),
+    new Emoji("🇧🇮", "Flags", ["burundi"]),
+    new Emoji("🇨🇻", "Flags", ["cape_verde"]),
+    new Emoji("🇰🇭", "Flags", ["cambodia"]),
+    new Emoji("🇨🇲", "Flags", ["cameroon"]),
+    new Emoji("🇨🇦", "Flags", ["canada"]),
+    new Emoji("🇮🇨", "Flags", ["canary_islands"]),
+    new Emoji("🇰🇾", "Flags", ["cayman_islands"]),
+    new Emoji("🇨🇫", "Flags", ["central_african_republic"]),
+    new Emoji("🇹🇩", "Flags", ["chad"]),
+    new Emoji("🇨🇱", "Flags", ["chile"]),
+    new Emoji("🇨🇳", "Flags", ["cn"]),
+    new Emoji("🇨🇽", "Flags", ["christmas_island"]),
+    new Emoji("🇨🇨", "Flags", ["cocos_islands"]),
+    new Emoji("🇨🇴", "Flags", ["colombia"]),
+    new Emoji("🇰🇲", "Flags", ["comoros"]),
+    new Emoji("🇨🇬", "Flags", ["congo_brazzaville"]),
+    new Emoji("🇨🇩", "Flags", ["congo_kinshasa"]),
+    new Emoji("🇨🇰", "Flags", ["cook_islands"]),
+    new Emoji("🇨🇷", "Flags", ["costa_rica"]),
+    new Emoji("🇨🇮", "Flags", ["cote_divoire"]),
+    new Emoji("🇭🇷", "Flags", ["croatia"]),
+    new Emoji("🇨🇺", "Flags", ["cuba"]),
+    new Emoji("🇨🇼", "Flags", ["curacao"]),
+    new Emoji("🇨🇾", "Flags", ["cyprus"]),
+    new Emoji("🇨🇿", "Flags", ["czech_republic"]),
+    new Emoji("🇩🇰", "Flags", ["denmark"]),
+    new Emoji("🇩🇯", "Flags", ["djibouti"]),
+    new Emoji("🇩🇲", "Flags", ["dominica"]),
+    new Emoji("🇩🇴", "Flags", ["dominican_republic"]),
+    new Emoji("🇪🇨", "Flags", ["ecuador"]),
+    new Emoji("🇪🇬", "Flags", ["egypt"]),
+    new Emoji("🇸🇻", "Flags", ["el_salvador"]),
+    new Emoji("🇬🇶", "Flags", ["equatorial_guinea"]),
+    new Emoji("🇪🇷", "Flags", ["eritrea"]),
+    new Emoji("🇪🇪", "Flags", ["estonia"]),
+    new Emoji("🇪🇹", "Flags", ["ethiopia"]),
+    new Emoji("🇪🇺", "Flags", ["eu", "european_union"]),
+    new Emoji("🇫🇰", "Flags", ["falkland_islands"]),
+    new Emoji("🇫🇴", "Flags", ["faroe_islands"]),
+    new Emoji("🇫🇯", "Flags", ["fiji"]),
+    new Emoji("🇫🇮", "Flags", ["finland"]),
+    new Emoji("🇫🇷", "Flags", ["fr"]),
+    new Emoji("🇬🇫", "Flags", ["french_guiana"]),
+    new Emoji("🇵🇫", "Flags", ["french_polynesia"]),
+    new Emoji("🇹🇫", "Flags", ["french_southern_territories"]),
+    new Emoji("🇬🇦", "Flags", ["gabon"]),
+    new Emoji("🇬🇲", "Flags", ["gambia"]),
+    new Emoji("🇬🇪", "Flags", ["georgia"]),
+    new Emoji("🇩🇪", "Flags", ["de"]),
+    new Emoji("🇬🇭", "Flags", ["ghana"]),
+    new Emoji("🇬🇮", "Flags", ["gibraltar"]),
+    new Emoji("🇬🇷", "Flags", ["greece"]),
+    new Emoji("🇬🇱", "Flags", ["greenland"]),
+    new Emoji("🇬🇩", "Flags", ["grenada"]),
+    new Emoji("🇬🇵", "Flags", ["guadeloupe"]),
+    new Emoji("🇬🇺", "Flags", ["guam"]),
+    new Emoji("🇬🇹", "Flags", ["guatemala"]),
+    new Emoji("🇬🇬", "Flags", ["guernsey"]),
+    new Emoji("🇬🇳", "Flags", ["guinea"]),
+    new Emoji("🇬🇼", "Flags", ["guinea_bissau"]),
+    new Emoji("🇬🇾", "Flags", ["guyana"]),
+    new Emoji("🇭🇹", "Flags", ["haiti"]),
+    new Emoji("🇭🇳", "Flags", ["honduras"]),
+    new Emoji("🇭🇰", "Flags", ["hong_kong"]),
+    new Emoji("🇭🇺", "Flags", ["hungary"]),
+    new Emoji("🇮🇸", "Flags", ["iceland"]),
+    new Emoji("🇮🇳", "Flags", ["india"]),
+    new Emoji("🇮🇩", "Flags", ["indonesia"]),
+    new Emoji("🇮🇷", "Flags", ["iran"]),
+    new Emoji("🇮🇶", "Flags", ["iraq"]),
+    new Emoji("🇮🇪", "Flags", ["ireland"]),
+    new Emoji("🇮🇲", "Flags", ["isle_of_man"]),
+    new Emoji("🇮🇱", "Flags", ["israel"]),
+    new Emoji("🇮🇹", "Flags", ["it"]),
+    new Emoji("🇯🇲", "Flags", ["jamaica"]),
+    new Emoji("🇯🇵", "Flags", ["jp"]),
+    new Emoji("🎌", "Flags", ["crossed_flags"]),
+    new Emoji("🇯🇪", "Flags", ["jersey"]),
+    new Emoji("🇯🇴", "Flags", ["jordan"]),
+    new Emoji("🇰🇿", "Flags", ["kazakhstan"]),
+    new Emoji("🇰🇪", "Flags", ["kenya"]),
+    new Emoji("🇰🇮", "Flags", ["kiribati"]),
+    new Emoji("🇽🇰", "Flags", ["kosovo"]),
+    new Emoji("🇰🇼", "Flags", ["kuwait"]),
+    new Emoji("🇰🇬", "Flags", ["kyrgyzstan"]),
+    new Emoji("🇱🇦", "Flags", ["laos"]),
+    new Emoji("🇱🇻", "Flags", ["latvia"]),
+    new Emoji("🇱🇧", "Flags", ["lebanon"]),
+    new Emoji("🇱🇸", "Flags", ["lesotho"]),
+    new Emoji("🇱🇷", "Flags", ["liberia"]),
+    new Emoji("🇱🇾", "Flags", ["libya"]),
+    new Emoji("🇱🇮", "Flags", ["liechtenstein"]),
+    new Emoji("🇱🇹", "Flags", ["lithuania"]),
+    new Emoji("🇱🇺", "Flags", ["luxembourg"]),
+    new Emoji("🇲🇴", "Flags", ["macau"]),
+    new Emoji("🇲🇰", "Flags", ["macedonia"]),
+    new Emoji("🇲🇬", "Flags", ["madagascar"]),
+    new Emoji("🇲🇼", "Flags", ["malawi"]),
+    new Emoji("🇲🇾", "Flags", ["malaysia"]),
+    new Emoji("🇲🇻", "Flags", ["maldives"]),
+    new Emoji("🇲🇱", "Flags", ["mali"]),
+    new Emoji("🇲🇹", "Flags", ["malta"]),
+    new Emoji("🇲🇭", "Flags", ["marshall_islands"]),
+    new Emoji("🇲🇶", "Flags", ["martinique"]),
+    new Emoji("🇲🇷", "Flags", ["mauritania"]),
+    new Emoji("🇲🇺", "Flags", ["mauritius"]),
+    new Emoji("🇾🇹", "Flags", ["mayotte"]),
+    new Emoji("🇲🇽", "Flags", ["mexico"]),
+    new Emoji("🇫🇲", "Flags", ["micronesia"]),
+    new Emoji("🇲🇩", "Flags", ["moldova"]),
+    new Emoji("🇲🇨", "Flags", ["monaco"]),
+    new Emoji("🇲🇳", "Flags", ["mongolia"]),
+    new Emoji("🇲🇪", "Flags", ["montenegro"]),
+    new Emoji("🇲🇸", "Flags", ["montserrat"]),
+    new Emoji("🇲🇦", "Flags", ["morocco"]),
+    new Emoji("🇲🇿", "Flags", ["mozambique"]),
+    new Emoji("🇲🇲", "Flags", ["myanmar"]),
+    new Emoji("🇳🇦", "Flags", ["namibia"]),
+    new Emoji("🇳🇷", "Flags", ["nauru"]),
+    new Emoji("🇳🇵", "Flags", ["nepal"]),
+    new Emoji("🇳🇱", "Flags", ["netherlands"]),
+    new Emoji("🇳🇨", "Flags", ["new_caledonia"]),
+    new Emoji("🇳🇿", "Flags", ["new_zealand"]),
+    new Emoji("🇳🇮", "Flags", ["nicaragua"]),
+    new Emoji("🇳🇪", "Flags", ["niger"]),
+    new Emoji("🇳🇬", "Flags", ["nigeria"]),
+    new Emoji("🇳🇺", "Flags", ["niue"]),
+    new Emoji("🇳🇫", "Flags", ["norfolk_island"]),
+    new Emoji("🇲🇵", "Flags", ["northern_mariana_islands"]),
+    new Emoji("🇰🇵", "Flags", ["north_korea"]),
+    new Emoji("🇳🇴", "Flags", ["norway"]),
+    new Emoji("🇴🇲", "Flags", ["oman"]),
+    new Emoji("🇵🇰", "Flags", ["pakistan"]),
+    new Emoji("🇵🇼", "Flags", ["palau"]),
+    new Emoji("🇵🇸", "Flags", ["palestinian_territories"]),
+    new Emoji("🇵🇦", "Flags", ["panama"]),
+    new Emoji("🇵🇬", "Flags", ["papua_new_guinea"]),
+    new Emoji("🇵🇾", "Flags", ["paraguay"]),
+    new Emoji("🇵🇪", "Flags", ["peru"]),
+    new Emoji("🇵🇭", "Flags", ["philippines"]),
+    new Emoji("🇵🇳", "Flags", ["pitcairn_islands"]),
+    new Emoji("🇵🇱", "Flags", ["poland"]),
+    new Emoji("🇵🇹", "Flags", ["portugal"]),
+    new Emoji("🇵🇷", "Flags", ["puerto_rico"]),
+    new Emoji("🇶🇦", "Flags", ["qatar"]),
+    new Emoji("🇷🇪", "Flags", ["reunion"]),
+    new Emoji("🇷🇴", "Flags", ["romania"]),
+    new Emoji("🇷🇺", "Flags", ["ru"]),
+    new Emoji("🇷🇼", "Flags", ["rwanda"]),
+    new Emoji("🇧🇱", "Flags", ["st_barthelemy"]),
+    new Emoji("🇸🇭", "Flags", ["st_helena"]),
+    new Emoji("🇰🇳", "Flags", ["st_kitts_nevis"]),
+    new Emoji("🇱🇨", "Flags", ["st_lucia"]),
+    new Emoji("🇵🇲", "Flags", ["st_pierre_miquelon"]),
+    new Emoji("🇻🇨", "Flags", ["st_vincent_grenadines"]),
+    new Emoji("🇼🇸", "Flags", ["samoa"]),
+    new Emoji("🇸🇲", "Flags", ["san_marino"]),
+    new Emoji("🇸🇹", "Flags", ["sao_tome_principe"]),
+    new Emoji("🇸🇦", "Flags", ["saudi_arabia"]),
+    new Emoji("🇸🇳", "Flags", ["senegal"]),
+    new Emoji("🇷🇸", "Flags", ["serbia"]),
+    new Emoji("🇸🇨", "Flags", ["seychelles"]),
+    new Emoji("🇸🇱", "Flags", ["sierra_leone"]),
+    new Emoji("🇸🇬", "Flags", ["singapore"]),
+    new Emoji("🇸🇽", "Flags", ["sint_maarten"]),
+    new Emoji("🇸🇰", "Flags", ["slovakia"]),
+    new Emoji("🇸🇮", "Flags", ["slovenia"]),
+    new Emoji("🇸🇧", "Flags", ["solomon_islands"]),
+    new Emoji("🇸🇴", "Flags", ["somalia"]),
+    new Emoji("🇿🇦", "Flags", ["south_africa"]),
+    new Emoji("🇬🇸", "Flags", ["south_georgia_south_sandwich_islands"]),
+    new Emoji("🇰🇷", "Flags", ["kr"]),
+    new Emoji("🇸🇸", "Flags", ["south_sudan"]),
+    new Emoji("🇪🇸", "Flags", ["es"]),
+    new Emoji("🇱🇰", "Flags", ["sri_lanka"]),
+    new Emoji("🇸🇩", "Flags", ["sudan"]),
+    new Emoji("🇸🇷", "Flags", ["suriname"]),
+    new Emoji("🇸🇿", "Flags", ["swaziland"]),
+    new Emoji("🇸🇪", "Flags", ["sweden"]),
+    new Emoji("🇨🇭", "Flags", ["switzerland"]),
+    new Emoji("🇸🇾", "Flags", ["syria"]),
+    new Emoji("🇹🇼", "Flags", ["taiwan"]),
+    new Emoji("🇹🇯", "Flags", ["tajikistan"]),
+    new Emoji("🇹🇿", "Flags", ["tanzania"]),
+    new Emoji("🇹🇭", "Flags", ["thailand"]),
+    new Emoji("🇹🇱", "Flags", ["timor_leste"]),
+    new Emoji("🇹🇬", "Flags", ["togo"]),
+    new Emoji("🇹🇰", "Flags", ["tokelau"]),
+    new Emoji("🇹🇴", "Flags", ["tonga"]),
+    new Emoji("🇹🇹", "Flags", ["trinidad_tobago"]),
+    new Emoji("🇹🇳", "Flags", ["tunisia"]),
+    new Emoji("🇹🇷", "Flags", ["tr"]),
+    new Emoji("🇹🇲", "Flags", ["turkmenistan"]),
+    new Emoji("🇹🇨", "Flags", ["turks_caicos_islands"]),
+    new Emoji("🇹🇻", "Flags", ["tuvalu"]),
+    new Emoji("🇺🇬", "Flags", ["uganda"]),
+    new Emoji("🇺🇦", "Flags", ["ukraine"]),
+    new Emoji("🇦🇪", "Flags", ["united_arab_emirates"]),
+    new Emoji("🇬🇧", "Flags", ["gb", "uk"]),
+    new Emoji("🇺🇸", "Flags", ["us"]),
+    new Emoji("🇻🇮", "Flags", ["us_virgin_islands"]),
+    new Emoji("🇺🇾", "Flags", ["uruguay"]),
+    new Emoji("🇺🇿", "Flags", ["uzbekistan"]),
+    new Emoji("🇻🇺", "Flags", ["vanuatu"]),
+    new Emoji("🇻🇦", "Flags", ["vatican_city"]),
+    new Emoji("🇻🇪", "Flags", ["venezuela"]),
+    new Emoji("🇻🇳", "Flags", ["vietnam"]),
+    new Emoji("🇼🇫", "Flags", ["wallis_futuna"]),
+    new Emoji("🇪🇭", "Flags", ["western_sahara"]),
+    new Emoji("🇾🇪", "Flags", ["yemen"]),
+    new Emoji("🇿🇲", "Flags", ["zambia"]),
+    new Emoji("🇿🇼", "Flags", ["zimbabwe"])
+];var langDefault = {
+    search: 'Search ...',
+    categories: {
+        Activity: "Activity",
+        Flags: "Flags",
+        Foods: "Foods",
+        Frequently: "Frequently",
+        Objects: "Objects",
+        Nature: "Nature",
+        Peoples: "Peoples",
+        Symbols: "Symbols",
+        Places: "Places"
+    }
+};var lang = langDefault;
+var i18n = function (translations) {
+    lang = __assign(__assign({}, langDefault), translations);
+};
+// Sample parse translation
+var t = function (term) {
+    var properties = term.split(".");
+    var text = lang;
+    properties.forEach(function (p) {
+        text = text[p];
+    });
+    return text;
+};
+var locale = { i18n: i18n, t: t };var Category = /** @class */ (function () {
+    function Category(name, icon) {
+        this.name = name;
+        this.icon = icon;
+    }
+    Object.defineProperty(Category.prototype, "label", {
+        get: function () {
+            return t("categories." + this.name);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Category;
+}());var icons = {
+    activity: "\n    <svg style=\"max-height:18px\" width=\"24\" height=\"24\"\n      xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 303.6 303.6\" fill=\"gray\">\n      <path d=\"M291.503 11.6c-10.4-10.4-37.2-11.6-48.4-11.6-50.4 0-122.4 18.4-173.6 69.6-77.2 76.8-78.4 201.6-58.4 222 10.8 10.4 35.6 12 49.2 12 49.6 0 121.2-18.4 173.2-70 76.4-76.4 80.4-199.6 58-222zm-231.2 277.2c-24.4 0-36-4.8-38.8-7.6-5.2-5.2-8.4-24.4-6.8-49.6l57.2 56.8c-4 .4-8 .4-11.6.4zm162.8-66c-38.8 38.8-90.4 57.2-132.4 63.6l-74-73.6c6-42 24-94 63.2-133.2 38-38 88-56.4 130.8-62.8l75.6 75.6c-6 40.8-24.4 91.6-63.2 130.4zm65.2-148.8l-58.8-59.2c4.8-.4 9.2-.4 13.6-.4 24.4 0 35.6 4.8 38 7.2 5.6 5.6 9.2 25.6 7.2 52.4z\"/>\n      <path d=\"M215.103 139.6l-20.8-20.8 13.2-13.2c2.8-2.8 2.8-7.6 0-10.4s-7.6-2.8-10.4 0l-13.2 13.6-20.8-20.8c-2.8-2.8-7.6-2.8-10.4 0-2.8 2.8-2.8 7.6 0 10.4l20.8 20.8-22 22-20.8-20.8c-2.8-2.8-7.6-2.8-10.4 0s-2.8 7.6 0 10.4l20.8 20.8-22 22-20.8-20.8c-2.8-2.8-7.6-2.8-10.4 0s-2.8 7.6 0 10.4l20.8 20.8-13.2 13.2c-2.8 2.8-2.8 7.6 0 10.4 1.6 1.6 3.2 2 5.2 2s3.6-.8 5.2-2l13.2-13.2 20.8 20.8c1.6 1.6 3.2 2 5.2 2s3.6-.8 5.2-2c2.8-2.8 2.8-7.6 0-10.4l-20.8-21.2 22-22 20.8 20.8c1.6 1.6 3.2 2 5.2 2s3.6-.8 5.2-2c2.8-2.8 2.8-7.6 0-10.4l-20.8-20.8 22-22 20.8 20.8c1.6 1.6 3.2 2 5.2 2s3.6-.8 5.2-2c2.8-2.8 2.8-7.6 0-10.4zM169.103 47.6c-1.2-4-5.2-6-9.2-4.8-3.2 1.2-80.8 25.6-110.4 98-1.6 4 0 8.4 4 9.6.8.4 2 .4 2.8.4 2.8 0 5.6-1.6 6.8-4.4 27.2-66 100.4-89.6 101.2-89.6 4-1.2 6-5.2 4.8-9.2z\"/>\n    </svg>\n    ",
+    flags: "\n    <svg style=\"max-height:18px\" width=\"24\" height=\"24\"\n      xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" fill=\"gray\">\n      <path d=\"M472.928 34.72c-4.384-2.944-9.984-3.52-14.912-1.568-1.088.448-106.528 42.176-195.168.384C186.752-2.4 102.944 14.4 64 25.76V16c0-8.832-7.168-16-16-16S32 7.168 32 16v480c0 8.832 7.168 16 16 16s16-7.168 16-16V315.296c28.352-9.248 112.384-31.232 185.184 3.168 34.592 16.352 70.784 21.792 103.648 21.792 63.2 0 114.016-20.128 117.184-21.408 6.016-2.464 9.984-8.32 9.984-14.848V48c0-5.312-2.656-10.272-7.072-13.28zM448 292.672c-28.512 9.248-112.512 31.136-185.184-3.168C186.752 253.6 102.944 270.4 64 281.76V59.328c28.352-9.248 112.384-31.232 185.184 3.168 76 35.872 159.872 19.104 198.816 7.712v222.464z\"/>\n    </svg>\n    ",
+    foods: "\n    <svg style=\"max-height:18px\" width=\"24\" height=\"24\"\n      xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 511.999 511.999\" fill=\"gray\">\n      <path d=\"M413.949 155.583a10.153 10.153 0 0 0-3.24-2.16c-.61-.25-1.24-.44-1.87-.57-3.25-.66-6.701.41-9.03 2.73a10.093 10.093 0 0 0-2.93 7.07 10.098 10.098 0 0 0 1.69 5.56c.36.54.779 1.05 1.24 1.52 1.86 1.86 4.44 2.93 7.07 2.93.65 0 1.31-.07 1.96-.2.63-.13 1.26-.32 1.87-.57a10.146 10.146 0 0 0 3.24-2.16c.47-.47.88-.98 1.25-1.52a10.098 10.098 0 0 0 1.49-3.6 10.038 10.038 0 0 0-2.74-9.03zM115.289 385.873c-.12-.64-.32-1.27-.57-1.87-.25-.6-.55-1.18-.91-1.73-.37-.54-.79-1.06-1.25-1.52a9.57 9.57 0 0 0-1.52-1.24c-.54-.36-1.12-.67-1.72-.92-.61-.25-1.24-.44-1.88-.57a9.847 9.847 0 0 0-3.9 0c-.64.13-1.27.32-1.87.57-.61.25-1.19.56-1.73.92-.55.36-1.06.78-1.52 1.24-.46.46-.88.98-1.24 1.52-.36.55-.67 1.13-.92 1.73-.25.6-.45 1.23-.57 1.87-.13.651-.2 1.3-.2 1.96 0 .65.07 1.3.2 1.95.12.64.32 1.27.57 1.87.25.6.56 1.18.92 1.73.36.54.78 1.06 1.24 1.52.46.46.97.88 1.52 1.24.54.36 1.12.67 1.73.92.6.25 1.23.44 1.87.57s1.3.2 1.95.2c.65 0 1.31-.07 1.95-.2.64-.13 1.27-.32 1.88-.57.6-.25 1.18-.56 1.72-.92.55-.36 1.059-.78 1.52-1.24.46-.46.88-.98 1.25-1.52.36-.55.66-1.13.91-1.73.25-.6.45-1.23.57-1.87.13-.65.2-1.3.2-1.95 0-.66-.07-1.31-.2-1.96z\"/>\n      <path d=\"M511.999 222.726c0-14.215-9.228-26.315-22.007-30.624-1.628-74.155-62.456-133.978-136.994-133.978H159.002c-74.538 0-135.366 59.823-136.994 133.978C9.228 196.411 0 208.51 0 222.726a32.076 32.076 0 0 0 3.847 15.203 44.931 44.931 0 0 0-.795 8.427v.708c0 14.06 6.519 26.625 16.693 34.833-10.178 8.275-16.693 20.891-16.693 35.001 0 15.114 7.475 28.515 18.921 36.702v26.668c0 40.588 33.021 73.608 73.608 73.608h320.836c40.588 0 73.608-33.021 73.608-73.608V353.6c11.446-8.186 18.921-21.587 18.921-36.702 0-13.852-6.354-26.385-16.361-34.702 9.983-8.212 16.361-20.656 16.361-34.562v-.708c0-2.985-.294-5.944-.877-8.845a32.082 32.082 0 0 0 3.93-15.355zM44.033 173.229h322.441c5.523 0 10-4.477 10-10s-4.477-10-10-10H49.737c16.896-43.883 59.503-75.106 109.265-75.106h193.996c62.942 0 114.438 49.953 116.934 112.295H42.068c.234-5.848.9-11.588 1.965-17.189zM23.052 316.896c0-13.837 11.257-25.094 25.094-25.094h117.298l55.346 50.188H48.146c-13.837 0-25.094-11.256-25.094-25.094zm.976-62.945c.422.111.847.215 1.275.309 7.421 1.634 14.68 8.002 22.365 14.744a576.29 576.29 0 0 0 3.206 2.799h-3.081c-11.253-.001-20.774-7.551-23.765-17.852zm308.727 89.752l57.233-51.899 49.904.57-81.871 74.24-25.266-22.911zm7.861 34.126H295.12l17.467-15.839h10.563l17.466 15.839zm19.599-86.027l-82.499 74.811-82.499-74.811h164.998zm-59.529-20c.849-.842 1.677-1.675 2.49-2.493 9.531-9.587 17.059-17.16 32.89-17.16 15.832 0 23.359 7.573 32.89 17.162.812.817 1.64 1.65 2.489 2.491h-70.759zm-160.13 0a485.82 485.82 0 0 0 2.489-2.492c9.531-9.588 17.059-17.161 32.89-17.161 15.83 0 23.358 7.573 32.888 17.16.813.818 1.641 1.651 2.49 2.493h-70.757zm275.862 162.073H95.582c-29.56 0-53.608-24.049-53.608-53.608v-18.275h200.872l17.467 15.839H145.897c-5.523 0-10 4.477-10 10s4.477 10 10 10H467.07c-7.288 20.958-27.242 36.044-50.652 36.044zm53.608-56.046h-94.6l17.467-15.839h77.133v15.839zm-6.174-35.837h-48.906l54.624-49.533c11.135 2.604 19.376 12.665 19.376 24.439 0 13.836-11.257 25.094-25.094 25.094zm-2.728-70.19l.262-.227.101-.087.342-.298c.848-.738 1.682-1.469 2.501-2.187 4.105-3.601 8.089-7.095 12.04-9.819 3.446-2.375 6.868-4.164 10.326-4.925l.359-.081.04-.01.317-.076.065-.016a22.897 22.897 0 0 0 .42-.107l.196-.052a.374.374 0 0 0 .048-.012c-2.433 9.276-10.129 16.443-19.691 18.102a9.984 9.984 0 0 0-2.016-.205h-5.31zm21.271-37.073a40.746 40.746 0 0 0-4.536 1.281c-10.109 3.489-18.327 10.602-26.283 17.58l-.434.381c-9.178 8.052-17.923 15.723-29.033 17.834h-13.146c-11.249-1.93-17.833-8.552-25.823-16.591-10.213-10.275-22.923-23.062-47.074-23.062-24.15 0-36.86 12.786-47.074 23.06-7.992 8.04-14.576 14.663-25.829 16.593h-14.327c-11.253-1.93-17.837-8.553-25.829-16.593-10.213-10.274-22.923-23.06-47.072-23.06-24.151 0-36.861 12.787-47.074 23.062-7.991 8.039-14.574 14.661-25.824 16.591h-7.065c-14.134 0-24.325-8.939-35.113-18.404-9.248-8.112-18.81-16.501-31.252-19.241a12.237 12.237 0 0 1-7.025-4.453 10.027 10.027 0 0 0-1.153-1.252 12.234 12.234 0 0 1-1.428-5.727c-.001-6.788 5.52-12.309 12.307-12.309h447.384c6.787 0 12.308 5.521 12.308 12.308 0 5.729-4.039 10.776-9.605 12.002z\"/>\n    </svg>\n    ",
+    frequently: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 219.15 219.15\" width=\"24\" height=\"24\" fill=\"gray\">\n      <path d=\"M109.575 0C49.156 0 .001 49.155.001 109.574c0 60.42 49.154 109.576 109.573 109.576 60.42 0 109.574-49.156 109.574-109.576C219.149 49.155 169.995 0 109.575 0zm0 204.15c-52.148 0-94.573-42.427-94.573-94.576C15.001 57.426 57.427 15 109.575 15c52.148 0 94.574 42.426 94.574 94.574 0 52.15-42.426 94.576-94.574 94.576z\"/>\n      <path d=\"M166.112 108.111h-52.051V51.249a7.5 7.5 0 0 0-15 0v64.362a7.5 7.5 0 0 0 7.5 7.5h59.551a7.5 7.5 0 0 0 0-15z\"/>\n    </svg>\n    ",
+    nature: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" width=\"24\" height=\"24\" fill=\"gray\">\n      <path d=\"M490.815 3.784C480.082 5.7 227.049 51.632 148.477 130.203c-39.153 39.153-64.259 87.884-70.694 137.218-5.881 45.081 4.347 85.929 28.878 116.708L.001 490.789 21.212 512l106.657-106.657c33.094 26.378 75.092 34.302 116.711 28.874 49.334-6.435 98.065-31.541 137.218-70.695C460.368 284.951 506.3 31.918 508.216 21.185L511.999 0l-21.184 3.784zm-43.303 39.493L309.407 181.383l-7.544-98.076c46.386-15.873 97.819-29.415 145.649-40.03zm-174.919 50.64l8.877 115.402-78.119 78.119-11.816-153.606c19.947-13.468 47.183-26.875 81.058-39.915zm-109.281 64.119l12.103 157.338-47.36 47.36c-39.246-52.892-24.821-139.885 35.257-204.698zm57.113 247.849c-26.548-.001-51.267-7.176-71.161-21.938l47.363-47.363 157.32 12.102c-40.432 37.475-89.488 57.201-133.522 57.199zm157.743-85.421l-153.605-11.816 78.118-78.118 115.403 8.877c-13.04 33.876-26.448 61.111-39.916 81.057zm50.526-110.326l-98.076-7.544L468.725 64.485c-10.589 47.717-24.147 99.232-40.031 145.653z\"/>\n    </svg>\n    ",
+    objects: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 792 792\" fill=\"gray\">\n      <path d=\"M425.512 741.214H365.58c-14.183 0-25.164 11.439-25.164 25.622S351.397 792 365.58 792h59.932c15.101 0 26.54-10.981 26.54-25.164s-11.44-25.622-26.54-25.622zM472.638 671.209H319.821c-14.183 0-26.081 10.98-26.081 25.163s11.898 25.164 26.081 25.164h152.817c14.183 0 25.164-10.981 25.164-25.164s-10.982-25.163-25.164-25.163zM639.188 138.634c-25.164-42.548-59.181-76.135-102.49-101.113C493.526 12.621 446.566 0 395.771 0 320.28 0 247.19 31.684 197.205 81.445c-49.761 49.527-81.904 121.24-81.904 196.282 0 33.861 7.779 68.629 22.879 103.866 15.1 35.228 38.565 78.614 70.005 130.396 7.448 12.269 15.764 31.205 25.623 56.271 12.104 30.757 22.87 51.713 31.566 63.602 5.027 6.872 11.899 10.063 20.596 10.063h228.766c9.605 0 16.359-4.188 21.504-11.898 6.754-10.132 13.987-27.516 22.42-51.693 8.951-25.691 16.838-43.982 23.329-55.364 30.571-53.587 54.446-99.747 70.464-137.717 16.018-37.979 24.246-74.124 24.246-107.526 0-49.878-12.347-96.545-37.511-139.093zm-35.696 232.437c-15.012 34.348-36.398 76.974-65.427 126.736-9.41 16.125-18.458 37.003-26.989 63.592-3.367 10.474-7.32 20.596-11.439 30.2H300.153c-6.862-11.439-12.26-25.837-18.761-42.089-12.718-31.801-23.338-52.621-30.2-64.061-28.824-48.043-49.868-87.39-64.051-118.957s-20.537-60.859-21.044-88.766c-2.235-121.718 106.13-228.991 229.674-226.941 41.631.693 80.527 10.063 115.765 30.659 35.227 20.586 63.134 48.043 83.729 82.812 20.586 34.768 31.108 72.748 31.108 113.47-.001 27.449-7.692 58.596-22.881 93.345z\"/>\n    </svg>\n    ",
+    peoples: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 106.059 106.059\" fill=\"gray\">\n      <path d=\"M90.544 90.542c20.687-20.684 20.685-54.341.002-75.024-20.688-20.689-54.347-20.689-75.031-.006-20.688 20.687-20.686 54.346.002 75.034 20.682 20.684 54.341 20.684 75.027-.004zM21.302 21.3c17.494-17.493 45.959-17.495 63.457.002 17.494 17.494 17.492 45.963-.002 63.455-17.494 17.494-45.96 17.496-63.455.003-17.498-17.498-17.496-45.966 0-63.46zM27 69.865s-2.958-11.438 6.705-8.874c0 0 17.144 9.295 38.651 0 9.662-2.563 6.705 8.874 6.705 8.874C73.539 86.824 53.03 85.444 53.03 85.444S32.521 86.824 27 69.865zm6.24-31.194a6.202 6.202 0 1 1 12.399.001 6.202 6.202 0 0 1-12.399-.001zm28.117 0a6.202 6.202 0 1 1 12.403.001 6.202 6.202 0 0 1-12.403-.001z\"/>\n    </svg>\n    ",
+    places: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 611.999 611.998\" fill=\"gray\">\n      <path d=\"M596.583 15.454C586.226 5.224 573.354.523 558.423.523c-15.597 0-31.901 4.906-49.452 14.599-17.296 9.551-32.851 20.574-46.458 32.524h-.665c-2.655 2.322-10.953 10.287-25.219 24.553-14.272 14.272-26.217 26.223-35.845 36.51L112.401 26.406c-6.896-1.968-12.928.014-17.593 4.645L46.687 78.839c-4.326 4.297-5.805 9.268-4.977 15.597.829 6.287 3.979 10.627 9.629 13.607L280.32 228.839 161.514 347.978l-95.91 3.32c-4.645.164-8.637 1.643-12.276 5.311L5.872 404.397c-4.312 4.34-6.641 9.289-5.643 16.262 1.657 6.967 5.31 11.611 11.618 13.602l117.142 48.787 48.787 117.148c2.421 5.812 6.634 9.621 13.607 11.279h3.313c4.977 0 9.296-1.658 12.942-5.311l47.456-47.457c3.653-3.645 5.494-7.965 5.643-12.275l3.32-95.91 118.807-118.807 121.128 228.99c2.988 5.643 7.32 8.793 13.607 9.621 6.329.836 11.271-1.316 15.597-5.643l47.456-47.457c4.978-4.977 6.945-10.697 4.978-17.586l-82.296-288.389 59.732-59.739c10.287-10.287 21.699-24.149 33.183-45.134 5.777-10.542 10.032-20.886 12.942-31.194 5.722-20.218 3.258-44.07-12.608-59.73zm-59.4 110.176l-67.039 67.372c-5.628 5.657-6.811 11.122-4.977 17.586l81.637 288.388-22.563 22.238L403.438 292.89c-2.98-5.643-7.299-8.963-12.941-9.621-6.301-1.331-11.611.325-16.263 4.977l-141.37 141.37c-2.987 2.986-4.644 6.973-5.643 11.949l-3.32 95.904-22.896 23.236-41.48-98.566c-1.331-4.645-4.553-8.184-9.629-10.287L51.338 411.03l23.229-22.895 95.578-3.654c5.643-.99 9.622-2.654 12.276-5.309l141.37-141.371c4.651-4.645 6.308-9.954 4.984-16.262-.666-5.643-3.986-9.954-9.629-12.942L90.829 87.47l22.231-22.238 288.389 81.637c6.464 1.833 11.951.666 17.587-4.977l28.545-28.539 26.217-25.884 11.278-11.285 1.331-.666c27.873-23.895 55.088-38.16 72.016-38.16 5.969 0 9.954 1.324 11.611 3.979 18.917 18.585-21.099 72.484-32.851 84.293z\"/>\n    </svg>\n    ",
+    symbols: "\n    <svg style=\"max-height:18px\"\n      xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 511.626 511.626\" fill=\"gray\">\n      <path d=\"M475.366 71.949c-24.175-23.606-57.575-35.404-100.215-35.404-11.8 0-23.843 2.046-36.117 6.136-12.279 4.093-23.702 9.615-34.256 16.562-10.568 6.945-19.65 13.467-27.269 19.556a263.828 263.828 0 0 0-21.696 19.414 264.184 264.184 0 0 0-21.698-19.414c-7.616-6.089-16.702-12.607-27.268-19.556-10.564-6.95-21.985-12.468-34.261-16.562-12.275-4.089-24.316-6.136-36.116-6.136-42.637 0-76.039 11.801-100.211 35.404C12.087 95.55 0 128.286 0 170.16c0 12.753 2.24 25.891 6.711 39.398 4.471 13.514 9.566 25.031 15.275 34.546 5.708 9.514 12.181 18.792 19.414 27.834 7.233 9.041 12.519 15.272 15.846 18.698 3.33 3.426 5.948 5.903 7.851 7.427L243.25 469.938c3.427 3.426 7.614 5.144 12.562 5.144s9.138-1.718 12.563-5.144l177.87-171.31c43.588-43.58 65.38-86.406 65.38-128.472.001-41.877-12.085-74.61-36.259-98.207zm-53.961 199.846L255.813 431.391 89.938 271.507C54.344 235.922 36.55 202.133 36.55 170.156c0-15.415 2.046-29.026 6.136-40.824 4.093-11.8 9.327-21.177 15.703-28.124 6.377-6.949 14.132-12.607 23.268-16.988 9.141-4.377 18.086-7.328 26.84-8.85 8.754-1.52 18.079-2.281 27.978-2.281 9.896 0 20.557 2.424 31.977 7.279 11.418 4.853 21.934 10.944 31.545 18.271 9.613 7.332 17.845 14.183 24.7 20.557 6.851 6.38 12.559 12.229 17.128 17.559 3.424 4.189 8.091 6.283 13.989 6.283 5.9 0 10.562-2.094 13.99-6.283 4.568-5.33 10.28-11.182 17.131-17.559 6.852-6.374 15.085-13.222 24.694-20.557 9.613-7.327 20.129-13.418 31.553-18.271 11.416-4.854 22.08-7.279 31.977-7.279s19.219.761 27.977 2.281c8.757 1.521 17.702 4.473 26.84 8.85 9.137 4.38 16.892 10.042 23.267 16.988 6.376 6.947 11.612 16.324 15.705 28.124 4.086 11.798 6.132 25.409 6.132 40.824-.002 31.977-17.89 65.86-53.675 101.639z\"/>\n    </svg>\n    "
+};
+var categoriesDefault = [
+    new Category("Frequently", icons["frequently"]),
+    new Category("Peoples", icons["peoples"]),
+    new Category("Nature", icons["nature"]),
+    new Category("Foods", icons["foods"]),
+    new Category("Activity", icons["activity"]),
+    new Category("Objects", icons["objects"]),
+    new Category("Places", icons["places"]),
+    new Category("Symbols", icons["symbols"]),
+    new Category("Flags", icons["flags"])
+];var CategoryItem = /** @class */ (function (_super) {
+    __extends(CategoryItem, _super);
+    function CategoryItem() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(CategoryItem.prototype, "styleSVG", {
+        get: function () {
+            return __assign({}, this.styles);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
+    ], CategoryItem.prototype, "label", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
+    ], CategoryItem.prototype, "icon", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], CategoryItem.prototype, "styles", void 0);
+    CategoryItem = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({})
+    ], CategoryItem);
+    return CategoryItem;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+    if (typeof shadowMode !== 'boolean') {
+        createInjectorSSR = createInjector;
+        createInjector = shadowMode;
+        shadowMode = false;
+    }
+    // Vue.extend constructor export interop.
+    const options = typeof script === 'function' ? script.options : script;
+    // render functions
+    if (template && template.render) {
+        options.render = template.render;
+        options.staticRenderFns = template.staticRenderFns;
+        options._compiled = true;
+        // functional template
+        if (isFunctionalTemplate) {
+            options.functional = true;
+        }
+    }
+    // scopedId
+    if (scopeId) {
+        options._scopeId = scopeId;
+    }
+    let hook;
+    if (moduleIdentifier) {
+        // server build
+        hook = function (context) {
+            // 2.3 injection
+            context =
+                context || // cached call
+                    (this.$vnode && this.$vnode.ssrContext) || // stateful
+                    (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+            // 2.2 with runInNewContext: true
+            if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                context = __VUE_SSR_CONTEXT__;
+            }
+            // inject component styles
+            if (style) {
+                style.call(this, createInjectorSSR(context));
+            }
+            // register component module identifier for async chunk inference
+            if (context && context._registeredComponents) {
+                context._registeredComponents.add(moduleIdentifier);
+            }
+        };
+        // used by ssr in case component is cached and beforeCreate
+        // never gets called
+        options._ssrRegister = hook;
+    }
+    else if (style) {
+        hook = shadowMode
+            ? function (context) {
+                style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+            }
+            : function (context) {
+                style.call(this, createInjector(context));
+            };
+    }
+    if (hook) {
+        if (options.functional) {
+            // register for functional component in vue file
+            const originalRender = options.render;
+            options.render = function renderWithStyleInjection(h, context) {
+                hook.call(context);
+                return originalRender(h, context);
+            };
+        }
+        else {
+            // inject component registration as beforeCreate hook
+            const existing = options.beforeCreate;
+            options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+        }
+    }
+    return script;
+}const isOldIE = typeof navigator !== 'undefined' &&
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+function createInjector(context) {
+    return (id, style) => addStyle(id, style);
+}
+let HEAD;
+const styles = {};
+function addStyle(id, css) {
+    const group = isOldIE ? css.media || 'default' : id;
+    const style = styles[group] || (styles[group] = { ids: new Set(), styles: [] });
+    if (!style.ids.has(id)) {
+        style.ids.add(id);
+        let code = css.source;
+        if (css.map) {
+            // https://developer.chrome.com/devtools/docs/javascript-debugging
+            // this makes source maps inside style tags work properly in Chrome
+            code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+            // http://stackoverflow.com/a/26603875
+            code +=
+                '\n/*# sourceMappingURL=data:application/json;base64,' +
+                    btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+                    ' */';
+        }
+        if (!style.element) {
+            style.element = document.createElement('style');
+            style.element.type = 'text/css';
+            if (css.media)
+                style.element.setAttribute('media', css.media);
+            if (HEAD === undefined) {
+                HEAD = document.head || document.getElementsByTagName('head')[0];
+            }
+            HEAD.appendChild(style.element);
+        }
+        if ('styleSheet' in style.element) {
+            style.styles.push(code);
+            style.element.styleSheet.cssText = style.styles
+                .filter(Boolean)
+                .join('\n');
+        }
+        else {
+            const index = style.ids.size - 1;
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index])
+                style.element.removeChild(nodes[index]);
+            if (nodes.length)
+                style.element.insertBefore(textNode, nodes[index]);
+            else
+                style.element.appendChild(textNode);
+        }
+    }
+}/* script */
+const __vue_script__ = CategoryItem;
+
+/* template */
+var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"svg",style:(_vm.styleSVG),attrs:{"title":_vm.label},domProps:{"innerHTML":_vm._s(_vm.icon)}})};
+var __vue_staticRenderFns__ = [];
+
+  /* style */
+  const __vue_inject_styles__ = function (inject) {
+    if (!inject) return
+    inject("data-v-3d397e3a_0", { source: ".svg[data-v-3d397e3a]{display:inline-block;vertical-align:middle}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__ = "data-v-3d397e3a";
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var Categories = /** @class */ (function (_super) {
+    __extends(Categories, _super);
+    function Categories() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Categories.prototype.onSelect = function (category) {
+        return category;
+    };
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], Categories.prototype, "categories", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], Categories.prototype, "current", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Emit"])("select")
+    ], Categories.prototype, "onSelect", null);
+    Categories = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            components: {
+                CategoryItem: __vue_component__
+            }
+        })
+    ], Categories);
+    return Categories;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$1 = Categories;
+
+/* template */
+var __vue_render__$1 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"Categories"}},_vm._l((_vm.categories),function(category,index){return _c('div',{key:index,class:['category', { active: category.name === _vm.current }],on:{"click":function($event){return _vm.onSelect(category)}}},[_c('CategoryItem',{attrs:{"label":category.label,"icon":category.icon}})],1)}),0)};
+var __vue_staticRenderFns__$1 = [];
+
+  /* style */
+  const __vue_inject_styles__$1 = function (inject) {
+    if (!inject) return
+    inject("data-v-6d975e7c_0", { source: "#Categories[data-v-6d975e7c]{display:flex;width:100%;flex-direction:row;align-items:center;border-bottom:1px solid var(--ep-color-border);background:var(--ep-color-bg);overflow-x:auto}.category[data-v-6d975e7c]{flex:1;padding:5px;text-align:center;cursor:pointer}.category.active[data-v-6d975e7c]{border-bottom:3px solid var(--ep-color-active);filter:saturate(3);padding-bottom:2px}.category>img[data-v-6d975e7c]{width:22px;height:22px}.category[data-v-6d975e7c]:hover{filter:saturate(3)}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$1 = "data-v-6d975e7c";
+  /* module identifier */
+  const __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$1 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var EmojiItem = /** @class */ (function (_super) {
+    __extends(EmojiItem, _super);
+    function EmojiItem() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(EmojiItem.prototype, "styleSize", {
+        get: function () {
+            return {
+                fontSize: this.size - 5 + "px",
+                lineHeight: this.size + "px",
+                height: this.size + "px",
+                width: this.size + "px"
+            };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiItem.prototype, "emoji", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiItem.prototype, "size", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiItem.prototype, "withBorder", void 0);
+    EmojiItem = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({})
+    ], EmojiItem);
+    return EmojiItem;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$2 = EmojiItem;
+
+/* template */
+var __vue_render__$2 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{class:['emoji', { 'border': _vm.withBorder } ],style:(_vm.styleSize),domProps:{"innerHTML":_vm._s(_vm.emoji.data)}})};
+var __vue_staticRenderFns__$2 = [];
+
+  /* style */
+  const __vue_inject_styles__$2 = function (inject) {
+    if (!inject) return
+    inject("data-v-5a35c3ac_0", { source: ".emoji[data-v-5a35c3ac]{display:inline-block;text-align:center;padding:3px;box-sizing:content-box;overflow:hidden;transition:transform .2s;cursor:pointer}.emoji[data-v-5a35c3ac]:hover{transform:scale(1.05)}.border[data-v-5a35c3ac]:hover{background:#00000010;border-radius:8px}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$2 = "data-v-5a35c3ac";
+  /* module identifier */
+  const __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$2 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var CategoryLabel = /** @class */ (function (_super) {
+    __extends(CategoryLabel, _super);
+    function CategoryLabel() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
+    ], CategoryLabel.prototype, "name", void 0);
+    CategoryLabel = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({})
+    ], CategoryLabel);
+    return CategoryLabel;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$3 = CategoryLabel;
+
+/* template */
+var __vue_render__$3 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"category-title"},[_vm._v(_vm._s(_vm.name))])};
+var __vue_staticRenderFns__$3 = [];
+
+  /* style */
+  const __vue_inject_styles__$3 = function (inject) {
+    if (!inject) return
+    inject("data-v-b863a738_0", { source: ".category-title[data-v-b863a738]{text-transform:uppercase;font-size:.8em;padding:5px 0 0 16px;color:#676666}.category-title[data-v-b863a738]:not(:first-of-type){padding:10px 0 0 16px}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$3 = "data-v-b863a738";
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var EmojiList = /** @class */ (function (_super) {
+    __extends(EmojiList, _super);
+    function EmojiList() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EmojiList.prototype.searchByAlias = function (term, emoji) {
+        var isRelevant = function (alias) { return alias.toLowerCase().includes(term); };
+        return emoji.aliases.some(function (alias) { return isRelevant(alias); });
+    };
+    EmojiList.prototype.calcScrollTop = function () {
+        return this.hasSearch ? 88 : 44;
+    };
+    Object.defineProperty(EmojiList.prototype, "gridDynamic", {
+        get: function () {
+            var percent = 100 / this.emojisByRow;
+            return {
+                gridTemplateColumns: "repeat(" + this.emojisByRow + ", " + percent + "%)"
+            };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(EmojiList.prototype, "dataFiltered", {
+        get: function () {
+            var _this = this;
+            var data = this.data[this.category];
+            var searchValue = this.filter.trim().toLowerCase();
+            if (searchValue) {
+                data = data.filter(function (emoji) {
+                    return _this.searchByAlias(searchValue, emoji);
+                });
+            }
+            return data;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(EmojiList.prototype, "dataFilteredByCategory", {
+        get: function () {
+            var _this = this;
+            var _data = Object.assign({}, this.data);
+            var searchValue = this.filter.trim().toLowerCase();
+            if (searchValue) {
+                this.categories.forEach(function (category) {
+                    _data[category] = _this.data[category].filter(function (item) {
+                        return _this.searchByAlias(searchValue, item);
+                    });
+                });
+            }
+            return _data;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(EmojiList.prototype, "categories", {
+        get: function () {
+            return Object.keys(this.data);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(EmojiList.prototype, "containerEmoji", {
+        get: function () {
+            return this.$refs["container-emoji"];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    EmojiList.prototype.onSelect = function (emoji) {
+        return emoji;
+    };
+    EmojiList.prototype.onDataChanged = function () {
+        this.containerEmoji.scrollTop = 0;
+    };
+    EmojiList.prototype.onCategoryChanged = function (newValue) {
+        if (this.continuousList) {
+            var categoryEl = this.$refs[newValue][0].$el;
+            this.containerEmoji.scrollTop =
+                categoryEl.offsetTop - this.calcScrollTop();
+        }
+    };
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
+    ], EmojiList.prototype, "data", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ required: true })
+    ], EmojiList.prototype, "emojisByRow", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "emojiWithBorder", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "emojiSize", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "filter", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "continuousList", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "category", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], EmojiList.prototype, "hasSearch", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Emit"])("select")
+    ], EmojiList.prototype, "onSelect", null);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Watch"])("data")
+    ], EmojiList.prototype, "onDataChanged", null);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Watch"])("category")
+    ], EmojiList.prototype, "onCategoryChanged", null);
+    EmojiList = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            components: {
+                EmojiItem: __vue_component__$2,
+                CategoryLabel: __vue_component__$3
+            }
+        })
+    ], EmojiList);
+    return EmojiList;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$4 = EmojiList;
+
+/* template */
+var __vue_render__$4 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"Emojis"}},[_c('div',{ref:"container-emoji",staticClass:"container-emoji"},[(_vm.continuousList)?_vm._l((_vm.dataFilteredByCategory),function(category,category_name){return _c('div',{key:category_name},[_c('CategoryLabel',{directives:[{name:"show",rawName:"v-show",value:(category.length),expression:"category.length"}],ref:category_name,refInFor:true,attrs:{"name":category_name}}),_vm._v(" "),(category.length)?_c('div',{staticClass:"grid-emojis",style:(_vm.gridDynamic)},_vm._l((category),function(emoji,index_e){return _c('EmojiItem',{key:(category_name + "-" + index_e),attrs:{"emoji":emoji,"size":_vm.emojiSize,"withBorder":_vm.emojiWithBorder},nativeOn:{"click":function($event){return _vm.onSelect(emoji)}}})}),1):_vm._e()],1)}):[_c('div',{staticClass:"grid-emojis",style:(_vm.gridDynamic)},_vm._l((_vm.dataFiltered),function(emoji,index){return _c('EmojiItem',{key:index,attrs:{"emoji":emoji,"size":_vm.emojiSize,"withBorder":_vm.emojiWithBorder},nativeOn:{"click":function($event){return _vm.onSelect(emoji)}}})}),1)]],2)])};
+var __vue_staticRenderFns__$4 = [];
+
+  /* style */
+  const __vue_inject_styles__$4 = function (inject) {
+    if (!inject) return
+    inject("data-v-5c988bee_0", { source: "#Emojis[data-v-5c988bee]{font-family:Twemoji,NotomojiColor,Notomoji,EmojiOne Color,Symbola,Noto,Segoe UI Emoji,OpenSansEmoji,monospace;display:block;width:100%;max-width:100%;color:var(--ep-color-text)}#Emojis[data-v-5c988bee] ::-webkit-scrollbar{border-radius:4px;width:4px;overflow:hidden}.container-emoji[data-v-5c988bee]{overflow-x:hidden;overflow-y:scroll;height:350px}.grid-emojis[data-v-5c988bee]{display:grid;margin:5px 0;justify-items:center}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$4 = "data-v-5c988bee";
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var timemout = 500;
+var listenInput;
+var InputSearch = /** @class */ (function (_super) {
+    __extends(InputSearch, _super);
+    function InputSearch() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.inputSearch = "";
+        return _this;
+    }
+    InputSearch.prototype.onInputChanged = function (newValue, old) {
+        var _this = this;
+        clearTimeout(listenInput);
+        listenInput = setTimeout(function () { return _this.$emit("update", newValue); }, timemout);
+    };
+    Object.defineProperty(InputSearch.prototype, "placeholder", {
+        get: function () {
+            return t("search");
+        },
+        enumerable: false,
+        configurable: true
+    });
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Watch"])("inputSearch")
+    ], InputSearch.prototype, "onInputChanged", null);
+    InputSearch = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({})
+    ], InputSearch);
+    return InputSearch;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$5 = InputSearch;
+
+/* template */
+var __vue_render__$5 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"InputSearch"}},[_c('div',{staticClass:"container-search"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.inputSearch),expression:"inputSearch"}],attrs:{"type":"text","placeholder":_vm.placeholder},domProps:{"value":(_vm.inputSearch)},on:{"input":function($event){if($event.target.composing){ return; }_vm.inputSearch=$event.target.value;}}})])])};
+var __vue_staticRenderFns__$5 = [];
+
+  /* style */
+  const __vue_inject_styles__$5 = function (inject) {
+    if (!inject) return
+    inject("data-v-839ecda0_0", { source: "#InputSearch[data-v-839ecda0]{display:block;width:100%;max-width:100%}.container-search[data-v-839ecda0]{display:block;justify-content:center;box-sizing:border-box;width:100%;margin:5px 0;padding:0 5%}.container-search input[data-v-839ecda0]{width:100%;font-size:14px;padding:6px 8px;box-sizing:border-box;border-radius:8px;background:var(--ep-color-sbg);color:var(--ep-color-text);border:1px solid var(--ep-color-border)}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$5 = "data-v-839ecda0";
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var VEmojiPicker = /** @class */ (function (_super) {
+    __extends(VEmojiPicker, _super);
+    function VEmojiPicker() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.mapEmojis = {};
+        _this.currentCategory = _this.initialCategory;
+        _this.filterEmoji = "";
+        return _this;
+    }
+    VEmojiPicker.prototype.created = function () {
+        var categoriesNames = this.customCategories.map(function (c) { return c.name; });
+        if (!categoriesNames.includes(this.initialCategory)) {
+            this.initialCategory = categoriesNames[0];
+        }
+        // Create map
+        this.mapperEmojisCategory(this.customEmojis);
+        this.restoreFrequentlyEmojis();
+        // Configure i18n
+        if (this.i18n) {
+            locale.i18n(this.i18n);
+        }
+    };
+    VEmojiPicker.prototype.beforeDestroy = function () {
+        this.mapEmojis = {};
+    };
+    VEmojiPicker.prototype.onSearch = function (term) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.filterEmoji = term;
+                return [2 /*return*/];
+            });
+        });
+    };
+    VEmojiPicker.prototype.changeCategory = function (category) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hasEmojis;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        hasEmojis = this.mapEmojis[category.name].length;
+                        this.currentCategory = category.name;
+                        if (!hasEmojis) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.onChangeCategory(category)];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    VEmojiPicker.prototype.updateFrequently = function (emoji) {
+        return __awaiter(this, void 0, void 0, function () {
+            var oldEmojis, emojis;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        oldEmojis = this.mapEmojis["Frequently"];
+                        emojis = __spread(new Set(__spread([emoji], oldEmojis)));
+                        this.mapEmojis["Frequently"] = emojis.slice(0, this.limitFrequently);
+                        return [4 /*yield*/, this.saveFrequentlyEmojis(emojis)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    VEmojiPicker.prototype.mapperEmojisCategory = function (emojis) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.$set(this.mapEmojis, "Frequently", []);
+                emojis
+                    .filter(function (emoji) { return !_this.exceptEmojis.includes(emoji); })
+                    .forEach(function (emoji) {
+                    var _category = emoji.category;
+                    if (!_this.mapEmojis[_category]) {
+                        _this.$set(_this.mapEmojis, _category, []);
+                    }
+                    _this.mapEmojis[_category].push(emoji);
+                });
+                return [2 /*return*/];
+            });
+        });
+    };
+    VEmojiPicker.prototype.restoreFrequentlyEmojis = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var jsonMapIndexEmojis, mapIndexEmojis;
+            var _this = this;
+            return __generator(this, function (_a) {
+                jsonMapIndexEmojis = localStorage.getItem("frequentlyEmojis");
+                mapIndexEmojis = JSON.parse(jsonMapIndexEmojis) || [];
+                this.mapEmojis["Frequently"] = mapIndexEmojis.map(function (index) { return _this.customEmojis[index]; });
+                return [2 /*return*/];
+            });
+        });
+    };
+    VEmojiPicker.prototype.saveFrequentlyEmojis = function (emojis) {
+        return __awaiter(this, void 0, void 0, function () {
+            var mapIndexEmojis;
+            var _this = this;
+            return __generator(this, function (_a) {
+                mapIndexEmojis = emojis.map(function (emoji) {
+                    return _this.customEmojis.indexOf(emoji);
+                });
+                localStorage.setItem("frequentlyEmojis", JSON.stringify(mapIndexEmojis));
+                return [2 /*return*/];
+            });
+        });
+    };
+    Object.defineProperty(VEmojiPicker.prototype, "categoriesFiltered", {
+        get: function () {
+            var _this = this;
+            return this.customCategories.filter(function (category) { return !_this.exceptCategories.includes(category); });
+        },
+        enumerable: false,
+        configurable: true
+    });
+    VEmojiPicker.prototype.onSelectEmoji = function (emoji) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.updateFrequently(emoji)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, emoji];
+                }
+            });
+        });
+    };
+    VEmojiPicker.prototype.onChangeCategory = function (category) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, category];
+            });
+        });
+    };
+    VEmojiPicker.prototype.onChangeCustomEmojis = function (newEmojis) {
+        if (newEmojis && newEmojis.length) {
+            this.mapEmojis = {};
+            this.mapperEmojisCategory(newEmojis);
+        }
+    };
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: function () { return emojisDefault; } })
+    ], VEmojiPicker.prototype, "customEmojis", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: function () { return categoriesDefault; } })
+    ], VEmojiPicker.prototype, "customCategories", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: 15 })
+    ], VEmojiPicker.prototype, "limitFrequently", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: 5 })
+    ], VEmojiPicker.prototype, "emojisByRow", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: false })
+    ], VEmojiPicker.prototype, "continuousList", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: 32 })
+    ], VEmojiPicker.prototype, "emojiSize", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: true })
+    ], VEmojiPicker.prototype, "emojiWithBorder", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: true })
+    ], VEmojiPicker.prototype, "showSearch", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: true })
+    ], VEmojiPicker.prototype, "showCategories", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: false })
+    ], VEmojiPicker.prototype, "dark", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: "Peoples" })
+    ], VEmojiPicker.prototype, "initialCategory", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: function () { return []; } })
+    ], VEmojiPicker.prototype, "exceptCategories", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({ default: function () { return []; } })
+    ], VEmojiPicker.prototype, "exceptEmojis", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Prop"])({})
+    ], VEmojiPicker.prototype, "i18n", void 0);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Emit"])("select")
+    ], VEmojiPicker.prototype, "onSelectEmoji", null);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Emit"])("changeCategory")
+    ], VEmojiPicker.prototype, "onChangeCategory", null);
+    __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Watch"])("customEmojis")
+    ], VEmojiPicker.prototype, "onChangeCustomEmojis", null);
+    VEmojiPicker = __decorate([
+        Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            components: {
+                Categories: __vue_component__$1,
+                EmojiList: __vue_component__$4,
+                InputSearch: __vue_component__$5
+            }
+        })
+    ], VEmojiPicker);
+    return VEmojiPicker;
+}(vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__["Vue"]));/* script */
+const __vue_script__$6 = VEmojiPicker;
+
+/* template */
+var __vue_render__$6 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:['emoji-picker', {dark: _vm.dark}],attrs:{"id":"EmojiPicker"}},[(_vm.showCategories)?_c('Categories',{attrs:{"categories":_vm.categoriesFiltered,"current":_vm.currentCategory},on:{"select":_vm.changeCategory}}):_vm._e(),_vm._v(" "),(_vm.showSearch)?_c('InputSearch',{on:{"update":_vm.onSearch}}):_vm._e(),_vm._v(" "),_c('EmojiList',{attrs:{"data":_vm.mapEmojis,"category":_vm.currentCategory,"filter":_vm.filterEmoji,"emojiWithBorder":_vm.emojiWithBorder,"emojiSize":_vm.emojiSize,"emojisByRow":_vm.emojisByRow,"continuousList":_vm.continuousList,"hasSearch":_vm.showSearch},on:{"select":_vm.onSelectEmoji}})],1)};
+var __vue_staticRenderFns__$6 = [];
+
+  /* style */
+  const __vue_inject_styles__$6 = function (inject) {
+    if (!inject) return
+    inject("data-v-f1d527bc_0", { source: ".emoji-picker[data-v-f1d527bc]{--ep-color-bg:#f0f0f0;--ep-color-sbg:#f6f6f6;--ep-color-border:#e4e4e4;--ep-color-text:#4a4a4a;--ep-color-active:#009688;display:inline-flex;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeSpeed;flex-direction:column;align-items:center;background-color:var(--ep-color-bg);border-radius:4px;border:1px solid var(--ep-color-border);overflow:hidden;width:325px;user-select:none}@media screen and (max-width:325px){.emoji-picker[data-v-f1d527bc]{width:100%}}.dark[data-v-f1d527bc]{--ep-color-bg:#191B1A;--ep-color-sbg:#212221;--ep-color-border:#3E3D42;--ep-color-text:#f0f0f0;--ep-color-active:#009688}", map: undefined, media: undefined });
+
+  };
+  /* scoped */
+  const __vue_scope_id__$6 = "data-v-f1d527bc";
+  /* module identifier */
+  const __vue_module_identifier__$6 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$6 = false;
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
+    __vue_inject_styles__$6,
+    __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
+    false,
+    createInjector,
+    undefined,
+    undefined
+  );var defaultOptions = {
+    i18n: {}
+};
+var plugin = {
+    VEmojiPicker: __vue_component__$6,
+    install: function (Vue, opts) {
+        if (opts === void 0) { opts = defaultOptions; }
+        locale.i18n(opts.i18n);
+        Vue.component(__vue_component__$6.name, __vue_component__$6);
+    }
+};/* harmony default export */ __webpack_exports__["default"] = (plugin);
+
+/***/ }),
+
+/***/ "./node_modules/vue-class-component/dist/vue-class-component.esm.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/vue-class-component/dist/vue-class-component.esm.js ***!
+  \**************************************************************************/
+/*! exports provided: default, createDecorator, mixins */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createDecorator", function() { return createDecorator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mixins", function() { return mixins; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/**
+  * vue-class-component v7.2.6
+  * (c) 2015-present Evan You
+  * @license MIT
+  */
+
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+// The rational behind the verbose Reflect-feature check below is the fact that there are polyfills
+// which add an implementation for Reflect.defineMetadata but not for Reflect.getOwnMetadataKeys.
+// Without this check consumers will encounter hard to track down runtime errors.
+function reflectionIsSupported() {
+  return typeof Reflect !== 'undefined' && Reflect.defineMetadata && Reflect.getOwnMetadataKeys;
+}
+function copyReflectionMetadata(to, from) {
+  forwardMetadata(to, from);
+  Object.getOwnPropertyNames(from.prototype).forEach(function (key) {
+    forwardMetadata(to.prototype, from.prototype, key);
+  });
+  Object.getOwnPropertyNames(from).forEach(function (key) {
+    forwardMetadata(to, from, key);
+  });
+}
+
+function forwardMetadata(to, from, propertyKey) {
+  var metaKeys = propertyKey ? Reflect.getOwnMetadataKeys(from, propertyKey) : Reflect.getOwnMetadataKeys(from);
+  metaKeys.forEach(function (metaKey) {
+    var metadata = propertyKey ? Reflect.getOwnMetadata(metaKey, from, propertyKey) : Reflect.getOwnMetadata(metaKey, from);
+
+    if (propertyKey) {
+      Reflect.defineMetadata(metaKey, metadata, to, propertyKey);
+    } else {
+      Reflect.defineMetadata(metaKey, metadata, to);
+    }
+  });
+}
+
+var fakeArray = {
+  __proto__: []
+};
+var hasProto = fakeArray instanceof Array;
+function createDecorator(factory) {
+  return function (target, key, index) {
+    var Ctor = typeof target === 'function' ? target : target.constructor;
+
+    if (!Ctor.__decorators__) {
+      Ctor.__decorators__ = [];
+    }
+
+    if (typeof index !== 'number') {
+      index = undefined;
+    }
+
+    Ctor.__decorators__.push(function (options) {
+      return factory(options, key, index);
+    });
+  };
+}
+function mixins() {
+  for (var _len = arguments.length, Ctors = new Array(_len), _key = 0; _key < _len; _key++) {
+    Ctors[_key] = arguments[_key];
+  }
+
+  return vue__WEBPACK_IMPORTED_MODULE_0___default.a.extend({
+    mixins: Ctors
+  });
+}
+function isPrimitive(value) {
+  var type = _typeof(value);
+
+  return value == null || type !== 'object' && type !== 'function';
+}
+function warn(message) {
+  if (typeof console !== 'undefined') {
+    console.warn('[vue-class-component] ' + message);
+  }
+}
+
+function collectDataFromConstructor(vm, Component) {
+  // override _init to prevent to init as Vue instance
+  var originalInit = Component.prototype._init;
+
+  Component.prototype._init = function () {
+    var _this = this;
+
+    // proxy to actual vm
+    var keys = Object.getOwnPropertyNames(vm); // 2.2.0 compat (props are no longer exposed as self properties)
+
+    if (vm.$options.props) {
+      for (var key in vm.$options.props) {
+        if (!vm.hasOwnProperty(key)) {
+          keys.push(key);
+        }
+      }
+    }
+
+    keys.forEach(function (key) {
+      Object.defineProperty(_this, key, {
+        get: function get() {
+          return vm[key];
+        },
+        set: function set(value) {
+          vm[key] = value;
+        },
+        configurable: true
+      });
+    });
+  }; // should be acquired class property values
+
+
+  var data = new Component(); // restore original _init to avoid memory leak (#209)
+
+  Component.prototype._init = originalInit; // create plain data object
+
+  var plainData = {};
+  Object.keys(data).forEach(function (key) {
+    if (data[key] !== undefined) {
+      plainData[key] = data[key];
+    }
+  });
+
+  if (true) {
+    if (!(Component.prototype instanceof vue__WEBPACK_IMPORTED_MODULE_0___default.a) && Object.keys(plainData).length > 0) {
+      warn('Component class must inherit Vue or its descendant class ' + 'when class property is used.');
+    }
+  }
+
+  return plainData;
+}
+
+var $internalHooks = ['data', 'beforeCreate', 'created', 'beforeMount', 'mounted', 'beforeDestroy', 'destroyed', 'beforeUpdate', 'updated', 'activated', 'deactivated', 'render', 'errorCaptured', 'serverPrefetch' // 2.6
+];
+function componentFactory(Component) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  options.name = options.name || Component._componentTag || Component.name; // prototype props.
+
+  var proto = Component.prototype;
+  Object.getOwnPropertyNames(proto).forEach(function (key) {
+    if (key === 'constructor') {
+      return;
+    } // hooks
+
+
+    if ($internalHooks.indexOf(key) > -1) {
+      options[key] = proto[key];
+      return;
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(proto, key);
+
+    if (descriptor.value !== void 0) {
+      // methods
+      if (typeof descriptor.value === 'function') {
+        (options.methods || (options.methods = {}))[key] = descriptor.value;
+      } else {
+        // typescript decorated data
+        (options.mixins || (options.mixins = [])).push({
+          data: function data() {
+            return _defineProperty({}, key, descriptor.value);
+          }
+        });
+      }
+    } else if (descriptor.get || descriptor.set) {
+      // computed properties
+      (options.computed || (options.computed = {}))[key] = {
+        get: descriptor.get,
+        set: descriptor.set
+      };
+    }
+  });
+  (options.mixins || (options.mixins = [])).push({
+    data: function data() {
+      return collectDataFromConstructor(this, Component);
+    }
+  }); // decorate options
+
+  var decorators = Component.__decorators__;
+
+  if (decorators) {
+    decorators.forEach(function (fn) {
+      return fn(options);
+    });
+    delete Component.__decorators__;
+  } // find super
+
+
+  var superProto = Object.getPrototypeOf(Component.prototype);
+  var Super = superProto instanceof vue__WEBPACK_IMPORTED_MODULE_0___default.a ? superProto.constructor : vue__WEBPACK_IMPORTED_MODULE_0___default.a;
+  var Extended = Super.extend(options);
+  forwardStaticMembers(Extended, Component, Super);
+
+  if (reflectionIsSupported()) {
+    copyReflectionMetadata(Extended, Component);
+  }
+
+  return Extended;
+}
+var reservedPropertyNames = [// Unique id
+'cid', // Super Vue constructor
+'super', // Component options that will be used by the component
+'options', 'superOptions', 'extendOptions', 'sealedOptions', // Private assets
+'component', 'directive', 'filter'];
+var shouldIgnore = {
+  prototype: true,
+  arguments: true,
+  callee: true,
+  caller: true
+};
+
+function forwardStaticMembers(Extended, Original, Super) {
+  // We have to use getOwnPropertyNames since Babel registers methods as non-enumerable
+  Object.getOwnPropertyNames(Original).forEach(function (key) {
+    // Skip the properties that should not be overwritten
+    if (shouldIgnore[key]) {
+      return;
+    } // Some browsers does not allow reconfigure built-in properties
+
+
+    var extendedDescriptor = Object.getOwnPropertyDescriptor(Extended, key);
+
+    if (extendedDescriptor && !extendedDescriptor.configurable) {
+      return;
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(Original, key); // If the user agent does not support `__proto__` or its family (IE <= 10),
+    // the sub class properties may be inherited properties from the super class in TypeScript.
+    // We need to exclude such properties to prevent to overwrite
+    // the component options object which stored on the extended constructor (See #192).
+    // If the value is a referenced value (object or function),
+    // we can check equality of them and exclude it if they have the same reference.
+    // If it is a primitive value, it will be forwarded for safety.
+
+    if (!hasProto) {
+      // Only `cid` is explicitly exluded from property forwarding
+      // because we cannot detect whether it is a inherited property or not
+      // on the no `__proto__` environment even though the property is reserved.
+      if (key === 'cid') {
+        return;
+      }
+
+      var superDescriptor = Object.getOwnPropertyDescriptor(Super, key);
+
+      if (!isPrimitive(descriptor.value) && superDescriptor && superDescriptor.value === descriptor.value) {
+        return;
+      }
+    } // Warn if the users manually declare reserved properties
+
+
+    if ( true && reservedPropertyNames.indexOf(key) >= 0) {
+      warn("Static property name '".concat(key, "' declared on class '").concat(Original.name, "' ") + 'conflicts with reserved property name of Vue internal. ' + 'It may cause unexpected behavior of the component. Consider renaming the property.');
+    }
+
+    Object.defineProperty(Extended, key, descriptor);
+  });
+}
+
+function Component(options) {
+  if (typeof options === 'function') {
+    return componentFactory(options);
+  }
+
+  return function (Component) {
+    return componentFactory(Component, options);
+  };
+}
+
+Component.registerHooks = function registerHooks(keys) {
+  $internalHooks.push.apply($internalHooks, _toConsumableArray(keys));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Component);
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ContactComponent.vue?vue&type=template&id=2b26a8a8&":
 /*!*******************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ContactComponent.vue?vue&type=template&id=2b26a8a8& ***!
@@ -37803,13 +47445,13 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _vm._m(0),
         _vm._v(" "),
-        _c("div", { staticClass: " col-lg-10 " }, [
+        _c("div", { staticClass: "col-9 col-md-9 col-lg-10 " }, [
           _c("div", { staticClass: "d-flex w-100 justify-content-between" }, [
             _c("h5", { staticClass: "mb-1" }, [
               _vm._v(_vm._s(_vm.conversation.contactName) + " ")
             ]),
             _vm._v(" "),
-            _c("small", [_vm._v(_vm._s(_vm.conversation.last_time))])
+            _c("small", [_vm._v("15:08")])
           ]),
           _vm._v(" "),
           _c("p", { staticClass: "mb-0" }, [
@@ -37825,11 +47467,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: " col-lg-2 " }, [
+    return _c("div", { staticClass: "col-3 col-md-3 col-lg-2 " }, [
       _c("img", {
-        staticClass: "rounded",
+        staticClass: "rounded-circle",
         staticStyle: { width: "50px" },
-        attrs: { src: "http://lorempixel.com/g/500/500/people", alt: "avatar" }
+        attrs: {
+          src: "https://picsum.photos/seed/picsum/500/500",
+          alt: "avatar"
+        }
       })
     ])
   }
@@ -37855,79 +47500,89 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-5 col-lg-4 bg-light contacs p-0" }, [
-    _c("div", { staticClass: "row pr-3 pl-3" }, [
-      _c("div", { staticClass: "input-group mt-3 mr-3 ml-3 mb-0" }, [
-        _c("div", { staticClass: "input-group-prepend" }, [
-          _c(
-            "span",
-            { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
-            [
-              _c(
-                "svg",
-                {
-                  staticClass: "bi bi-search",
-                  attrs: {
-                    width: "1em",
-                    height: "1em",
-                    viewBox: "0 0 16 16",
-                    fill: "currentColor",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
+  return _c(
+    "div",
+    {
+      staticClass: "col-10 col-md-4 col-lg-4 bg-light contacs p-0",
+      attrs: { id: "allContacts" }
+    },
+    [
+      _c("div", { staticClass: "row pr-3 pl-3" }, [
+        _c("div", { staticClass: "input-group mt-3 mr-3 ml-3 mb-0" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c(
+              "span",
+              {
+                staticClass: "input-group-text",
+                attrs: { id: "basic-addon1" }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "bi bi-search",
                     attrs: {
-                      "fill-rule": "evenodd",
-                      d:
-                        "M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
+                      width: "1em",
+                      height: "1em",
+                      viewBox: "0 0 16 16",
+                      fill: "currentColor",
+                      xmlns: "http://www.w3.org/2000/svg"
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("path", {
-                    attrs: {
-                      "fill-rule": "evenodd",
-                      d:
-                        "M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
-                    }
-                  })
-                ]
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "Buscar personas",
-            "aria-label": "Username",
-            "aria-describedby": "basic-addon1"
-          }
-        })
-      ])
-    ]),
-    _vm._v(" "),
-    _c("hr", { staticClass: "mr-3 ml-3" }),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "list-group list" },
-      _vm._l(_vm.conversations, function(conversation) {
-        return _c("contact-component", {
-          key: conversation.id,
-          attrs: { conversation: conversation },
-          nativeOn: {
-            click: function($event) {
-              return _vm.selectConversation(conversation)
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        "fill-rule": "evenodd",
+                        d:
+                          "M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              placeholder: "Buscar personas",
+              "aria-label": "Username",
+              "aria-describedby": "basic-addon1"
             }
-          }
-        })
-      }),
-      1
-    )
-  ])
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("hr", { staticClass: "mr-3 ml-3" }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "list-group list" },
+        _vm._l(_vm.conversations, function(conversation) {
+          return _c("contact-component", {
+            key: conversation.id,
+            attrs: { conversation: conversation },
+            nativeOn: {
+              click: function($event) {
+                return _vm.selectConversation(conversation)
+              }
+            }
+          })
+        }),
+        1
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37951,81 +47606,166 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-lg-8 p-0" }, [
-    _c("div", { staticClass: "card w-100 h-100 conversation" }, [
-      _c("div", { staticClass: "card-header bg-ligth" }, [
-        _c("img", {
-          staticClass: "rounded",
-          staticStyle: { width: "30px" },
-          attrs: {
-            src: "http://lorempixel.com/g/500/500/people",
-            alt: "avatar"
-          }
-        }),
-        _vm._v(" "),
-        _c("span", [_vm._v(_vm._s(_vm.contactName))])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "card-body messages" },
-        _vm._l(_vm.messages, function(message) {
-          return _c(
-            "message-conversation-component",
-            { key: message.id, attrs: { writtenByMe: message.writtenByMe } },
-            [_vm._v("\n        " + _vm._s(message.content) + "\n      ")]
-          )
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-footer text-muted pt-2 pb-2" }, [
-        _c(
-          "form",
-          {
-            attrs: { autocomplete: "off" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.postMessage($event)
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "input-group" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.messageSent,
-                    expression: "messageSent"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Escribe tu mensaje...",
-                  "aria-describedby": "basic-addon2"
-                },
-                domProps: { value: _vm.messageSent },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+  return _c(
+    "div",
+    {
+      staticClass: "col-10 col-md-7 col-lg-8 p-0",
+      attrs: { id: "allConversation" }
+    },
+    [
+      _c("div", { staticClass: "card w-100 h-100 conversation" }, [
+        _c("div", { staticClass: "card-header bg-ligth" }, [
+          this.screen < 576
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-light",
+                  attrs: { id: "return" },
+                  on: {
+                    click: function($event) {
+                      return _vm.showContacts()
                     }
-                    _vm.messageSent = $event.target.value
                   }
+                },
+                [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "bi bi-arrow-left-square",
+                      attrs: {
+                        width: "1.5em",
+                        height: "1.4em",
+                        viewBox: "0 0 16 16",
+                        fill: "currentColor",
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "fill-rule": "evenodd",
+                          d:
+                            "M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          "fill-rule": "evenodd",
+                          d:
+                            "M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("img", {
+            staticClass: "rounded-circle mr-3 ml-3",
+            staticStyle: { width: "30px" },
+            attrs: {
+              src: "https://picsum.photos/seed/picsum/500/500",
+              alt: "avatar"
+            }
+          }),
+          _vm._v(" "),
+          _c("h5", { staticClass: "d-inline mb-0 mt-2" }, [
+            _vm._v(_vm._s(_vm.contactName))
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "card-body messages " },
+          _vm._l(_vm.messages, function(message) {
+            return _c("message-conversation-component", {
+              key: message.id,
+              attrs: { writtenByMe: message.writtenByMe, message: message }
+            })
+          }),
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-footer text-muted pt-2 pb-2 pl-0 " }, [
+          _c(
+            "form",
+            {
+              attrs: { autocomplete: "off" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.postMessage($event)
                 }
-              }),
-              _vm._v(" "),
-              _vm._m(0)
-            ])
-          ]
-        )
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "input-group" },
+                [
+                  _c("div", { staticClass: "input-group-append emojis" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-light ",
+                        attrs: { type: "button" },
+                        on: { click: _vm.toogleDialogEmoji }
+                      },
+                      [_vm._v("😃")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("VEmojiPicker", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.showDialog,
+                        expression: "showDialog"
+                      }
+                    ],
+                    attrs: { labelSearch: "Search", lang: "pt-BR" },
+                    on: { select: _vm.onSelectEmoji }
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.messageSent,
+                        expression: "messageSent"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      placeholder: "Escribe tu mensaje...",
+                      "aria-describedby": "basic-addon2"
+                    },
+                    domProps: { value: _vm.messageSent },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.messageSent = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ],
+                1
+              )
+            ]
+          )
+        ])
       ])
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -38044,6 +47784,41 @@ var staticRenderFns = [
           )
         ]
       )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-7 col-lg-8 p-0" }, [
+      _c("div", { staticClass: "card w-100 h-100 conversation" }, [
+        _c("div", { staticClass: "card-body messages empty" })
+      ])
     ])
   }
 ]
@@ -38079,8 +47854,23 @@ var render = function() {
       }
     },
     [
-      _c("div", { staticClass: "card-body" }, [
-        _c("p", { staticClass: "card-text" }, [_vm._t("default")], 2)
+      _c("div", { staticClass: "card-body pl-2 pt-1 pb-0 pr-0" }, [
+        _c("p", { staticClass: "card-text mb-0" }, [
+          _vm._v("\n      " + _vm._s(_vm.message.content) + "\n    ")
+        ]),
+        _vm._v(" "),
+        _c(
+          "p",
+          {
+            staticClass: "mb-0 ",
+            staticStyle: {
+              "font-size": ".7em",
+              color: "#777",
+              "margin-left": "88%"
+            }
+          },
+          [_vm._v("\n      15:45\n      ")]
+        )
       ])
     ]
   )
@@ -38109,10 +47899,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass: "row justify-content-center",
-      staticStyle: { "min-height": "80vh" }
-    },
+    { staticClass: "row justify-content-center" },
     [
       _c("contact-list-component", {
         on: {
@@ -38126,10 +47913,11 @@ var render = function() {
         ? _c("conversation-component", {
             attrs: {
               contactId: _vm.selectedConversation.contact_id,
-              contactName: _vm.selectedConversation.contactName
+              contactName: _vm.selectedConversation.contactName,
+              messages: _vm.messages
             }
           })
-        : _vm._e()
+        : _c("empty-conversation-component")
     ],
     1
   )
@@ -38248,6 +48036,314 @@ function normalizeComponent (
     exports: scriptExports,
     options: options
   }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/vue-property-decorator/lib/vue-property-decorator.js ***!
+  \***************************************************************************/
+/*! exports provided: Component, Vue, Mixins, Inject, InjectReactive, Provide, ProvideReactive, Model, Prop, PropSync, Watch, Emit, Ref */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Inject", function() { return Inject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InjectReactive", function() { return InjectReactive; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Provide", function() { return Provide; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProvideReactive", function() { return ProvideReactive; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return Model; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Prop", function() { return Prop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PropSync", function() { return PropSync; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Watch", function() { return Watch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Emit", function() { return Emit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Ref", function() { return Ref; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (default from non-harmony) */ __webpack_require__.d(__webpack_exports__, "Vue", function() { return vue__WEBPACK_IMPORTED_MODULE_0___default.a; });
+/* harmony import */ var vue_class_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-class-component */ "./node_modules/vue-class-component/dist/vue-class-component.esm.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Component", function() { return vue_class_component__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Mixins", function() { return vue_class_component__WEBPACK_IMPORTED_MODULE_1__["mixins"]; });
+
+/** vue-property-decorator verson 9.0.2 MIT LICENSE copyright 2020 kaorun343 */
+/// <reference types='reflect-metadata'/>
+
+
+
+
+/** Used for keying reactive provide/inject properties */
+var reactiveInjectKey = '__reactiveInject__';
+/**
+ * decorator of an inject
+ * @param from key
+ * @return PropertyDecorator
+ */
+function Inject(options) {
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, key) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            componentOptions.inject[key] = options || key;
+        }
+    });
+}
+/**
+ * decorator of a reactive inject
+ * @param from key
+ * @return PropertyDecorator
+ */
+function InjectReactive(options) {
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, key) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            var fromKey_1 = !!options ? options.from || options : key;
+            var defaultVal_1 = (!!options && options.default) || undefined;
+            if (!componentOptions.computed)
+                componentOptions.computed = {};
+            componentOptions.computed[key] = function () {
+                var obj = this[reactiveInjectKey];
+                return obj ? obj[fromKey_1] : defaultVal_1;
+            };
+            componentOptions.inject[reactiveInjectKey] = reactiveInjectKey;
+        }
+    });
+}
+function produceProvide(original) {
+    var provide = function () {
+        var _this = this;
+        var rv = typeof original === 'function' ? original.call(this) : original;
+        rv = Object.create(rv || null);
+        // set reactive services (propagates previous services if necessary)
+        rv[reactiveInjectKey] = Object.create(this[reactiveInjectKey] || {});
+        for (var i in provide.managed) {
+            rv[provide.managed[i]] = this[i];
+        }
+        var _loop_1 = function (i) {
+            rv[provide.managedReactive[i]] = this_1[i]; // Duplicates the behavior of `@Provide`
+            Object.defineProperty(rv[reactiveInjectKey], provide.managedReactive[i], {
+                enumerable: true,
+                get: function () { return _this[i]; },
+            });
+        };
+        var this_1 = this;
+        for (var i in provide.managedReactive) {
+            _loop_1(i);
+        }
+        return rv;
+    };
+    provide.managed = {};
+    provide.managedReactive = {};
+    return provide;
+}
+function needToProduceProvide(original) {
+    return (typeof original !== 'function' ||
+        (!original.managed && !original.managedReactive));
+}
+function inheritInjected(componentOptions) {
+    // inject parent reactive services (if any)
+    if (!Array.isArray(componentOptions.inject)) {
+        componentOptions.inject = componentOptions.inject || {};
+        componentOptions.inject[reactiveInjectKey] = {
+            from: reactiveInjectKey,
+            default: {},
+        };
+    }
+}
+/**
+ * decorator of a provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function Provide(key) {
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        inheritInjected(componentOptions);
+        if (needToProduceProvide(provide)) {
+            provide = componentOptions.provide = produceProvide(provide);
+        }
+        provide.managed[k] = key || k;
+    });
+}
+/**
+ * decorator of a reactive provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function ProvideReactive(key) {
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        inheritInjected(componentOptions);
+        if (needToProduceProvide(provide)) {
+            provide = componentOptions.provide = produceProvide(provide);
+        }
+        provide.managedReactive[k] = key || k;
+    });
+}
+/** @see {@link https://github.com/vuejs/vue-class-component/blob/master/src/reflect.ts} */
+var reflectMetadataIsSupported = typeof Reflect !== 'undefined' && typeof Reflect.getMetadata !== 'undefined';
+function applyMetadata(options, target, key) {
+    if (reflectMetadataIsSupported) {
+        if (!Array.isArray(options) &&
+            typeof options !== 'function' &&
+            typeof options.type === 'undefined') {
+            var type = Reflect.getMetadata('design:type', target, key);
+            if (type !== Object) {
+                options.type = type;
+            }
+        }
+    }
+}
+/**
+ * decorator of model
+ * @param  event event name
+ * @param options options
+ * @return PropertyDecorator
+ */
+function Model(event, options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+            componentOptions.model = { prop: k, event: event || k };
+        })(target, key);
+    };
+}
+/**
+ * decorator of a prop
+ * @param  options the options for the prop
+ * @return PropertyDecorator | void
+ */
+function Prop(options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+        })(target, key);
+    };
+}
+/**
+ * decorator of a synced prop
+ * @param propName the name to interface with from outside, must be different from decorated property
+ * @param options the options for the synced prop
+ * @return PropertyDecorator | void
+ */
+function PropSync(propName, options) {
+    if (options === void 0) { options = {}; }
+    // @ts-ignore
+    return function (target, key) {
+        applyMetadata(options, target, key);
+        Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
+            ;
+            (componentOptions.props || (componentOptions.props = {}))[propName] = options;
+            (componentOptions.computed || (componentOptions.computed = {}))[k] = {
+                get: function () {
+                    return this[propName];
+                },
+                set: function (value) {
+                    // @ts-ignore
+                    this.$emit("update:" + propName, value);
+                },
+            };
+        })(target, key);
+    };
+}
+/**
+ * decorator of a watch function
+ * @param  path the path or the expression to observe
+ * @param  WatchOption
+ * @return MethodDecorator
+ */
+function Watch(path, options) {
+    if (options === void 0) { options = {}; }
+    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, handler) {
+        if (typeof componentOptions.watch !== 'object') {
+            componentOptions.watch = Object.create(null);
+        }
+        var watch = componentOptions.watch;
+        if (typeof watch[path] === 'object' && !Array.isArray(watch[path])) {
+            watch[path] = [watch[path]];
+        }
+        else if (typeof watch[path] === 'undefined') {
+            watch[path] = [];
+        }
+        watch[path].push({ handler: handler, deep: deep, immediate: immediate });
+    });
+}
+// Code copied from Vue/src/shared/util.js
+var hyphenateRE = /\B([A-Z])/g;
+var hyphenate = function (str) { return str.replace(hyphenateRE, '-$1').toLowerCase(); };
+/**
+ * decorator of an event-emitter function
+ * @param  event The name of the event
+ * @return MethodDecorator
+ */
+function Emit(event) {
+    return function (_target, propertyKey, descriptor) {
+        var key = hyphenate(propertyKey);
+        var original = descriptor.value;
+        descriptor.value = function emitter() {
+            var _this = this;
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var emit = function (returnValue) {
+                var emitName = event || key;
+                if (returnValue === undefined) {
+                    if (args.length === 0) {
+                        _this.$emit(emitName);
+                    }
+                    else if (args.length === 1) {
+                        _this.$emit(emitName, args[0]);
+                    }
+                    else {
+                        _this.$emit.apply(_this, [emitName].concat(args));
+                    }
+                }
+                else {
+                    args.unshift(returnValue);
+                    _this.$emit.apply(_this, [emitName].concat(args));
+                }
+            };
+            var returnValue = original.apply(this, args);
+            if (isPromise(returnValue)) {
+                returnValue.then(emit);
+            }
+            else {
+                emit(returnValue);
+            }
+            return returnValue;
+        };
+    };
+}
+/**
+ * decorator of a ref prop
+ * @param refKey the ref key defined in template
+ */
+function Ref(refKey) {
+    return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (options, key) {
+        options.computed = options.computed || {};
+        options.computed[key] = {
+            cache: false,
+            get: function () {
+                return this.$refs[refKey || key];
+            },
+        };
+    });
+}
+function isPromise(obj) {
+    return obj instanceof Promise || (obj && typeof obj.then === 'function');
 }
 
 
@@ -50316,6 +60412,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 Vue.component('contact-component', __webpack_require__(/*! ./components/ContactComponent.vue */ "./resources/js/components/ContactComponent.vue")["default"]);
 Vue.component('contact-list-component', __webpack_require__(/*! ./components/ContactListComponent.vue */ "./resources/js/components/ContactListComponent.vue")["default"]);
 Vue.component('conversation-component', __webpack_require__(/*! ./components/ConversationComponent.vue */ "./resources/js/components/ConversationComponent.vue")["default"]);
+Vue.component('empty-conversation-component', __webpack_require__(/*! ./components/EmptyConversationComponent.vue */ "./resources/js/components/EmptyConversationComponent.vue")["default"]);
 Vue.component('message-conversation-component', __webpack_require__(/*! ./components/MessageConversationComponent.vue */ "./resources/js/components/MessageConversationComponent.vue")["default"]);
 Vue.component('messenger-component', __webpack_require__(/*! ./components/MessengerComponent.vue */ "./resources/js/components/MessengerComponent.vue")["default"]);
 var app = new Vue({
@@ -50333,9 +60430,12 @@ var app = new Vue({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -50363,14 +60463,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
-// import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+
+
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  broadcaster: 'pusher',
+  key: "d1ebf49ab7e4cd82aef0",
+  cluster: "us2",
+  encrypted: true
+});
 
 /***/ }),
 
@@ -50523,7 +60624,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ConversationComponent_vue_vue_type_template_id_e673d542___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ConversationComponent.vue?vue&type=template&id=e673d542& */ "./resources/js/components/ConversationComponent.vue?vue&type=template&id=e673d542&");
 /* harmony import */ var _ConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ConversationComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ConversationComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ConversationComponent.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -50531,7 +60634,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ConversationComponent_vue_vue_type_template_id_e673d542___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ConversationComponent_vue_vue_type_template_id_e673d542___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -50563,6 +60666,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./ConversationComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ConversationComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
 /***/ "./resources/js/components/ConversationComponent.vue?vue&type=template&id=e673d542&":
 /*!******************************************************************************************!*\
   !*** ./resources/js/components/ConversationComponent.vue?vue&type=template&id=e673d542& ***!
@@ -50576,6 +60695,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_template_id_e673d542___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConversationComponent_vue_vue_type_template_id_e673d542___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/EmptyConversationComponent.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/EmptyConversationComponent.vue ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EmptyConversationComponent.vue?vue&type=template&id=3e25f898& */ "./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898&");
+/* harmony import */ var _EmptyConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EmptyConversationComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EmptyConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/EmptyConversationComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./EmptyConversationComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmptyConversationComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyConversationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./EmptyConversationComponent.vue?vue&type=template&id=3e25f898& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EmptyConversationComponent.vue?vue&type=template&id=3e25f898&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyConversationComponent_vue_vue_type_template_id_3e25f898___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

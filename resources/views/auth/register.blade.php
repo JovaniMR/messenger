@@ -19,7 +19,7 @@
     <body class="fondo">
         <main class="container">         
              <div class="row justify-content-center mt-3">
-                <div class="col-lg-4">
+                <div class="col-lg-4 register">
                     {{-- Card register --}}
                     <div class="card mb-4">
                         <div class="card-body" style="padding-bottom: 5px">
