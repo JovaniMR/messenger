@@ -1,4 +1,4 @@
-##CHAT
+## CHAT
 
 ## Contributing
 
