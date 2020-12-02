@@ -34,5 +34,10 @@ class MessageController extends Controller
         $message->content = $request->content;
         
         $message->save();
+
+        $data = [];
+        $data['message']=$message;
+        return $data;
+        
     }
 }

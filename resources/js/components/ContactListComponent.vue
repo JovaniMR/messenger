@@ -52,22 +52,13 @@
 <script>
 
 export default {
-  data() {
-    return {
-      conversations: [],
-    };
+  props:{
+    conversations: Array
   },
   mounted() {
-    this.getConversations();
     document.getElementById('allConversation').style.display = 'none';
-
   },
   methods: {
-    getConversations() {
-      axios.get("/api/conversations").then((response) => {
-        this.conversations = response.data;
-      });
-    },
     selectConversation(conversation){
       this.$emit('conversationSelected',conversation);
       // if(screen.width < 576){

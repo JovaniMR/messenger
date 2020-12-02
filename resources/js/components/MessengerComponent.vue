@@ -2,6 +2,7 @@
   <div class="row justify-content-center">
     <contact-list-component
       @conversationSelected="changeActiveConversation($event)"
+      :conversations="conversations"
     ></contact-list-component>
 
     <conversation-component
@@ -9,6 +10,7 @@
       :contactId="selectedConversation.contact_id"
       :contactName="selectedConversation.contactName"
       :messages="messages"
+      @messageCreated="addMessage($event)"
     ></conversation-component>
 
     <empty-conversation-component v-else></empty-conversation-component>
@@ -25,13 +27,22 @@ export default {
     return {
       selectedConversation: "",
       messages: [],
+      conversations: []
     };
   },
   mounted() {
-    Echo.channel("example").listen("MessageSent", (data) => {
+    this.getConversations();
+
+    Echo.private(`users.${this.userId}`)
+    .listen("MessageSent", (data) => {
       const message = data.message;
-      message.writtenByMe = (this.userId == message.from_id);
-      this.messages.push(message);
+      message.writtenByMe = false;
+      if(this.selectedConversation.contact_id == message.from_id ||
+         this.selectedConversation.contact_id == message.to_id){  
+        this.messages.push(message);
+     }
+
+     this.getConversations();
     });
   },
   methods: {
@@ -46,6 +57,26 @@ export default {
           this.messages = response.data;
         });
     },
+    addMessage(message){
+      const conversation = this.conversations.find((conversation)=>{
+         return conversation.contact_id == message.from_id ||
+                conversation.contact_id == message.to_id;
+      });
+
+      const author =  this.userId == message.from_id ? 'Tu' : this.conversation.contact_name;
+      conversation.last_message = `${author}: ${message.content}`;
+      conversation.last_time = message.created_at;
+
+      if(this.selectedConversation.contact_id == message.from_id ||
+         this.selectedConversation.contact_id == message.to_id){  
+        this.messages.push(message);
+     }
+    },
+    getConversations() {
+      axios.get("/api/conversations").then((response) => {
+        this.conversations = response.data;
+      });
+    }
   },
 };
 </script>

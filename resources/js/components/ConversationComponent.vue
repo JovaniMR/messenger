@@ -108,6 +108,9 @@ export default {
         })
         .then((response) => {
           this.messageSent = "";
+          const message = response.data.message;
+          message.writtenByMe = true;
+          this.$emit('messageCreated',response.data.message);
         });
     },
     scrollToEnd() {

@@ -7,8 +7,7 @@
                 <div class="col-9 col-md-9 col-lg-10 ">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{ conversation.contactName }} </h5>
-                        <!-- <small>{{ conversation.last_time }}</small> -->
-                        <small>15:08</small>
+                        <small>{{ lastTime }}</small>
                     </div>
                     <p class="mb-0">{{ conversation.last_message }} </p>
                 </div>
@@ -26,6 +25,12 @@
             return {
                     
             }
+        },
+        computed:{
+          lastTime(){
+              return moment(this.conversation.last_time,'YYYY-MM-DD hh:mm:ss')
+                     .locale("es").fromNow();
+          }
         },
         mounted() {
             console.log('Component mounted.')

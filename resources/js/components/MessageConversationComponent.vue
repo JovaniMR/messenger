@@ -13,9 +13,8 @@
       <p class="card-text mb-0">
         {{ message.content }}
       </p>
-      <p class="mb-0 " style="font-size: .7em; color: #777; margin-left:88%">
-        15:45
-        <!-- {{ message.created_at }} -->
+      <p class="mb-0 " style="font-size: .7em; color: #777; margin-left:83%">
+        {{ lastTime }}
       </p>
     </div>
   </div>
@@ -25,10 +24,16 @@
 export default {
   props: {
     writtenByMe: Boolean,
-    message: Array
+    message: Object
   },
   data() {
     return {};
   },
+  computed:{
+          lastTime(){
+              return moment(this.message.created_at,'YYYY-MM-DD hh:mm:ss')
+                     .locale("es").format('hh:mm a');
+          }
+        }
 };
 </script>
