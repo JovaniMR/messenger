@@ -1970,41 +1970,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     conversations: Array
@@ -2280,6 +2245,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userId: Number
@@ -2289,7 +2293,8 @@ __webpack_require__.r(__webpack_exports__);
       selectedConversation: "",
       stateOnline: false,
       messages: [],
-      conversations: []
+      conversations: [],
+      querySearch: ""
     };
   },
   mounted: function mounted() {
@@ -2306,7 +2311,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _this.getConversations();
     });
-    Echo.join('messenger').here(function (users) {
+    Echo.join("messenger").here(function (users) {
       users.forEach(function (user) {
         return _this.changeStatus(user.id, true);
       });
@@ -2332,7 +2337,7 @@ __webpack_require__.r(__webpack_exports__);
       var conversation = this.conversations.find(function (conversation) {
         return conversation.contact_id == message.from_id || conversation.contact_id == message.to_id;
       });
-      var author = this.userId == message.from_id ? 'Tu' : this.conversation.contact_name;
+      var author = this.userId == message.from_id ? "Tu" : this.conversation.contact_name;
       conversation.last_message = "".concat(author, ": ").concat(message.content);
       conversation.last_time = message.created_at;
 
@@ -2351,6 +2356,15 @@ __webpack_require__.r(__webpack_exports__);
       if (this.selectedConversation.contact_id == user) {
         this.stateOnline = status;
       }
+    }
+  },
+  computed: {
+    conversationsFiltered: function conversationsFiltered() {
+      var _this4 = this;
+
+      return this.conversations.filter(function (conversation) {
+        return conversation.contactName.toLowerCase().includes(_this4.querySearch.toLowerCase());
+      });
     }
   }
 });
@@ -69122,86 +69136,19 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass: "col-10 col-md-4 col-lg-4 bg-light contacs p-0",
-      attrs: { id: "allContacts" }
-    },
-    [
-      _c("div", { staticClass: "row pr-3 pl-3" }, [
-        _c("div", { staticClass: "input-group mt-3 mr-3 ml-3 mb-0" }, [
-          _c("div", { staticClass: "input-group-prepend" }, [
-            _c(
-              "span",
-              {
-                staticClass: "input-group-text",
-                attrs: { id: "basic-addon1" }
-              },
-              [
-                _c(
-                  "svg",
-                  {
-                    staticClass: "bi bi-search",
-                    attrs: {
-                      width: "1em",
-                      height: "1em",
-                      viewBox: "0 0 16 16",
-                      fill: "currentColor",
-                      xmlns: "http://www.w3.org/2000/svg"
-                    }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        "fill-rule": "evenodd",
-                        d:
-                          "M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("path", {
-                      attrs: {
-                        "fill-rule": "evenodd",
-                        d:
-                          "M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
-                      }
-                    })
-                  ]
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              type: "text",
-              placeholder: "Buscar personas",
-              "aria-label": "Username",
-              "aria-describedby": "basic-addon1"
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("hr", { staticClass: "mr-3 ml-3" }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "list-group list" },
-        _vm._l(_vm.conversations, function(conversation) {
-          return _c("contact-component", {
-            key: conversation.id,
-            attrs: { conversation: conversation },
-            nativeOn: {
-              click: function($event) {
-                return _vm.selectConversation(conversation)
-              }
-            }
-          })
-        }),
-        1
-      )
-    ]
+    { staticClass: "list-group list" },
+    _vm._l(_vm.conversations, function(conversation) {
+      return _c("contact-component", {
+        key: conversation.id,
+        attrs: { conversation: conversation },
+        nativeOn: {
+          click: function($event) {
+            return _vm.selectConversation(conversation)
+          }
+        }
+      })
+    }),
+    1
   )
 }
 var staticRenderFns = []
@@ -69535,14 +69482,99 @@ var render = function() {
     "div",
     { staticClass: "row justify-content-center" },
     [
-      _c("contact-list-component", {
-        attrs: { conversations: _vm.conversations },
-        on: {
-          conversationSelected: function($event) {
-            return _vm.changeActiveConversation($event)
-          }
-        }
-      }),
+      _c(
+        "div",
+        {
+          staticClass: "col-10 col-md-4 col-lg-4 bg-light contacs p-0",
+          attrs: { id: "allContacts" }
+        },
+        [
+          _c("div", { staticClass: "row pr-3 pl-3" }, [
+            _c("div", { staticClass: "input-group mt-3 mr-3 ml-3 mb-0" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c(
+                  "span",
+                  {
+                    staticClass: "input-group-text",
+                    attrs: { id: "basic-addon1" }
+                  },
+                  [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "bi bi-search",
+                        attrs: {
+                          width: "1em",
+                          height: "1em",
+                          viewBox: "0 0 16 16",
+                          fill: "currentColor",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            "fill-rule": "evenodd",
+                            d:
+                              "M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("path", {
+                          attrs: {
+                            "fill-rule": "evenodd",
+                            d:
+                              "M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
+                          }
+                        })
+                      ]
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.querySearch,
+                    expression: "querySearch"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  placeholder: "Buscar personas",
+                  "aria-label": "Username",
+                  "aria-describedby": "basic-addon1"
+                },
+                domProps: { value: _vm.querySearch },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.querySearch = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("hr", { staticClass: "mr-3 ml-3" }),
+          _vm._v(" "),
+          _c("contact-list-component", {
+            attrs: { conversations: _vm.conversationsFiltered },
+            on: {
+              conversationSelected: function($event) {
+                return _vm.changeActiveConversation($event)
+              }
+            }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
       _vm.selectedConversation
         ? _c("conversation-component", {
