@@ -2118,6 +2118,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2126,6 +2129,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     contactId: Number,
     contactName: String,
+    stateOnline: Boolean,
     messages: Array
   },
   data: function data() {
@@ -2275,6 +2279,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userId: Number
@@ -2282,6 +2287,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedConversation: "",
+      stateOnline: false,
       messages: [],
       conversations: []
     };
@@ -2299,6 +2305,15 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       _this.getConversations();
+    });
+    Echo.join('messenger').here(function (users) {
+      users.forEach(function (user) {
+        return _this.changeStatus(user.id, true);
+      });
+    }).joining(function (user) {
+      return _this.changeStatus(user.id, true);
+    }).leaving(function (user) {
+      return _this.changeStatus(user.id, false);
     });
   },
   methods: {
@@ -2331,6 +2346,11 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/conversations").then(function (response) {
         _this3.conversations = response.data;
       });
+    },
+    changeStatus: function changeStatus(user, status) {
+      if (this.selectedConversation.contact_id == user) {
+        this.stateOnline = status;
+      }
     }
   }
 });
@@ -69273,7 +69293,21 @@ var render = function() {
           _vm._v(" "),
           _c("h5", { staticClass: "d-inline mb-0 mt-2" }, [
             _vm._v(_vm._s(_vm.contactName))
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.stateOnline
+            ? _c(
+                "p",
+                {
+                  staticStyle: {
+                    "margin-left": "70px",
+                    "margin-bottom": "0",
+                    "font-size": ".9em"
+                  }
+                },
+                [_vm._v("En linea")]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
@@ -69515,6 +69549,7 @@ var render = function() {
             attrs: {
               contactId: _vm.selectedConversation.contact_id,
               contactName: _vm.selectedConversation.contactName,
+              stateOnline: _vm.stateOnline,
               messages: _vm.messages
             },
             on: {

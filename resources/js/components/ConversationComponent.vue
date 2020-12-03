@@ -18,6 +18,9 @@
           style="width: 30px"
         />
         <h5 class="d-inline mb-0 mt-2">{{ contactName }}</h5>
+        <p style="margin-left:70px; 
+        margin-bottom:0; 
+        font-size:.9em" v-if="stateOnline" >En linea</p>
       </div>
 
       <!--Message -->
@@ -86,6 +89,7 @@ export default {
   props: {
     contactId: Number,
     contactName: String,
+    stateOnline: Boolean,
     messages: Array,
   },
   data() {

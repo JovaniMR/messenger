@@ -9,6 +9,7 @@
       v-if="selectedConversation"
       :contactId="selectedConversation.contact_id"
       :contactName="selectedConversation.contactName"
+      :stateOnline="stateOnline"
       :messages="messages"
       @messageCreated="addMessage($event)"
     ></conversation-component>
@@ -26,6 +27,7 @@ export default {
   data() {
     return {
       selectedConversation: "",
+      stateOnline: false,
       messages: [],
       conversations: []
     };
@@ -44,6 +46,19 @@ export default {
 
      this.getConversations();
     });
+
+    Echo.join('messenger')
+    .here((users) => {
+       users.forEach(
+          user => this.changeStatus(user.id,true)
+       );
+    })
+    .joining(
+        user => this.changeStatus(user.id,true)   
+    )
+    .leaving(
+        user => this.changeStatus(user.id,false)
+    );
   },
   methods: {
     changeActiveConversation(conversation) {
@@ -76,6 +91,11 @@ export default {
       axios.get("/api/conversations").then((response) => {
         this.conversations = response.data;
       });
+    },
+    changeStatus(user,status){
+      if(this.selectedConversation.contact_id == user){
+           this.stateOnline=status;
+        }
     }
   },
 };
