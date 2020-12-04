@@ -1,8 +1,8 @@
 <template>   
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" :class="{'bg-info':active}">              
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" :class="{'bg-light':selected}">              
             <div class="row">
                 <div class="col-3 col-md-3 col-lg-2 ">
-                        <img src="https://picsum.photos/seed/picsum/500/500" alt="avatar"  class="rounded-circle" style="width: 50px;">
+                        <img :src="conversation.contactImage" alt="avatar"  class="rounded-circle" style="width: 50px;">
                 </div>
                 <div class="col-9 col-md-9 col-lg-10 ">
                     <div class="d-flex w-100 justify-content-between">
@@ -19,7 +19,8 @@
     export default {
         props:{
             active: Boolean,
-            conversation : Object
+            conversation : Object,
+            selected: Boolean
         },
         data() {
             return {

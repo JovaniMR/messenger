@@ -12,7 +12,7 @@
         </button> 
 
         <img
-          src="https://picsum.photos/seed/picsum/500/500"
+          :src="contactImage"
           alt="avatar"
           class="rounded-circle mr-3 ml-3" 
           style="width: 30px"
@@ -89,6 +89,7 @@ export default {
   props: {
     contactId: Number,
     contactName: String,
+    contactImage: String,
     stateOnline: Boolean,
     messages: Array,
   },
@@ -104,7 +105,7 @@ export default {
     this.scrollToEnd();
   },
   methods: {
-    postMessage() {
+    postMessage() { //Petición al servidor para registrar un nuevo mensaje
       axios
         .post("/api/messages", {
           to_id: this.contactId,
@@ -116,7 +117,7 @@ export default {
           message.writtenByMe = true;
           this.$emit('messageCreated',response.data.message);
         });
-    },
+    },//Calcula el tamaño del scroll para recorrer hasta el final(abajo)
     scrollToEnd() {
       const el = document.querySelector(".messages");
       el.scrollTop = el.scrollHeight;

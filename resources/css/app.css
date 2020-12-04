@@ -58,7 +58,12 @@ hr {
     width: 50%;
 }
 
+/* ProfileComponent */
 
+.label{
+    font-size: 1em;
+    color: white;
+}
 
 /*--------------- Reponsive Design ---------------- */
 

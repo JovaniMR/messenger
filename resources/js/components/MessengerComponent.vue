@@ -48,6 +48,7 @@
       v-if="selectedConversation"
       :contactId="selectedConversation.contact_id"
       :contactName="selectedConversation.contactName"
+      :contactImage="selectedConversation.contactImage"
       :stateOnline="stateOnline"
       :messages="messages"
       @messageCreated="addMessage($event)"
@@ -74,7 +75,7 @@ export default {
   },
   mounted() {
     this.getConversations();
-
+    // Canal de comunicación que actualiza los mensajes recibidos
     Echo.private(`users.${this.userId}`).listen("MessageSent", (data) => {
       const message = data.message;
       message.writtenByMe = false;
@@ -88,6 +89,7 @@ export default {
       this.getConversations();
     });
 
+    // Canal de comunicación que actualiza el estado de los usuarios (Online,Offline)
     Echo.join("messenger")
       .here((users) => {
         users.forEach((user) => this.changeStatus(user.id, true));
@@ -96,18 +98,19 @@ export default {
       .leaving((user) => this.changeStatus(user.id, false));
   },
   methods: {
+    // Obtiene la información del contacto selecccionado
     changeActiveConversation(conversation) {
       this.selectedConversation = conversation;
       this.getMessages();
     },
-    getMessages() {
+    getMessages() {  //Obtiene los mensajes del contacto selecciondo
       axios
         .get(`/api/messages?contact_id=${this.selectedConversation.contact_id}`)
         .then((response) => {
           this.messages = response.data;
         });
     },
-    addMessage(message) {
+    addMessage(message) { //Agrega un nuevo mensaje a la vista cuando lo escribimos
       const conversation = this.conversations.find((conversation) => {
         return (
           conversation.contact_id == message.from_id ||
@@ -127,11 +130,11 @@ export default {
         this.messages.push(message);
       }
     },
-    getConversations() {
+    getConversations() { //Obtiene todas las conversaciones(contactos)
       axios.get("/api/conversations").then((response) => {
         this.conversations = response.data;
       });
-    },
+    },//Cambia el estado del usuario (En linea)
     changeStatus(user, status) {
       if (this.selectedConversation.contact_id == user) {
         this.stateOnline = status;
@@ -139,7 +142,7 @@ export default {
     },
   },
   computed: {
-    conversationsFiltered() {
+    conversationsFiltered() { //Filtra los contactos por su nombre
       return this.conversations.filter((conversation) =>
         conversation.contactName.toLowerCase().includes(this.querySearch.toLowerCase())
       );

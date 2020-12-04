@@ -1928,7 +1928,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     active: Boolean,
-    conversation: Object
+    conversation: Object,
+    selected: Boolean
   },
   data: function data() {
     return {};
@@ -1970,15 +1971,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     conversations: Array
+  },
+  data: function data() {
+    return {
+      selectedConversationId: ''
+    };
   },
   mounted: function mounted() {
     document.getElementById('allConversation').style.display = 'none';
   },
   methods: {
     selectConversation: function selectConversation(conversation) {
+      this.selectedConversationId = conversation.id;
       this.$emit('conversationSelected', conversation); // if(screen.width < 576){
       //   this.hide();
       // }
@@ -2094,6 +2102,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     contactId: Number,
     contactName: String,
+    contactImage: String,
     stateOnline: Boolean,
     messages: Array
   },
@@ -2112,6 +2121,7 @@ __webpack_require__.r(__webpack_exports__);
     postMessage: function postMessage() {
       var _this = this;
 
+      //Petición al servidor para registrar un nuevo mensaje
       axios.post("/api/messages", {
         to_id: this.contactId,
         content: this.messageSent
@@ -2123,6 +2133,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.$emit('messageCreated', response.data.message);
       });
     },
+    //Calcula el tamaño del scroll para recorrer hasta el final(abajo)
     scrollToEnd: function scrollToEnd() {
       var el = document.querySelector(".messages");
       el.scrollTop = el.scrollHeight;
@@ -2284,6 +2295,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userId: Number
@@ -2300,7 +2312,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    this.getConversations();
+    this.getConversations(); // Canal de comunicación que actualiza los mensajes recibidos
+
     Echo["private"]("users.".concat(this.userId)).listen("MessageSent", function (data) {
       var message = data.message;
       message.writtenByMe = false;
@@ -2310,7 +2323,8 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       _this.getConversations();
-    });
+    }); // Canal de comunicación que actualiza el estado de los usuarios (Online,Offline)
+
     Echo.join("messenger").here(function (users) {
       users.forEach(function (user) {
         return _this.changeStatus(user.id, true);
@@ -2322,6 +2336,7 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    // Obtiene la información del contacto selecccionado
     changeActiveConversation: function changeActiveConversation(conversation) {
       this.selectedConversation = conversation;
       this.getMessages();
@@ -2329,11 +2344,13 @@ __webpack_require__.r(__webpack_exports__);
     getMessages: function getMessages() {
       var _this2 = this;
 
+      //Obtiene los mensajes del contacto selecciondo
       axios.get("/api/messages?contact_id=".concat(this.selectedConversation.contact_id)).then(function (response) {
         _this2.messages = response.data;
       });
     },
     addMessage: function addMessage(message) {
+      //Agrega un nuevo mensaje a la vista cuando lo escribimos
       var conversation = this.conversations.find(function (conversation) {
         return conversation.contact_id == message.from_id || conversation.contact_id == message.to_id;
       });
@@ -2348,10 +2365,12 @@ __webpack_require__.r(__webpack_exports__);
     getConversations: function getConversations() {
       var _this3 = this;
 
+      //Obtiene todas las conversaciones(contactos)
       axios.get("/api/conversations").then(function (response) {
         _this3.conversations = response.data;
       });
     },
+    //Cambia el estado del usuario (En linea)
     changeStatus: function changeStatus(user, status) {
       if (this.selectedConversation.contact_id == user) {
         this.stateOnline = status;
@@ -2362,9 +2381,124 @@ __webpack_require__.r(__webpack_exports__);
     conversationsFiltered: function conversationsFiltered() {
       var _this4 = this;
 
+      //Filtra los contactos por su nombre
       return this.conversations.filter(function (conversation) {
         return conversation.contactName.toLowerCase().includes(_this4.querySearch.toLowerCase());
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    user: Object,
+    csrfToken: String
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {
+    image: function image() {
+      return "/images/".concat(this.user.image);
     }
   }
 });
@@ -69072,12 +69206,18 @@ var render = function() {
     {
       staticClass:
         "list-group-item list-group-item-action flex-column align-items-start",
-      class: { "bg-info": _vm.active },
+      class: { "bg-light": _vm.selected },
       attrs: { href: "#" }
     },
     [
       _c("div", { staticClass: "row" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "col-3 col-md-3 col-lg-2 " }, [
+          _c("img", {
+            staticClass: "rounded-circle",
+            staticStyle: { width: "50px" },
+            attrs: { src: _vm.conversation.contactImage, alt: "avatar" }
+          })
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-9 col-md-9 col-lg-10 " }, [
           _c("div", { staticClass: "d-flex w-100 justify-content-between" }, [
@@ -69096,23 +69236,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-3 col-md-3 col-lg-2 " }, [
-      _c("img", {
-        staticClass: "rounded-circle",
-        staticStyle: { width: "50px" },
-        attrs: {
-          src: "https://picsum.photos/seed/picsum/500/500",
-          alt: "avatar"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -69140,7 +69264,10 @@ var render = function() {
     _vm._l(_vm.conversations, function(conversation) {
       return _c("contact-component", {
         key: conversation.id,
-        attrs: { conversation: conversation },
+        attrs: {
+          conversation: conversation,
+          selected: _vm.selectedConversationId === conversation.id
+        },
         nativeOn: {
           click: function($event) {
             return _vm.selectConversation(conversation)
@@ -69232,10 +69359,7 @@ var render = function() {
           _c("img", {
             staticClass: "rounded-circle mr-3 ml-3",
             staticStyle: { width: "30px" },
-            attrs: {
-              src: "https://picsum.photos/seed/picsum/500/500",
-              alt: "avatar"
-            }
+            attrs: { src: _vm.contactImage, alt: "avatar" }
           }),
           _vm._v(" "),
           _c("h5", { staticClass: "d-inline mb-0 mt-2" }, [
@@ -69581,6 +69705,7 @@ var render = function() {
             attrs: {
               contactId: _vm.selectedConversation.contact_id,
               contactName: _vm.selectedConversation.contactName,
+              contactImage: _vm.selectedConversation.contactImage,
               stateOnline: _vm.stateOnline,
               messages: _vm.messages
             },
@@ -69596,6 +69721,236 @@ var render = function() {
   )
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center mt-3" }, [
+      _c("div", { staticClass: "col-lg-4 login" }, [
+        _c("div", { staticClass: "card mb-2" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
+                attrs: {
+                  action: "",
+                  method: "post",
+                  enctype: "multipart/form-data"
+                }
+              },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.csrfToken,
+                      expression: "csrfToken"
+                    }
+                  ],
+                  attrs: { type: "hidden", name: "_token" },
+                  domProps: { value: _vm.csrfToken },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.csrfToken = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("fieldset", { attrs: { disabled: "" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group", attrs: { disabled: "" } },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticStyle: { color: "#777" },
+                          attrs: { for: "inputEmail4" }
+                        },
+                        [_vm._v("Correo Electrónico")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.email,
+                            expression: "user.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "email",
+                          id: "inputEmail4",
+                          name: "email"
+                        },
+                        domProps: { value: _vm.user.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "email", $event.target.value)
+                          }
+                        }
+                      })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group", attrs: { required: "" } },
+                  [
+                    _c(
+                      "label",
+                      {
+                        staticStyle: { color: "#777" },
+                        attrs: { for: "inputAddress" }
+                      },
+                      [_vm._v("Nombre")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.user.name,
+                          expression: "user.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "inputAddress",
+                        placeholder: "1234 Main St",
+                        name: "name"
+                      },
+                      domProps: { value: _vm.user.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.user, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticStyle: { color: "#777" },
+                      attrs: { for: "exampleFormControlFile1" }
+                    },
+                    [_vm._v("Elije tu foto (Tamaño: 100x100 px)")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    { staticStyle: { color: "#777" }, attrs: { for: "pass" } },
+                    [_vm._v("(Soló si se desea cambiar)")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("img", {
+                      staticClass: "rounded-circle",
+                      staticStyle: { width: "50px" },
+                      attrs: { src: _vm.image, alt: "avatar" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "form-control-file",
+                    attrs: {
+                      type: "file",
+                      id: "exampleFormControlFile1",
+                      name: "image"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _vm._m(1)
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("label", { staticStyle: { color: "#777" }, attrs: { for: "pass" } }, [
+        _vm._v("Nueva Contraseña ")
+      ]),
+      _vm._v(" "),
+      _c("label", { staticStyle: { color: "#777" }, attrs: { for: "pass" } }, [
+        _vm._v("(Soló si se desea cambiar)")
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "password",
+          id: "pass",
+          placeholder: "Nueva contraseña",
+          name: "password"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group text-center" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success btn-sm btn-block",
+          attrs: { type: "submit" }
+        },
+        [_vm._v("\n                Actualizar\n              ")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -82088,6 +82443,7 @@ Vue.component('conversation-component', __webpack_require__(/*! ./components/Con
 Vue.component('empty-conversation-component', __webpack_require__(/*! ./components/EmptyConversationComponent.vue */ "./resources/js/components/EmptyConversationComponent.vue")["default"]);
 Vue.component('message-conversation-component', __webpack_require__(/*! ./components/MessageConversationComponent.vue */ "./resources/js/components/MessageConversationComponent.vue")["default"]);
 Vue.component('messenger-component', __webpack_require__(/*! ./components/MessengerComponent.vue */ "./resources/js/components/MessengerComponent.vue")["default"]);
+Vue.component('profile-component', __webpack_require__(/*! ./components/ProfileComponent.vue */ "./resources/js/components/ProfileComponent.vue")["default"]);
 var app = new Vue({
   el: '#app',
   methods: {
@@ -82576,6 +82932,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MessengerComponent_vue_vue_type_template_id_54eee856___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MessengerComponent_vue_vue_type_template_id_54eee856___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileComponent.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/ProfileComponent.vue ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProfileComponent.vue?vue&type=template&id=a8276c82& */ "./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82&");
+/* harmony import */ var _ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProfileComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ProfileComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82& ***!
+  \*************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ProfileComponent.vue?vue&type=template&id=a8276c82& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ProfileComponent.vue?vue&type=template&id=a8276c82&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfileComponent_vue_vue_type_template_id_a8276c82___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -7,6 +7,7 @@
         v-for="conversation in conversations"
         :key="conversation.id"
         :conversation= "conversation"
+        :selected="selectedConversationId === conversation.id "
         @click.native="selectConversation(conversation)"
       >
       </contact-component>
@@ -20,11 +21,17 @@ export default {
   props:{
     conversations: Array
   },
+  data(){
+    return{
+      selectedConversationId:''
+    }
+  },
   mounted() {
     document.getElementById('allConversation').style.display = 'none';
   },
   methods: {
     selectConversation(conversation){
+      this.selectedConversationId=conversation.id;
       this.$emit('conversationSelected',conversation);
       // if(screen.width < 576){
       //   this.hide();

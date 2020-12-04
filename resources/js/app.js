@@ -10,6 +10,7 @@ Vue.component('conversation-component', require('./components/ConversationCompon
 Vue.component('empty-conversation-component', require('./components/EmptyConversationComponent.vue').default);
 Vue.component('message-conversation-component', require('./components/MessageConversationComponent.vue').default);
 Vue.component('messenger-component', require('./components/MessengerComponent.vue').default);
+Vue.component('profile-component', require('./components/ProfileComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

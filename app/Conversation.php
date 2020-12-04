@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
 {
-    protected $appends=['contactName'];
+    protected $appends=['contactName','contactImage'];
 
     public function getContactNameAttribute(){
         return $this->contact->name;    
+    }
+
+    public function getContactImageAttribute(){
+        return '/images/'.$this->contact->image;    
     }
 
     public function contact(){
