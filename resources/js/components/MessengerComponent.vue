@@ -75,6 +75,7 @@ export default {
   },
   mounted() {
     this.getConversations();
+    
     // Canal de comunicación que actualiza los mensajes recibidos
     Echo.private(`users.${this.userId}`).listen("MessageSent", (data) => {
       const message = data.message;

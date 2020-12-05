@@ -24,6 +24,7 @@ class MessageController extends Controller
         })->get();
     }
 
+    //Guarda Mensajes
     public function store(Request $request){
            
         $userId = auth()->id();

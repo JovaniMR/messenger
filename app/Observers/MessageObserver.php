@@ -16,7 +16,7 @@ class MessageObserver
      */
     public function created(Message $message)
     {
-          
+        //Registra una nueva conversacion cuando es creado un mensaje  
         $conversation = Conversation::where('user_id', $message->from_id)
             ->where('contact_id', $message->to_id)->first();
 
