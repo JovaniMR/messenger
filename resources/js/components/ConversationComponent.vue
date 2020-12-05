@@ -115,7 +115,8 @@ export default {
           this.messageSent = "";
           const message = response.data.message;
           message.writtenByMe = true;
-          this.$emit('messageCreated',response.data.message);
+          this.$emit('messageCreated',message);
+          // console.log(message);
         });
     },//Calcula el tamaño del scroll para recorrer hasta el final(abajo)
     scrollToEnd() {
