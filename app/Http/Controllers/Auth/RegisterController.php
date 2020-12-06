@@ -41,10 +41,6 @@ class RegisterController extends Controller
     }
 
     
-    public function index(){
-       
-       return view('auth/registro');
-    }
     /**
      * Get a validator for an incoming registration request.
      *
