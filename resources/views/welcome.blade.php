@@ -95,7 +95,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-12 text-center ">
                                     {{-- @if (Route::has('register')) --}}
-                                       <p class="mt-4">¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>      
+                                       <p class="mt-4">¿No tienes cuenta? <a href="{{ route('login') }}">Regístrate</a></p>      
                                     {{-- @endif --}}
                                 </div>
                             </div>
