@@ -43,7 +43,7 @@ class RegisterController extends Controller
     
     public function index(){
        
-       return view('auth/register');
+       return view('auth/login');
     }
     /**
      * Get a validator for an incoming registration request.
