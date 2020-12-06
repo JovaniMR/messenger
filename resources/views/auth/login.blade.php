@@ -101,10 +101,10 @@
                     <div class="car-body">
                         <div class="form-group row ">
                             <div class="col-md-12 text-center ">
-                                @if (Route::has('register'))
+                                {{-- @if (Route::has('register')) --}}
                                 <p class="mt-4 mr-2" style=" color: #777">¿No tienes cuenta? <a
                                         href="{{ route('register') }}">Regístrate</a></p>
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </div>
