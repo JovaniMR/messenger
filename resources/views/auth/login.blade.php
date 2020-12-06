@@ -103,7 +103,7 @@
                             <div class="col-md-12 text-center ">
                                 {{-- @if (Route::has('register')) --}}
                                 <p class="mt-4 mr-2" style=" color: #777">¿No tienes cuenta? 
-                                    <a href="{{ route('prueba') }}">Regístrate</a></p>
+                                    <a href="{{ route('re') }}">Regístrate</a></p>
                                 {{-- @endif --}}
                             </div>
                         </div>
