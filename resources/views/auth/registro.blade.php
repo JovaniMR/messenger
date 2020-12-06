@@ -29,7 +29,7 @@
                             </div>
 
                             <p class="text-center" style=" font-size:18px; color: #777">Regístrate para chatear con tus amigos.</p>
-                            <form method="POST" action="{{ route('register') }}">
+                            {{-- <form method="POST" action="{{ route('register') }}"> --}}
                                 @csrf
                 
                                 {{--Inputs for registration  --}}
@@ -82,7 +82,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </form>
+                            {{-- </form> --}}
                         </div>
                     </div>
                 
