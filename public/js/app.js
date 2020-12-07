@@ -69582,7 +69582,7 @@ var staticRenderFns = [
         "div",
         {
           staticClass: "card w-100  conversation",
-          staticStyle: { height: "85%" }
+          staticStyle: { height: "90%" }
         },
         [_c("div", { staticClass: "card-body messages empty" })]
       )
@@ -69672,6 +69672,7 @@ var render = function() {
         "div",
         {
           staticClass: "col-10 col-md-4 col-lg-4 bg-light contacs p-0",
+          staticStyle: { height: "80.5vh" },
           attrs: { id: "allContacts" }
         },
         [

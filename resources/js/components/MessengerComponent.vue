@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div id="allContacts" class="col-10 col-md-4 col-lg-4 bg-light contacs p-0">
+    <div id="allContacts" class="col-10 col-md-4 col-lg-4 bg-light contacs p-0" style="height:80.5vh">
       <!-- {{--Search  --}} -->
       <div class="row pr-3 pl-3">
         <div class="input-group mt-3 mr-3 ml-3 mb-0">
