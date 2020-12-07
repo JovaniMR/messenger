@@ -1,6 +1,6 @@
 <template>
   <!-- {{-- General Messages  --}} -->
-  <div id="allConversation" class="col-10 col-md-7 col-lg-8 p-0">
+  <div id="allConversation" class="col-10 col-md-7 col-lg-8 p-0" style="85%">
     <div class="card w-100 h-100 conversation">
       <div class="card-header bg-ligth">
          

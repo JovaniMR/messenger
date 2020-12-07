@@ -69360,6 +69360,7 @@ var render = function() {
     "div",
     {
       staticClass: "col-10 col-md-7 col-lg-8 p-0",
+      staticStyle: {},
       attrs: { id: "allConversation" }
     },
     [
