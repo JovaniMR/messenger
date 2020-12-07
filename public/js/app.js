@@ -69578,9 +69578,14 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-7 col-lg-8 p-0" }, [
-      _c("div", { staticClass: "card w-100 h-100 conversation" }, [
-        _c("div", { staticClass: "card-body messages empty" })
-      ])
+      _c(
+        "div",
+        {
+          staticClass: "card w-100  conversation",
+          staticStyle: { height: "85%" }
+        },
+        [_c("div", { staticClass: "card-body messages empty" })]
+      )
     ])
   }
 ]

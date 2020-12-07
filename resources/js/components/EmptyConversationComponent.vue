@@ -1,7 +1,7 @@
 <template>
   <!-- {{-- General Messages  --}} -->
   <div class="col-md-7 col-lg-8 p-0">
-    <div class="card w-100 h-100 conversation">
+    <div class="card w-100  conversation" style="height:85%">
       <!--Message -->
       <div class="card-body messages empty">
 
