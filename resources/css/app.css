@@ -24,10 +24,6 @@ hr {
     border-radius: 10px 0 0 10px !important;
 }
 
-.list {
-    width: 100% !important;
-    overflow: auto;
-}
 
 .allContacts{
     overflow: auto;

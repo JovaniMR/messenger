@@ -2,7 +2,7 @@
   <!-- {{-- Contacs general--}} -->
 
     <!-- {{-- List contacs  --}} -->
-    <div class="list-group list">
+    <div class="list-group list w-100 h-75">
       <contact-component
         v-for="conversation in conversations"
         :key="conversation.id"
@@ -14,6 +14,12 @@
     </div>
 
 </template>
+<style>
+.list {
+    /* width: 100% !important; */
+    overflow-y: auto;
+}  
+</style>
 
 <script>
 
