@@ -69316,11 +69316,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-<<<<<<< HEAD
-    { staticClass: "list-group list w-100 h-75" },
-=======
     { staticClass: "list-group list w-100" },
->>>>>>> f7704aa62b1e6e2d425d4991242e60f5826b9133
     _vm._l(_vm.conversations, function(conversation) {
       return _c("contact-component", {
         key: conversation.id,
