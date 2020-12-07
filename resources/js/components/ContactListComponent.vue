@@ -2,7 +2,7 @@
   <!-- {{-- Contacs general--}} -->
 
     <!-- {{-- List contacs  --}} -->
-    <div class="list-group list w-100">
+    <div class="list-group list w-100 h-75">
       <contact-component
         v-for="conversation in conversations"
         :key="conversation.id"
