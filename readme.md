@@ -4,6 +4,7 @@
 - HTML, CSS, Boostrap, Jvascript
 - Vue js (2.x)
 - Laravel (5.8)
+- Socket.io
 
 #### Características
 - Registro, inicio de sesión y edición de perfil
