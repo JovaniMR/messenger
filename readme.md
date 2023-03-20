@@ -1,7 +1,7 @@
 # CHAT REALTIME
 
 #### Tecnologías
-- HTML, CSS, Boostrap, Jvascript
+- HTML, CSS, Bootstrap, Javascript
 - Vue js (2.x)
 - Laravel (5.8)
 - Socket.io
